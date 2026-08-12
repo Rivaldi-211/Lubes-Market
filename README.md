@@ -1,6 +1,6 @@
-# BUMDes Berkah — Laravel
+# LUDES-MARKET — Laravel
 
-Sistem informasi pemasaran produk lokal BUMDes Berkah, Desa Moncongloe Lappara. Versi ini merupakan migrasi dari aplikasi PHP Native ke Laravel dengan struktur fitur lama tetap dipertahankan dan antarmuka dirombak menjadi storefront editorial berbasis foto serta dashboard operasional untuk Admin, Penjual, dan Pembeli.
+Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara. Versi ini merupakan migrasi dari aplikasi PHP Native ke Laravel dengan struktur fitur lama tetap dipertahankan dan antarmuka dirombak menjadi storefront editorial berbasis foto serta dashboard operasional untuk Admin, Penjual, dan Pembeli.
 
 ## Teknologi
 
@@ -31,7 +31,7 @@ Sistem informasi pemasaran produk lokal BUMDes Berkah, Desa Moncongloe Lappara. 
 
 - Checkout dari keranjang
 - Alamat pengiriman, nomor HP, dan catatan pesanan
-- Metode pembayaran: COD, Transfer, QRIS, Savala
+- Metode pembayaran: COD, Transfer, QRIS, Moncongloe
 - Riwayat dan status pesanan
 - Pembatalan hanya ketika status `Menunggu`
 - Stok dikembalikan tepat satu kali ketika pesanan dibatalkan
@@ -202,7 +202,7 @@ Status bisnis yang digunakan:
 - User: `aktif`, `nonaktif`
 - Produk: `Ready`, `Pre-Order`, `Habis`
 - Pesanan: `Menunggu`, `Diproses`, `Selesai`, `Dibatalkan`
-- Pembayaran: `COD`, `Transfer`, `QRIS`, `Savala`
+- Pembayaran: `COD`, `Transfer`, `QRIS`, `Moncongloe`
 
 ## Keamanan dan Integritas Transaksi
 

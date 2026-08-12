@@ -2,7 +2,7 @@
   "$schema": "https://getcomposer.org/schema.json",
   "name": "bumdes/berkah",
   "type": "project",
-  "description": "Sistem Informasi Pemasaran Produk Lokal BUMDes Berkah berbasis Laravel.",
+  "description": "Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.",
   "keywords": ["laravel", "bumdes", "umkm", "ecommerce"],
   "license": "MIT",
   "require": {

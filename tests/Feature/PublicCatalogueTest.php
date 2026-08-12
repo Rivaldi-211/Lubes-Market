@@ -17,7 +17,7 @@ class PublicCatalogueTest extends TestCase
     public function test_home_and_catalogue_are_public(): void
     {
         $this->seed(BumdesDemoSeeder::class);
-        $this->get('/')->assertOk()->assertSee('BUMDes Berkah');
+        $this->get('/')->assertOk()->assertSee('LUDES-MARKET');
         $this->get('/katalog')->assertOk()->assertSee('Jalangkote Isi Sayur');
     }
 

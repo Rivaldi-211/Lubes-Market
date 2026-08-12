@@ -171,8 +171,8 @@ INSERT INTO `kategori` (`id`,`nama_kategori`,`created_at`,`updated_at`) VALUES
 (3,'Kerajinan / Kreatif','2026-08-13 03:00:00','2026-08-13 03:00:00');
 
 INSERT INTO `umkm` (`id`,`user_id`,`nama_umkm`,`pemilik`,`alamat`,`no_hp`,`deskripsi`,`foto`,`status`,`created_at`,`updated_at`) VALUES
-(1,2,'Jalangkote Bu Sari','Ibu Sari','Kawasan Kuliner Savana Lappara (Savala), Moncongloe Lappara','081234500002','Jalangkote rumahan yang dibuat segar untuk warga dan pengunjung Savala.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(2,3,'Pisang Epe & Bakso Bakar Pak Baso','Pak Baso','Kawasan Kuliner Savana Lappara (Savala), Moncongloe Lappara','081234500003','Pisang epe, bakso bakar, dan minuman segar untuk suasana sore di Savala.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(1,2,'Jalangkote Bu Sari','Ibu Sari','Kawasan Kuliner Moncongloe Lappara','081234500002','Jalangkote rumahan yang dibuat segar untuk warga dan pengunjung Moncongloe Lappara.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(2,3,'Pisang Epe & Bakso Bakar Pak Baso','Pak Baso','Kawasan Kuliner Moncongloe Lappara','081234500003','Pisang epe, bakso bakar, dan minuman segar untuk suasana sore di Moncongloe Lappara.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (3,4,'Kripik Moncongloe Bu Nur','Ibu Nur','Dusun Moncongloe Lappara','081234500004','Camilan kering dan kue tradisional produksi warga Moncongloe Lappara.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (4,5,'Anyaman Kreatif Dg. Tola','Pak Dg. Tola','Dusun Moncongloe Lappara','081234500005','Kerajinan bambu dan suvenir buatan tangan untuk kebutuhan harian dan oleh-oleh.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00');
 
@@ -180,7 +180,7 @@ INSERT INTO `produk` (`id`,`umkm_id`,`kategori_id`,`nama_produk`,`harga`,`stok_s
 (1,1,1,'Jalangkote Isi Sayur',5000.00,'Ready',30,'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (2,1,1,'Jalangkote Isi Telur',6000.00,'Ready',24,'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (3,2,1,'Pisang Epe Coklat Keju',15000.00,'Ready',18,'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(4,2,1,'Bakso Bakar',12000.00,'Ready',25,'Bakso bakar dengan bumbu gurih khas lapak Savala, isi 10 tusuk.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(4,2,1,'Bakso Bakar',12000.00,'Ready',25,'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (5,2,1,'Jus Buah Segar',10000.00,'Ready',20,'Jus buah segar pilihan tanpa bahan pengawet.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (6,3,2,'Kripik Pisang Original',15000.00,'Ready',40,'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (7,3,2,'Kripik Singkong Moncongloe',13000.00,'Ready',36,'Kripik singkong renyah tersedia rasa original dan pedas.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),

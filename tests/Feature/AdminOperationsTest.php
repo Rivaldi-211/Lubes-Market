@@ -26,7 +26,7 @@ class AdminOperationsTest extends TestCase
             'nama_lengkap'=>'Ani Seller','username'=>'ani_seller','email'=>'ani@example.test','password'=>'password123','password_confirmation'=>'password123',
         ])->assertRedirect(route('admin.umkm.index'));
         $seller=User::where('username','ani_seller')->firstOrFail(); $this->assertSame('penjual',$seller->role); $this->assertSame('Dapur Baru',$seller->umkm->nama_umkm);
-        $this->actingAs($admin)->patch(route('admin.umkm.update',$seller->umkm),['nama_umkm'=>'Dapur Ani','pemilik'=>'Ani','alamat'=>'Savala','no_hp'=>'0812999','status'=>'aktif'])->assertRedirect(route('admin.umkm.index'));
+        $this->actingAs($admin)->patch(route('admin.umkm.update',$seller->umkm),['nama_umkm'=>'Dapur Ani','pemilik'=>'Ani','alamat'=>'Moncongloe Lappara','no_hp'=>'0812999','status'=>'aktif'])->assertRedirect(route('admin.umkm.index'));
         $this->assertDatabaseHas('umkm',['id'=>$seller->umkm->id,'nama_umkm'=>'Dapur Ani']);
     }
     public function test_admin_can_create_and_update_global_product(): void

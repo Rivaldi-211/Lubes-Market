@@ -1,3 +1,3 @@
 <?php
 use Illuminate\Support\Facades\Artisan;
-Artisan::command('inspire', function () { $this->comment('BUMDes Berkah — produk lokal, ekonomi tumbuh.'); });
+Artisan::command('inspire', function () { $this->comment('LUDES-MARKET — produk lokal, ekonomi tumbuh.'); });

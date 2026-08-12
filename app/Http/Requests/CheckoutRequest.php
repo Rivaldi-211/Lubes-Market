@@ -8,7 +8,7 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'metode_pembayaran'=>['required',Rule::in(['COD','Transfer','QRIS','Savala'])],
+            'metode_pembayaran'=>['required',Rule::in(['COD','Transfer','QRIS','Moncongloe'])],
             'alamat_pengiriman'=>['required','string','max:255'],
             'no_hp_pembeli'=>['required','string','max:20'],
             'catatan'=>['nullable','string','max:255'],

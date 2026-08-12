@@ -25,8 +25,8 @@ class BumdesDemoSeeder extends Seeder
         foreach(['Kuliner Basah','Produk Kering / Oleh-oleh','Kerajinan / Kreatif'] as $name) Kategori::create(['nama_kategori'=>$name]);
         $sellerUsers=User::where('role','penjual')->orderBy('id')->get();
         $umkmRows=[
-            ['nama_umkm'=>'Jalangkote Bu Sari','pemilik'=>'Ibu Sari','alamat'=>'Kawasan Kuliner Savana Lappara (Savala), Moncongloe Lappara','no_hp'=>'081234500002','deskripsi'=>'Jalangkote rumahan yang dibuat segar untuk warga dan pengunjung Savala.'],
-            ['nama_umkm'=>'Pisang Epe & Bakso Bakar Pak Baso','pemilik'=>'Pak Baso','alamat'=>'Kawasan Kuliner Savana Lappara (Savala), Moncongloe Lappara','no_hp'=>'081234500003','deskripsi'=>'Pisang epe, bakso bakar, dan minuman segar untuk suasana sore di Savala.'],
+            ['nama_umkm'=>'Jalangkote Bu Sari','pemilik'=>'Ibu Sari','alamat'=>'Kawasan Kuliner Moncongloe Lappara','no_hp'=>'081234500002','deskripsi'=>'Jalangkote rumahan yang dibuat segar untuk warga dan pengunjung Moncongloe Lappara.'],
+            ['nama_umkm'=>'Pisang Epe & Bakso Bakar Pak Baso','pemilik'=>'Pak Baso','alamat'=>'Kawasan Kuliner Moncongloe Lappara','no_hp'=>'081234500003','deskripsi'=>'Pisang epe, bakso bakar, dan minuman segar untuk suasana sore di Moncongloe Lappara.'],
             ['nama_umkm'=>'Kripik Moncongloe Bu Nur','pemilik'=>'Ibu Nur','alamat'=>'Dusun Moncongloe Lappara','no_hp'=>'081234500004','deskripsi'=>'Camilan kering dan kue tradisional produksi warga Moncongloe Lappara.'],
             ['nama_umkm'=>'Anyaman Kreatif Dg. Tola','pemilik'=>'Pak Dg. Tola','alamat'=>'Dusun Moncongloe Lappara','no_hp'=>'081234500005','deskripsi'=>'Kerajinan bambu dan suvenir buatan tangan untuk kebutuhan harian dan oleh-oleh.'],
         ];
@@ -35,7 +35,7 @@ class BumdesDemoSeeder extends Seeder
             [1,1,'Jalangkote Isi Sayur',5000,'Ready',30,'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.'],
             [1,1,'Jalangkote Isi Telur',6000,'Ready',24,'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.'],
             [2,1,'Pisang Epe Coklat Keju',15000,'Ready',18,'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.'],
-            [2,1,'Bakso Bakar',12000,'Ready',25,'Bakso bakar dengan bumbu gurih khas lapak Savala, isi 10 tusuk.'],
+            [2,1,'Bakso Bakar',12000,'Ready',25,'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.'],
             [2,1,'Jus Buah Segar',10000,'Ready',20,'Jus buah segar pilihan tanpa bahan pengawet.'],
             [3,2,'Kripik Pisang Original',15000,'Ready',40,'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.'],
             [3,2,'Kripik Singkong Moncongloe',13000,'Ready',36,'Kripik singkong renyah tersedia rasa original dan pedas.'],

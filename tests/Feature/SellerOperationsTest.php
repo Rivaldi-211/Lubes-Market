@@ -19,7 +19,7 @@ class SellerOperationsTest extends TestCase
     public function test_seller_can_update_own_profile_and_product_but_not_foreign_product(): void
     {
         $this->seed(BumdesDemoSeeder::class); $seller=$this->seller();
-        $this->actingAs($seller)->patch(route('seller.profile.update'),['nama_umkm'=>'Jalangkote Bu Sari Baru','pemilik'=>'Ibu Sari','alamat'=>'Savala','no_hp'=>'08123','deskripsi'=>'Segar setiap hari'])->assertRedirect();
+        $this->actingAs($seller)->patch(route('seller.profile.update'),['nama_umkm'=>'Jalangkote Bu Sari Baru','pemilik'=>'Ibu Sari','alamat'=>'Moncongloe Lappara','no_hp'=>'08123','deskripsi'=>'Segar setiap hari'])->assertRedirect();
         $this->assertDatabaseHas('umkm',['id'=>$seller->umkm->id,'nama_umkm'=>'Jalangkote Bu Sari Baru']);
         $product=$seller->umkm->produk()->firstOrFail();
         $this->actingAs($seller)->patch(route('seller.products.update',$product),['kategori_id'=>$product->kategori_id,'nama_produk'=>'Jalangkote Premium','harga'=>7000,'stok_status'=>'Ready','stok_jumlah'=>20,'deskripsi'=>'Lebih renyah'])->assertRedirect();
