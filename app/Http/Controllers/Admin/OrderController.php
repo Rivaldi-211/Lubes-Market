@@ -1,0 +1,8 @@
+<?php
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller; use App\Http\Requests\Admin\OrderStatusRequest; use App\Models\Pesanan; use App\Models\Produk; use App\Services\ActivityLogger; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB; use Illuminate\Validation\ValidationException;
+class OrderController extends Controller
+{
+    public function index(Request $request){ $q=Pesanan::with(['produk.umkm','pembeli']); if($request->filled('status'))$q->where('status',$request->input('status')); if($request->filled('metode'))$q->where('metode_pembayaran',$request->input('metode')); $orders=$q->latest('tanggal_pesan')->paginate(20)->withQueryString(); return view('admin.orders.index',compact('orders')); }
+    public function update(OrderStatusRequest $request, Pesanan $pesanan, ActivityLogger $logger){ $new=$request->validated('status'); DB::transaction(function() use($pesanan,$new){ $order=Pesanan::whereKey($pesanan->id)->lockForUpdate()->firstOrFail(); if($order->status==='Dibatalkan' && $new!=='Dibatalkan') throw ValidationException::withMessages(['status'=>'Pesanan yang dibatalkan tidak dapat diaktifkan kembali.']); if($new==='Dibatalkan' && $order->status!=='Dibatalkan'){ $p=Produk::whereKey($order->produk_id)->lockForUpdate()->firstOrFail(); $p->increment('stok_jumlah',$order->jumlah); if($p->stok_status==='Habis')$p->update(['stok_status'=>'Ready']); } $order->update(['status'=>$new]); }); $logger->log("Admin mengubah status pesanan #{$pesanan->id} menjadi {$new}",$request->user(),$request->ip()); return back()->with('success','Status pesanan diperbarui.'); }
+}

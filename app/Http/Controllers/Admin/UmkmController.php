@@ -1,0 +1,15 @@
+<?php
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UmkmRequest;
+use App\Models\Umkm; use App\Models\User; use App\Services\ActivityLogger;
+use Illuminate\Http\Request; use Illuminate\Support\Facades\DB; use Illuminate\Support\Facades\Storage; use Illuminate\Validation\ValidationException;
+class UmkmController extends Controller
+{
+    public function index(){ $umkms=Umkm::with('user')->withCount('produk')->latest()->paginate(15); return view('admin.umkm.index',compact('umkms')); }
+    public function create(){ $sellers=User::where('role','penjual')->whereDoesntHave('umkm')->orderBy('nama_lengkap')->get(); return view('admin.umkm.form',['umkm'=>new Umkm,'sellers'=>$sellers]); }
+    public function store(UmkmRequest $request, ActivityLogger $logger){ $umkm=DB::transaction(function() use($request){ $data=$request->safe()->only(['nama_umkm','pemilik','alamat','no_hp','deskripsi','status']); if($request->filled('user_id')){ $user=User::where('role','penjual')->findOrFail($request->integer('user_id')); if($user->umkm()->exists()) throw ValidationException::withMessages(['user_id'=>'Akun penjual tersebut sudah terhubung dengan UMKM lain.']); } else { $user=User::create(['nama_lengkap'=>$request->input('nama_lengkap'),'username'=>$request->input('username'),'email'=>$request->input('email'),'no_hp'=>$request->input('no_hp'),'password'=>$request->input('password'),'role'=>'penjual','status'=>'aktif']); } $data['user_id']=$user->id; if($request->hasFile('foto')) $data['foto']=$request->file('foto')->store('umkm','public'); return Umkm::create($data); }); $logger->log("Menambahkan UMKM {$umkm->nama_umkm}",$request->user(),$request->ip()); return redirect()->route('admin.umkm.index')->with('success','UMKM dan akun penjual berhasil disimpan.'); }
+    public function edit(Umkm $umkm){ return view('admin.umkm.form',['umkm'=>$umkm,'sellers'=>collect()]); }
+    public function update(UmkmRequest $request, Umkm $umkm, ActivityLogger $logger){ $data=$request->safe()->only(['nama_umkm','pemilik','alamat','no_hp','deskripsi','status']); if($request->hasFile('foto')){ if($umkm->foto) Storage::disk('public')->delete($umkm->foto); $data['foto']=$request->file('foto')->store('umkm','public'); } $umkm->update($data); $logger->log("Memperbarui UMKM {$umkm->nama_umkm}",$request->user(),$request->ip()); return redirect()->route('admin.umkm.index')->with('success','Data UMKM diperbarui.'); }
+    public function destroy(Request $request, Umkm $umkm, ActivityLogger $logger){ if($umkm->produk()->whereHas('pesanan')->exists()) throw ValidationException::withMessages(['umkm'=>'UMKM dengan riwayat transaksi tidak dapat dihapus. Nonaktifkan UMKM sebagai gantinya.']); $name=$umkm->nama_umkm; $user=$umkm->user; if($umkm->foto) Storage::disk('public')->delete($umkm->foto); foreach($umkm->produk as $p) if($p->foto) Storage::disk('public')->delete($p->foto); DB::transaction(fn()=> $user?->delete()); $logger->log("Menghapus UMKM {$name}",$request->user(),$request->ip()); return redirect()->route('admin.umkm.index')->with('success','UMKM dihapus.'); }
+}

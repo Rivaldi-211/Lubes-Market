@@ -1,0 +1,15 @@
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+.phpunit.result.cache
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/vendor
+/storage/*.key
+/storage/logs/*.log
+/.worktrees
