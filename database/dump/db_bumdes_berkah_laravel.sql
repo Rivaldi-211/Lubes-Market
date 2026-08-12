@@ -177,14 +177,14 @@ INSERT INTO `umkm` (`id`,`user_id`,`nama_umkm`,`pemilik`,`alamat`,`no_hp`,`deskr
 (4,5,'Anyaman Kreatif Dg. Tola','Pak Dg. Tola','Dusun Moncongloe Lappara','081234500005','Kerajinan bambu dan suvenir buatan tangan untuk kebutuhan harian dan oleh-oleh.',NULL,'aktif','2026-08-13 03:00:00','2026-08-13 03:00:00');
 
 INSERT INTO `produk` (`id`,`umkm_id`,`kategori_id`,`nama_produk`,`harga`,`stok_status`,`stok_jumlah`,`deskripsi`,`foto`,`created_at`,`updated_at`) VALUES
-(1,1,1,'Jalangkote Isi Sayur',5000.00,'Ready',30,'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(2,1,1,'Jalangkote Isi Telur',6000.00,'Ready',24,'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(3,2,1,'Pisang Epe Coklat Keju',15000.00,'Ready',18,'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(4,2,1,'Bakso Bakar',12000.00,'Ready',25,'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(5,2,1,'Jus Buah Segar',10000.00,'Ready',20,'Jus buah segar pilihan tanpa bahan pengawet.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(6,3,2,'Kripik Pisang Original',15000.00,'Ready',40,'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(7,3,2,'Kripik Singkong Moncongloe',13000.00,'Ready',36,'Kripik singkong renyah tersedia rasa original dan pedas.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
-(8,3,2,'Kue Tradisional Campur',20000.00,'Pre-Order',12,'Paket kue tradisional dibuat sesuai jadwal pesanan.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(1,1,1,'Jalangkote Isi Sayur',5000.00,'Ready',30,'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.','Jalangkote isi sayur.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(2,1,1,'Jalangkote Isi Telur',6000.00,'Ready',24,'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.','jalangkote isi telur.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(3,2,1,'Pisang Epe Coklat Keju',15000.00,'Ready',18,'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.','pisang epe coklat keju.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(4,2,1,'Bakso Bakar',12000.00,'Ready',25,'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.','bakso bakar.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(5,2,1,'Jus Buah Segar',10000.00,'Ready',20,'Jus buah segar pilihan tanpa bahan pengawet.','jus buah segar.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(6,3,2,'Kripik Pisang Original',15000.00,'Ready',40,'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.','kripik pisang original.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(7,3,2,'Kripik Singkong Moncongloe',13000.00,'Ready',36,'Kripik singkong renyah tersedia rasa original dan pedas.','kripik singkong moncongloe.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
+(8,3,2,'Kue Tradisional Campur',20000.00,'Pre-Order',12,'Paket kue tradisional dibuat sesuai jadwal pesanan.','kue tradisional campur.png','2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (9,4,3,'Anyaman Tas Bambu',45000.00,'Ready',8,'Tas anyaman bambu buatan tangan dengan karakter alami.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00'),
 (10,4,3,'Suvenir Miniatur Desa Wisata',25000.00,'Pre-Order',10,'Suvenir miniatur khas desa wisata Moncongloe Lappara.',NULL,'2026-08-13 03:00:00','2026-08-13 03:00:00');
 
