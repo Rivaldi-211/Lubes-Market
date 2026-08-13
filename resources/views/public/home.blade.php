@@ -41,7 +41,7 @@
     <div class="shell" style="display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap;">
         <div style="max-width: 620px;">
             <div class="eyebrow light" style="color: var(--gold); margin-bottom: 8px;"><span></span>PROGRAM UNGGULAN DESA</div>
-            <h2 style="font-family: var(--display); font-size: 2.2rem; margin: 0 0 12px; color: var(--white);">🤝 LUDES KEROYOKAN</h2>
+            <h2 style="font-family: var(--display); font-size: 2.2rem; margin: 0 0 12px; color: var(--white);">LUDES KEROYOKAN</h2>
             <p style="font-size: 1.15rem; margin: 0 0 12px; color: var(--gold); font-weight: 600;">Satu Pesanan. Banyak UMKM. Satu Kekuatan Desa.</p>
             <p style="opacity: 0.85; margin: 0; line-height: 1.6;">
                 Butuh produk dalam jumlah besar? Beberapa UMKM Moncongloe dapat memenuhi kebutuhan Anda bersama.

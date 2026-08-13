@@ -25,7 +25,7 @@
         <div class="panel-heading">
             <div>
                 <small>STATISTIK</small>
-                <h2>🏆 Top 5 Menu Terlaris Toko</h2>
+                <h2>Top 5 Menu Terlaris Toko</h2>
             </div>
             <a class="outline-link" href="{{ route('seller.reports.index') }}">Laporan Sales</a>
         </div>
