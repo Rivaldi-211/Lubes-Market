@@ -32,6 +32,7 @@ class BumdesDemoSeeder extends Seeder
             ['nama_umkm' => 'Pisang Epe & Bakso Bakar Pak Baso', 'pemilik' => 'Pak Baso', 'alamat' => 'Kawasan Kuliner Moncongloe Lappara', 'no_hp' => '081234500003', 'deskripsi' => 'Pisang epe, bakso bakar, dan minuman segar untuk suasana sore di Moncongloe Lappara.'],
             ['nama_umkm' => 'Kripik Moncongloe Bu Nur', 'pemilik' => 'Ibu Nur', 'alamat' => 'Dusun Moncongloe Lappara', 'no_hp' => '081234500004', 'deskripsi' => 'Camilan kering dan kue tradisional produksi warga Moncongloe Lappara.'],
             ['nama_umkm' => 'Anyaman Kreatif Dg. Tola', 'pemilik' => 'Pak Dg. Tola', 'alamat' => 'Dusun Moncongloe Lappara', 'no_hp' => '081234500005', 'deskripsi' => 'Kerajinan bambu dan suvenir buatan tangan untuk kebutuhan harian dan oleh-oleh.'],
+            ['nama_umkm' => 'Moammar Donat Shop', 'pemilik' => 'Moammar', 'alamat' => 'Moncongloe Lappara', 'no_hp' => '085242664216', 'deskripsi' => 'Donat lembut, varian rasa melimpah, dan aneka kue khas Moammar.'],
         ];
         foreach ($umkmRows as $i => $row)
             Umkm::create($row + ['user_id' => $sellerUsers[$i]->id, 'status' => 'aktif']);
