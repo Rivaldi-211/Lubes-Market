@@ -65,13 +65,6 @@
                     </div>
                 </form>
 
-                @foreach($items as $item)
-                    <form id="remove-{{ $item['product']->id }}" method="post" action="{{ route('cart.remove', $item['product']) }}">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                @endforeach
-
                 <aside class="cart-summary">
                     <span>Ringkasan</span>
                     <h2>Keranjang Anda</h2>
@@ -100,6 +93,13 @@
                     </form>
                 </aside>
             </div>
+
+            @foreach($items as $item)
+                <form id="remove-{{ $item['product']->id }}" method="post" action="{{ route('cart.remove', $item['product']) }}">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            @endforeach
         @endif
     </div>
 </section>
