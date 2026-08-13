@@ -23,7 +23,28 @@ class QrisPaymentController extends Controller
 
         $qrDataUri = null;
         if ($payment->status === 'PENDING' && !empty($payment->qr_string)) {
-            $qrDataUri = (new QRCode())->render($payment->qr_string);
+            $qrContent = $payment->qr_string;
+            $qrMode = request()->query('qr_mode', 'demo');
+
+            if (app()->environment(['local', 'testing']) && $qrMode === 'demo') {
+                $host = request()->getHost();
+                $scheme = request()->getScheme();
+                $port = request()->getPort();
+                $portStr = ($port && $port != 80 && $port != 443) ? ":{$port}" : '';
+
+                if ($host === '127.0.0.1' || $host === 'localhost') {
+                    $localIp = gethostbyname(gethostname());
+                    if (filter_var($localIp, FILTER_VALIDATE_IP) && $localIp !== '127.0.0.1') {
+                        $qrContent = "{$scheme}://{$localIp}{$portStr}/pembayaran/qris/{$payment->reference_id}/demo-mobile";
+                    } else {
+                        $qrContent = route('payment.qris.demo_mobile', $payment->reference_id);
+                    }
+                } else {
+                    $qrContent = "{$scheme}://{$host}{$portStr}/pembayaran/qris/{$payment->reference_id}/demo-mobile";
+                }
+            }
+
+            $qrDataUri = (new QRCode())->render($qrContent);
         }
 
         return view('payment.qris', [

@@ -58,16 +58,30 @@
                             @endif
 
                             @if(app()->environment(['local', 'testing']) && $payment->payment_method === 'QRIS' && !empty($payment->xendit_payment_request_id) && ($payment->expires_at === null || $payment->expires_at->isFuture()))
-                                <div style="margin-top: 20px; padding: 16px; background: #fffbebf5; border: 1px dashed #f59e0b; border-radius: 12px; text-align: center;">
-                                    <small style="color: #b45309; display: block; margin-bottom: 8px; font-weight: 600;">
-                                        <i class="bi bi-bug"></i> LINGKUNGAN PENGUJIAN (TEST MODE)
+                                <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border: 1px dashed #10b981; border-radius: 12px; text-align: center;">
+                                    <small style="color: #047857; display: block; margin-bottom: 8px; font-weight: 600;">
+                                        <i class="bi bi-phone-vibrate-fill"></i> MODE PRESENTASI DEMO (SCAN KAMERA HP)
                                     </small>
-                                    <form action="{{ route('payment.qris.simulate', $payment->reference_id) }}" method="POST" onsubmit="this.querySelector('button').disabled = true;">
-                                        @csrf
-                                        <button type="submit" class="button button-outline" style="border-color: #d97706; color: #b45309;">
-                                            <i class="bi bi-play-circle-fill"></i> Simulasikan Pembayaran (Test Mode)
-                                        </button>
-                                    </form>
+                                    <p style="font-size: 0.85rem; color: #065f46; margin-bottom: 12px;">
+                                        Kode QR di atas dikodekan untuk <strong>Scan Kamera HP (Google Lens / iPhone Camera)</strong>. Saat di-scan dengan kamera HP, halaman simulasi mobile akan terbuka di HP Anda!
+                                    </p>
+                                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                                        <form action="{{ route('payment.qris.simulate', $payment->reference_id) }}" method="POST" onsubmit="this.querySelector('button').disabled = true;">
+                                            @csrf
+                                            <button type="submit" class="button button-outline" style="border-color: #059669; color: #047857; font-size: 0.88rem;">
+                                                <i class="bi bi-play-circle-fill"></i> Simulasikan Pembayaran (Test Mode)
+                                            </button>
+                                        </form>
+                                        @if(request()->query('qr_mode') === 'raw')
+                                            <a href="{{ route('payment.qris.show', $payment->reference_id) }}" class="button button-outline" style="border-color: #64748b; color: #475569; font-size: 0.88rem;">
+                                                <i class="bi bi-qr-code-scan"></i> Aktifkan Mobile Demo Scan
+                                            </a>
+                                        @else
+                                            <a href="{{ route('payment.qris.show', [$payment->reference_id, 'qr_mode' => 'raw']) }}" class="button button-outline" style="border-color: #64748b; color: #475569; font-size: 0.88rem;">
+                                                <i class="bi bi-code-slash"></i> Tampilkan Xendit Raw QR String
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             @endif
                         </div>

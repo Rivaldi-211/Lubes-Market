@@ -41,6 +41,11 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout',[LoginController::class,'destroy'])->middleware('auth')->name('logout');
 Route::post('/webhooks/xendit/payment', [\App\Http\Controllers\Webhook\XenditWebhookController::class, 'payment'])->name('webhooks.xendit.payment');
 
+if (app()->environment(['local', 'testing'])) {
+    Route::get('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'show'])->name('payment.qris.demo_mobile');
+    Route::post('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'pay'])->name('payment.qris.demo_mobile_pay');
+}
+
 Route::middleware(['auth','active'])->group(function () {
     Route::get('/nota/{pesanan}', [ReceiptController::class,'show'])->name('receipt.show');
 
@@ -51,6 +56,8 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/pembayaran/qris/{reference}/status', [\App\Http\Controllers\Payment\QrisPaymentController::class, 'status'])->name('payment.qris.status');
         if (app()->environment(['local', 'testing'])) {
             Route::post('/pembayaran/qris/{reference}/simulate', [\App\Http\Controllers\Payment\QrisPaymentSimulationController::class, 'store'])->name('payment.qris.simulate');
+            Route::get('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'show'])->name('payment.qris.demo_mobile');
+            Route::post('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'pay'])->name('payment.qris.demo_mobile_pay');
         }
         Route::get('/pembeli', BuyerDashboardController::class)->name('buyer.dashboard');
         Route::patch('/pembeli/pesanan/{pesanan}/batal',[BuyerOrderController::class,'cancel'])->name('buyer.orders.cancel');

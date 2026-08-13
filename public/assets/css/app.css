@@ -738,17 +738,29 @@ body.public-page.home-page {
 }
 
 .location-card {
-    background: #c6a35c;
-    color: #173524;
+    background: #c49a45;
+    color: #173322;
     padding: 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .location-card .eyebrow {
-    color: #173524;
+    color: #173322;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.location-card h2 {
+    color: #173322;
 }
 
 .location-card p {
     max-width: 470px;
+    color: #1c3826;
+    font-size: 1.02rem;
+    line-height: 1.6;
 }
 
 .map-art {

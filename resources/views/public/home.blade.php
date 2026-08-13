@@ -37,6 +37,59 @@
     </div>
 </section>
 
+@if(isset($topProduct) && $topProduct)
+<section class="section top-seller-section" style="background: #faf8f5; border-top: 1px solid #ece7de; border-bottom: 1px solid #ece7de; padding: 64px 0;">
+    <div class="shell">
+        <div style="background: #ffffff; border: 1px solid #e6e1d6; border-radius: 20px; padding: 36px; box-shadow: 0 8px 30px rgba(24, 46, 33, 0.04);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; align-items: center;">
+                <div style="position: relative;">
+                    @if($topProduct->foto)
+                        <img src="{{ asset('storage/' . $topProduct->foto) }}" alt="{{ $topProduct->nama_produk }}" style="width: 100%; max-height: 280px; object-fit: cover; border-radius: 14px; border: 1px solid #e8e3d8;">
+                    @else
+                        <div style="width: 100%; height: 260px; background: #f5f1e7; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #205037; border: 1px solid #e8e3d8;">
+                            <i class="bi bi-bag"></i>
+                        </div>
+                    @endif
+                    <div style="position: absolute; top: 12px; left: 12px; background: #ffffff; color: #205037; padding: 5px 14px; border-radius: 30px; font-weight: 600; font-size: 0.8rem; border: 1px solid #d9c9ac; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="bi bi-trophy-fill" style="color: #c79b42;"></i> PRODUK TERLARIS NO. 1 DESA
+                    </div>
+                </div>
+                <div>
+                    <div class="eyebrow" style="margin-bottom: 8px;"><span></span> Pilihan Utama Warga</div>
+                    <h2 style="font-family: 'Manrope', sans-serif; font-size: 1.85rem; font-weight: 700; margin-bottom: 12px; color: #173d2b; line-height: 1.2;">{{ $topProduct->nama_produk }}</h2>
+                    <p style="color: #6e736c; font-size: 0.95rem; margin-bottom: 24px; line-height: 1.6;">
+                        {{ Str::limit($topProduct->deskripsi, 150) }}
+                    </p>
+                    <div style="display: flex; gap: 28px; margin-bottom: 28px; padding: 16px 0; border-top: 1px solid #ece7de; border-bottom: 1px solid #ece7de; flex-wrap: wrap;">
+                        <div>
+                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Mitra UMKM</span>
+                            <strong style="color: #173d2b; font-weight: 600; font-size: 0.95rem;">{{ $topProduct->umkm->nama_umkm ?? '-' }}</strong>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Total Terjual</span>
+                            <strong style="color: #205037; font-weight: 700; font-size: 1.05rem;">
+                                {{ number_format($topProduct->total_terjual ?? 0, 0, ',', '.') }} porsi
+                            </strong>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Harga</span>
+                            <strong style="color: #173d2b; font-weight: 700; font-size: 1.05rem;">
+                                Rp{{ number_format($topProduct->harga, 0, ',', '.') }}
+                            </strong>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="{{ route('products.show', $topProduct->id) }}" class="button">
+                            Lihat Detail & Beli <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
 <section class="section section-muted">
     <div class="shell">
         <div class="section-heading">
@@ -106,17 +159,21 @@
 <section class="section location-section">
     <div class="shell location-grid">
         <div class="location-card">
-            <div class="eyebrow light"><span></span>Temukan kami</div>
-            <h2>Moncongloe Lappara,<br>Maros.</h2>
-            <p>Kawasan Kuliner Moncongloe Lappara menjadi salah satu titik aktivitas UMKM dan kuliner warga.</p>
-            <a class="button button-light" href="https://maps.google.com/?q=Moncongloe+Lappara+Maros" target="_blank" rel="noopener">Buka Google Maps <i class="bi bi-geo-alt"></i></a>
+            <div class="eyebrow" style="color: #173322; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;"><span style="background: #173322;"></span>TEMUKAN KAMI</div>
+            <h2 style="color: #173322; margin-top: 14px; margin-bottom: 20px; font-weight: 700; line-height: 1.05;">Moncongloe<br>Lappara,<br>Maros.</h2>
+            <p style="color: #1c3826; font-size: 1.02rem; margin-bottom: 36px; line-height: 1.6;">Kawasan Kuliner Moncongloe Lappara menjadi salah satu titik aktivitas UMKM dan kuliner warga.</p>
+            <div>
+                <a href="https://maps.google.com/?q=Moncongloe+Lappara+Maros" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; color: #173322; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(0,0,0,0.06); transition: all 0.2s ease;">
+                    Buka Google Maps <i class="bi bi-geo-alt" style="font-size: 1.05rem;"></i>
+                </a>
+            </div>
         </div>
         <div class="map-art" aria-label="Peta lokasi Moncongloe Lappara">
             <iframe 
                 src="https://maps.google.com/maps?q=Moncongloe+Lappara+Maros&t=&z=14&ie=UTF8&iwloc=&output=embed" 
                 width="100%" 
                 height="100%" 
-                style="border:0;width:100%;height:100%;min-height:360px;" 
+                style="border:0;width:100%;height:100%;min-height:480px;" 
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade" 
