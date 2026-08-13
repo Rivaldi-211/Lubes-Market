@@ -42,7 +42,7 @@ class AdminOperationsTest extends TestCase
         $this->seed(BumdesDemoSeeder::class); $admin=$this->admin(); $buyer=User::where('role','pembeli')->firstOrFail();
         $this->actingAs($admin)->patch(route('admin.users.status',$buyer),['status'=>'nonaktif'])->assertRedirect();
         $this->assertSame('nonaktif',$buyer->fresh()->status);
-        $this->actingAs($admin)->patch(route('admin.users.status',$admin),['status'=>'nonaktif'])->assertStatus(422);
+        $this->actingAs($admin)->patch(route('admin.users.status',$admin),['status'=>'nonaktif'],['Accept'=>'application/json'])->assertStatus(422);
     }
     public function test_admin_can_update_order_status_and_access_reports_logs(): void
     {

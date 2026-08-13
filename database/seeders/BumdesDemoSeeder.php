@@ -48,7 +48,7 @@ class BumdesDemoSeeder extends Seeder
             [4, 3, 'Anyaman Tas Bambu', 45000, 'Ready', 8, 'Tas anyaman bambu buatan tangan dengan karakter alami.', NULL],
             [4, 3, 'Suvenir Miniatur Desa Wisata', 25000, 'Pre-Order', 10, 'Suvenir miniatur khas desa wisata Moncongloe Lappara.', NULL],
             [5, 1, 'Donat Jumbo', 30000, 'Ready', 100, 'Donat lembut empuk isi 6.', NULL],
-            [5, 1, 'Kacang Bawang', 35000, 'Ready', 80, 'Kacang bawang gurih dan renyah.', NULL],
+            [5, 2, 'Kacang Bawang', 35000, 'Ready', 80, 'Kacang bawang gurih dan renyah.', NULL],
             [5, 1, 'Es Kepona', 16000, 'Ready', 60, 'Es kepona manis dan segar.', NULL],
             [5, 1, 'Dadar Santan Kacang', 10000, 'Ready', 50, 'Kombinasi rasa gurih santan dan renyah kacang dalam satu gigitan yang memanjakan lidah.', NULL],
             [5, 1, 'Pisang Ijo Monat', 12000, 'Ready', 50, 'Pisang ijo dengan saus santan dan sirup merah yang manis dan segar.', NULL],
@@ -77,5 +77,22 @@ class BumdesDemoSeeder extends Seeder
         $o1 = Pesanan::create(['pembeli_id' => $buyer->id, 'produk_id' => 3, 'jumlah' => 2, 'total_harga' => 30000, 'metode_pembayaran' => 'COD', 'alamat_pengiriman' => 'Moncongloe Lappara', 'no_hp_pembeli' => $buyer->no_hp, 'status' => 'Selesai', 'catatan' => 'Bungkus terpisah']);
         Pesanan::create(['pembeli_id' => $buyer->id, 'produk_id' => 6, 'jumlah' => 1, 'total_harga' => 15000, 'metode_pembayaran' => 'Transfer', 'alamat_pengiriman' => 'Moncongloe Lappara', 'no_hp_pembeli' => $buyer->no_hp, 'status' => 'Menunggu']);
         Ulasan::create(['pesanan_id' => $o1->id, 'produk_id' => 3, 'pembeli_id' => $buyer->id, 'rating' => 5, 'komentar' => 'Pisang epennya enak dan masih hangat saat diterima.']);
+
+        $kelompokSnack = \App\Models\KelompokKeroyokan::create([
+            'kategori_id' => 1,
+            'nama_kelompok' => 'Snack Box Acara Desa',
+            'deskripsi' => 'Paket gabungan snack box lokal untuk konsumsi rapat, seminar, dan acara warga desa.',
+            'aktif' => true,
+        ]);
+
+        $kelompokOlehOleh = \App\Models\KelompokKeroyokan::create([
+            'kategori_id' => 2,
+            'nama_kelompok' => 'Paket Keripik & Oleh-oleh Khas',
+            'deskripsi' => 'Gabungan aneka camilan kering dan keripik khas Moncongloe Lappara.',
+            'aktif' => true,
+        ]);
+
+        Produk::whereIn('id', [1, 2, 3, 4, 11, 13, 14, 15])->update(['kelompok_keroyokan_id' => $kelompokSnack->id]);
+        Produk::whereIn('id', [6, 7, 8, 12])->update(['kelompok_keroyokan_id' => $kelompokOlehOleh->id]);
     }
 }

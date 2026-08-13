@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller; use App\Http\Requests\Admin\ProductRequest; use App\Models\Kategori; use App\Models\Produk; use App\Models\Umkm; use App\Services\ActivityLogger; use Illuminate\Http\Request; use Illuminate\Support\Facades\Storage; use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\Controller; use App\Http\Requests\Admin\ProductRequest; use App\Models\Kategori; use App\Models\KelompokKeroyokan; use App\Models\Produk; use App\Models\Umkm; use App\Services\ActivityLogger; use Illuminate\Http\Request; use Illuminate\Support\Facades\Storage; use Illuminate\Validation\ValidationException;
 class ProductController extends Controller
 {
-    public function index(Request $request){ $q=Produk::with(['umkm','kategori']); if($request->filled('q')) $q->where('nama_produk','like','%'.$request->input('q').'%'); $products=$q->latest()->paginate(20)->withQueryString(); return view('admin.products.index',compact('products')); }
-    private function form(Produk $product){ return view('admin.products.form',compact('product')+['categories'=>Kategori::orderBy('nama_kategori')->get(),'umkms'=>Umkm::orderBy('nama_umkm')->get()]); }
+    public function index(Request $request){ $q=Produk::with(['umkm','kategori','kelompokKeroyokan']); if($request->filled('q')) $q->where('nama_produk','like','%'.$request->input('q').'%'); $products=$q->latest()->paginate(20)->withQueryString(); return view('admin.products.index',compact('products')); }
+    private function form(Produk $product){ return view('admin.products.form',compact('product')+['categories'=>Kategori::orderBy('nama_kategori')->get(),'umkms'=>Umkm::orderBy('nama_umkm')->get(),'kelompokList'=>KelompokKeroyokan::with('kategori')->orderBy('nama_kelompok')->get()]); }
     public function create(){ return $this->form(new Produk); }
     public function store(ProductRequest $request, ActivityLogger $logger){ $data=$request->safe()->except('foto'); if($request->hasFile('foto')) $data['foto']=$request->file('foto')->store('products','public'); if((int)$data['stok_jumlah']===0)$data['stok_status']='Habis'; $p=Produk::create($data); $logger->log("Admin menambahkan produk {$p->nama_produk}",$request->user(),$request->ip()); return redirect()->route('admin.products.index')->with('success','Produk ditambahkan.'); }
     public function edit(Produk $produk){ return $this->form($produk); }

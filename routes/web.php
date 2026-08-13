@@ -23,9 +23,15 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 
+use App\Http\Controllers\Public\KeroyokanController as PublicKeroyokanController;
+use App\Http\Controllers\Admin\KeroyokanController as AdminKeroyokanController;
+
 Route::get('/', HomeController::class)->name('home');
 Route::get('/katalog',[CatalogController::class,'index'])->name('catalogue');
 Route::get('/produk/{produk}',[ProductController::class,'show'])->name('products.show');
+Route::get('/keroyokan', [PublicKeroyokanController::class, 'index'])->name('keroyokan.index');
+Route::get('/keroyokan/{kelompokKeroyokan}', [PublicKeroyokanController::class, 'show'])->name('keroyokan.show');
+Route::post('/keroyokan/{kelompokKeroyokan}/simulasi', [PublicKeroyokanController::class, 'simulate'])->name('keroyokan.simulate');
 Route::get('/keranjang',[CartController::class,'index'])->name('cart.index');
 Route::post('/keranjang/tambah/{produk}',[CartController::class,'add'])->name('cart.add');
 Route::patch('/keranjang',[CartController::class,'update'])->name('cart.update');
@@ -59,6 +65,7 @@ Route::middleware(['auth','active'])->group(function () {
             Route::get('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'show'])->name('payment.qris.demo_mobile');
             Route::post('/pembayaran/qris/{reference}/demo-mobile', [\App\Http\Controllers\Payment\QrisMobileDemoController::class, 'pay'])->name('payment.qris.demo_mobile_pay');
         }
+        Route::post('/keroyokan/{kelompokKeroyokan}/konfirmasi', [PublicKeroyokanController::class, 'confirm'])->name('keroyokan.confirm');
         Route::get('/pembeli', BuyerDashboardController::class)->name('buyer.dashboard');
         Route::patch('/pembeli/pesanan/{pesanan}/batal',[BuyerOrderController::class,'cancel'])->name('buyer.orders.cancel');
         Route::post('/pembeli/pesanan/{pesanan}/bukti',[BuyerOrderController::class,'uploadProof'])->name('buyer.orders.proof');
@@ -69,6 +76,7 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
         Route::resource('umkm', AdminUmkmController::class)->except('show');
         Route::resource('produk', AdminProductController::class)->except('show')->names('products');
+        Route::resource('keroyokan', AdminKeroyokanController::class)->except('show')->names('keroyokan');
         Route::get('/pengguna', [AdminUserController::class,'index'])->name('users.index');
         Route::patch('/pengguna/{user}/status', [AdminUserController::class,'status'])->name('users.status');
         Route::get('/pesanan', [AdminOrderController::class,'index'])->name('orders.index');

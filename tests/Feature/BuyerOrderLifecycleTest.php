@@ -28,7 +28,7 @@ class BuyerOrderLifecycleTest extends TestCase
 
         $this->assertSame('Dibatalkan', $order->fresh()->status);
         $this->assertSame($before + $order->jumlah, $product->fresh()->stok_jumlah);
-        $this->actingAs($buyer)->patch(route('buyer.orders.cancel', $order))->assertStatus(422);
+        $this->actingAs($buyer)->patch(route('buyer.orders.cancel', $order), [], ['Accept' => 'application/json'])->assertStatus(422);
         $this->assertSame($before + $order->jumlah, $product->fresh()->stok_jumlah);
     }
 
@@ -41,7 +41,7 @@ class BuyerOrderLifecycleTest extends TestCase
         $completed = Pesanan::where('pembeli_id', $buyer->id)->where('status', 'Selesai')->firstOrFail();
 
         $this->actingAs($other)->patch(route('buyer.orders.cancel', $foreign))->assertForbidden();
-        $this->actingAs($buyer)->patch(route('buyer.orders.cancel', $completed))->assertStatus(422);
+        $this->actingAs($buyer)->patch(route('buyer.orders.cancel', $completed), [], ['Accept' => 'application/json'])->assertStatus(422);
     }
 
     public function test_transfer_or_qris_payment_proof_is_stored_for_own_order_only(): void
@@ -52,7 +52,7 @@ class BuyerOrderLifecycleTest extends TestCase
         $order = Pesanan::where('pembeli_id', $buyer->id)->where('metode_pembayaran', 'Transfer')->firstOrFail();
 
         $this->actingAs($buyer)->post(route('buyer.orders.proof', $order), [
-            'bukti_pembayaran' => UploadedFile::fake()->image('bukti.jpg')->size(500),
+            'bukti_pembayaran' => UploadedFile::fake()->create('bukti.jpg', 500, 'image/jpeg'),
         ])->assertRedirect(route('buyer.dashboard'));
 
         $path = $order->fresh()->bukti_pembayaran;
@@ -69,8 +69,8 @@ class BuyerOrderLifecycleTest extends TestCase
         $transfer = Pesanan::where('pembeli_id', $buyer->id)->where('metode_pembayaran', 'Transfer')->firstOrFail();
 
         $this->actingAs($buyer)->post(route('buyer.orders.proof', $cod), [
-            'bukti_pembayaran' => UploadedFile::fake()->image('bukti.jpg'),
-        ])->assertStatus(422);
+            'bukti_pembayaran' => UploadedFile::fake()->create('bukti.jpg', 100, 'image/jpeg'),
+        ], ['Accept' => 'application/json'])->assertStatus(422);
 
         $this->actingAs($buyer)->post(route('buyer.orders.proof', $transfer), [
             'bukti_pembayaran' => UploadedFile::fake()->create('bukti.pdf', 100, 'application/pdf'),
@@ -107,7 +107,7 @@ class BuyerOrderLifecycleTest extends TestCase
         ])->assertRedirect(route('buyer.dashboard'));
 
         $this->assertDatabaseHas('ulasan', ['pesanan_id'=>$order->id,'pembeli_id'=>$buyer->id,'rating'=>4]);
-        $this->actingAs($buyer)->post(route('buyer.orders.review', $order), ['rating'=>5])->assertStatus(422);
+        $this->actingAs($buyer)->post(route('buyer.orders.review', $order), ['rating'=>5], ['Accept' => 'application/json'])->assertStatus(422);
         $this->assertSame(1, Ulasan::where('pesanan_id', $order->id)->count());
     }
 }

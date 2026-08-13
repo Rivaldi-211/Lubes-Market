@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\BatchKeroyokan;
+use App\Models\KelompokKeroyokan;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutService
@@ -19,10 +22,35 @@ class CheckoutService
         $raw = $this->cart->raw();
         if ($raw === []) throw ValidationException::withMessages(['cart' => 'Keranjang Anda masih kosong.']);
 
-        $orders = DB::transaction(function () use ($buyer, $payload, $raw) {
+        $keroyokanContext = Session::get('keroyokan_context');
+        $validKeroyokanContext = false;
+        $kelompokKeroyokan = null;
+
+        if (is_array($keroyokanContext) && isset($keroyokanContext['kelompok_keroyokan_id'], $keroyokanContext['target_jumlah'])) {
+            $kelompokKeroyokan = KelompokKeroyokan::find($keroyokanContext['kelompok_keroyokan_id']);
+            if ($kelompokKeroyokan && $kelompokKeroyokan->aktif) {
+                $targetJumlah = (int) $keroyokanContext['target_jumlah'];
+                $sumCartQty = (int) array_sum($raw);
+                if ($sumCartQty === $targetJumlah) {
+                    $validKeroyokanContext = true;
+                }
+            }
+        }
+
+        $orders = DB::transaction(function () use ($buyer, $payload, $raw, $validKeroyokanContext, $kelompokKeroyokan, $keroyokanContext) {
             $created = collect();
             $totalQrisAmount = 0;
             $isQris = ($payload['metode_pembayaran'] === 'QRIS');
+
+            $batch = null;
+            if ($validKeroyokanContext) {
+                $batch = BatchKeroyokan::create([
+                    'pembeli_id' => $buyer->id,
+                    'kelompok_keroyokan_id' => $kelompokKeroyokan->id,
+                    'target_jumlah' => (int) $keroyokanContext['target_jumlah'],
+                    'total_harga' => 0,
+                ]);
+            }
 
             foreach ($raw as $productId => $quantity) {
                 $product = Produk::query()->whereKey((int)$productId)->lockForUpdate()->first();
@@ -32,6 +60,12 @@ class CheckoutService
                 $quantity = (int)$quantity;
                 if ($quantity < 1 || !$product->isAvailable() || $product->stok_jumlah < $quantity) {
                     throw ValidationException::withMessages(['cart' => "Stok {$product->nama_produk} berubah. Tersedia {$product->stok_jumlah} unit."]);
+                }
+
+                if ($validKeroyokanContext) {
+                    if ((int)$product->kelompok_keroyokan_id !== (int)$kelompokKeroyokan->id) {
+                        throw ValidationException::withMessages(['cart' => "Produk {$product->nama_produk} bukan bagian dari kelompok Keroyokan ini."]);
+                    }
                 }
 
                 if ($isQris) {
@@ -45,8 +79,9 @@ class CheckoutService
                     $totalQrisAmount += ($itemPrice * $quantity);
                 }
 
-                $created->push(Pesanan::create([
+                $orderData = [
                     'pembeli_id' => $buyer->id,
+                    'batch_keroyokan_id' => $batch?->id,
                     'produk_id' => $product->id,
                     'jumlah' => $quantity,
                     'total_harga' => (float)$product->harga * $quantity,
@@ -56,8 +91,16 @@ class CheckoutService
                     'status' => 'Menunggu',
                     'catatan' => $payload['catatan'] ?? null,
                     'tanggal_pesan' => now(),
-                ]));
+                ];
+
+                $created->push(Pesanan::create($orderData));
                 $product->decrement('stok_jumlah', $quantity);
+            }
+
+            if ($batch) {
+                $batch->update([
+                    'total_harga' => (float) $created->sum('total_harga')
+                ]);
             }
 
             if ($isQris) {
@@ -70,6 +113,7 @@ class CheckoutService
         }, 3);
 
         $this->cart->clear();
+        Session::forget('keroyokan_context');
         return $orders;
     }
 }
