@@ -32,10 +32,4 @@
 </form>
 
 <p class="auth-switch">Belum punya akun? <a href="{{ route('register') }}">Daftar sebagai pembeli atau penjual</a></p>
-
-<div class="demo-note">
-    <strong>Akun demo</strong>
-    <span>Admin: <code>admin</code> · Pembeli: <code>budi_pembeli</code></span>
-    <span>Password demo: <code>password123</code></span>
-</div>
 @endsection
