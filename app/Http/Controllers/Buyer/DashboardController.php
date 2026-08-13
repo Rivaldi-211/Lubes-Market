@@ -9,11 +9,20 @@ class DashboardController extends Controller
     {
         $orders=Pesanan::query()->where('pembeli_id',$request->user()->id)
             ->with(['produk.umkm','ulasan'])->latest('tanggal_pesan')->paginate(10);
+        $statsRaw=Pesanan::query()
+            ->where('pembeli_id',$request->user()->id)
+            ->selectRaw("
+                COUNT(*) as total,
+                COUNT(CASE WHEN status = 'Menunggu' THEN 1 END) as menunggu,
+                COUNT(CASE WHEN status = 'Diproses' THEN 1 END) as diproses,
+                COUNT(CASE WHEN status = 'Selesai' THEN 1 END) as selesai
+            ")
+            ->first();
         $stats=[
-            'total'=>Pesanan::where('pembeli_id',$request->user()->id)->count(),
-            'menunggu'=>Pesanan::where('pembeli_id',$request->user()->id)->where('status','Menunggu')->count(),
-            'diproses'=>Pesanan::where('pembeli_id',$request->user()->id)->where('status','Diproses')->count(),
-            'selesai'=>Pesanan::where('pembeli_id',$request->user()->id)->where('status','Selesai')->count(),
+            'total'=>(int)($statsRaw->total??0),
+            'menunggu'=>(int)($statsRaw->menunggu??0),
+            'diproses'=>(int)($statsRaw->diproses??0),
+            'selesai'=>(int)($statsRaw->selesai??0),
         ];
         return view('buyer.dashboard',compact('orders','stats'));
     }

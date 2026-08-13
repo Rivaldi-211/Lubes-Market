@@ -13,11 +13,18 @@ class DashboardController extends Controller
     {
         $umkm = $request->user()->umkm()->withCount('produk')->firstOrFail();
         $base = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id));
+        $orderStats = (clone $base)
+            ->selectRaw("
+                COUNT(*) as orders,
+                COUNT(CASE WHEN status = 'Menunggu' THEN 1 END) as waiting,
+                COALESCE(SUM(CASE WHEN status = 'Selesai' THEN total_harga ELSE 0 END), 0) as revenue
+            ")
+            ->first();
         $stats = [
             'products' => $umkm->produk_count,
-            'orders' => (clone $base)->count(),
-            'waiting' => (clone $base)->where('status', 'Menunggu')->count(),
-            'revenue' => (float)(clone $base)->where('status', 'Selesai')->sum('total_harga')
+            'orders' => (int) ($orderStats->orders ?? 0),
+            'waiting' => (int) ($orderStats->waiting ?? 0),
+            'revenue' => (float) ($orderStats->revenue ?? 0),
         ];
         $recent = (clone $base)->with(['produk', 'pembeli'])->latest('tanggal_pesan')->limit(8)->get();
 

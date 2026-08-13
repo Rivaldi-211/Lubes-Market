@@ -12,12 +12,17 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
+        $orderStats = Pesanan::selectRaw("
+            COUNT(*) as orders,
+            COALESCE(SUM(CASE WHEN status = 'Selesai' THEN total_harga ELSE 0 END), 0) as revenue
+        ")->first();
+
         $stats = [
             'umkm' => Umkm::count(),
             'products' => Produk::count(),
             'users' => User::count(),
-            'orders' => Pesanan::count(),
-            'revenue' => (float)Pesanan::where('status', 'Selesai')->sum('total_harga')
+            'orders' => (int) ($orderStats->orders ?? 0),
+            'revenue' => (float) ($orderStats->revenue ?? 0)
         ];
 
         $recent = Pesanan::with(['produk.umkm', 'pembeli'])->latest('tanggal_pesan')->limit(10)->get();
