@@ -1,2 +1,41 @@
-@extends('layouts.auth') @section('title','Masuk')
-@section('content')<div class="auth-heading"><small>AKSES SISTEM</small><h2>Masuk ke akun Anda.</h2><p>Gunakan username dan password yang telah terdaftar.</p></div><form class="auth-form" method="post" action="{{ route('login.store') }}">@csrf<label>Username<input name="username" value="{{ old('username') }}" autocomplete="username" required autofocus></label><label>Password<div class="password-field"><input type="password" name="password" autocomplete="current-password" required><i class="bi bi-lock"></i></div></label><label class="check-row"><input type="checkbox" name="remember" value="1"> Ingat sesi saya</label><button class="button wide" type="submit">Masuk <i class="bi bi-arrow-right"></i></button></form><p class="auth-switch">Belum punya akun? <a href="{{ route('register') }}">Daftar sebagai pembeli atau penjual</a></p><div class="demo-note"><strong>Akun demo</strong><span>Admin: <code>admin</code> · Pembeli: <code>budi_pembeli</code></span><span>Password demo: <code>password123</code></span></div>@endsection
+@extends('layouts.auth')
+
+@section('title', 'Masuk')
+
+@section('content')
+<div class="auth-heading">
+    <small>AKSES SISTEM</small>
+    <h2>Masuk ke akun Anda.</h2>
+    <p>Gunakan username dan password yang telah terdaftar.</p>
+</div>
+
+<form class="auth-form" method="post" action="{{ route('login.store') }}">
+    @csrf
+    <label>
+        Username
+        <input name="username" value="{{ old('username') }}" autocomplete="username" required autofocus>
+    </label>
+
+    <label>
+        Password
+        <div class="password-field">
+            <input type="password" name="password" autocomplete="current-password" required>
+            <i class="bi bi-lock"></i>
+        </div>
+    </label>
+
+    <label class="check-row">
+        <input type="checkbox" name="remember" value="1"> Ingat sesi saya
+    </label>
+
+    <button class="button wide" type="submit">Masuk <i class="bi bi-arrow-right"></i></button>
+</form>
+
+<p class="auth-switch">Belum punya akun? <a href="{{ route('register') }}">Daftar sebagai pembeli atau penjual</a></p>
+
+<div class="demo-note">
+    <strong>Akun demo</strong>
+    <span>Admin: <code>admin</code> · Pembeli: <code>budi_pembeli</code></span>
+    <span>Password demo: <code>password123</code></span>
+</div>
+@endsection
