@@ -17,7 +17,7 @@
     <div class="shell">
         <x-flash />
 
-        <form method="post" action="{{ route('checkout.store') }}" class="checkout-layout">
+        <form method="post" action="{{ route('checkout.store') }}" class="checkout-layout" id="checkoutForm" onsubmit="const btn = this.querySelector('button[type=submit]'); if (btn) { btn.disabled = true; btn.innerHTML = 'Memproses pesanan...'; }">
             @csrf
             <div class="checkout-main">
                 <section class="form-panel">

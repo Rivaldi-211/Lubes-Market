@@ -3,6 +3,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 class Pesanan extends Model
 {
@@ -13,4 +14,5 @@ class Pesanan extends Model
     public function pembeli(): BelongsTo { return $this->belongsTo(User::class, 'pembeli_id'); }
     public function produk(): BelongsTo { return $this->belongsTo(Produk::class, 'produk_id'); }
     public function ulasan(): HasOne { return $this->hasOne(Ulasan::class, 'pesanan_id'); }
+    public function payments(): BelongsToMany { return $this->belongsToMany(Payment::class, 'payment_pesanan', 'pesanan_id', 'payment_id')->withTimestamps(); }
 }

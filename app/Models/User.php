@@ -21,6 +21,7 @@ class User extends Authenticatable
 
     public function umkm(): HasOne { return $this->hasOne(Umkm::class, 'user_id'); }
     public function pesanan(): HasMany { return $this->hasMany(Pesanan::class, 'pembeli_id'); }
+    public function payments(): HasMany { return $this->hasMany(Payment::class, 'user_id'); }
     public function ulasan(): HasMany { return $this->hasMany(Ulasan::class, 'pembeli_id'); }
     public function logAktivitas(): HasMany { return $this->hasMany(LogAktivitas::class, 'user_id'); }
 

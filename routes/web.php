@@ -39,13 +39,19 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class,'store'])->name('register.store');
 });
 Route::post('/logout',[LoginController::class,'destroy'])->middleware('auth')->name('logout');
+Route::post('/webhooks/xendit/payment', [\App\Http\Controllers\Webhook\XenditWebhookController::class, 'payment'])->name('webhooks.xendit.payment');
 
 Route::middleware(['auth','active'])->group(function () {
     Route::get('/nota/{pesanan}', [ReceiptController::class,'show'])->name('receipt.show');
 
     Route::middleware('role:pembeli')->group(function(){
         Route::get('/checkout',[CheckoutController::class,'create'])->name('checkout.create');
-        Route::post('/checkout',[CheckoutController::class,'store'])->name('checkout.store');
+        Route::post('/checkout',[CheckoutController::class,'store'])->name('checkout.store')->block(lockSeconds: 30, waitSeconds: 35);
+        Route::get('/pembayaran/qris/{reference}', [\App\Http\Controllers\Payment\QrisPaymentController::class, 'show'])->name('payment.qris.show');
+        Route::get('/pembayaran/qris/{reference}/status', [\App\Http\Controllers\Payment\QrisPaymentController::class, 'status'])->name('payment.qris.status');
+        if (app()->environment(['local', 'testing'])) {
+            Route::post('/pembayaran/qris/{reference}/simulate', [\App\Http\Controllers\Payment\QrisPaymentSimulationController::class, 'store'])->name('payment.qris.simulate');
+        }
         Route::get('/pembeli', BuyerDashboardController::class)->name('buyer.dashboard');
         Route::patch('/pembeli/pesanan/{pesanan}/batal',[BuyerOrderController::class,'cancel'])->name('buyer.orders.cancel');
         Route::post('/pembeli/pesanan/{pesanan}/bukti',[BuyerOrderController::class,'uploadProof'])->name('buyer.orders.proof');
