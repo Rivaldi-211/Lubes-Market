@@ -531,6 +531,61 @@
 
 .pagination-wrap {
     padding-top: 18px;
+    width: 100%;
+}
+
+.ludes-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    width: 100%;
+}
+
+.pagination-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pagination-links .page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--green-900, #182e21);
+    background: #ffffff;
+    border: 1px solid var(--line, #e2ded4);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination-links a.page-btn:hover {
+    background: var(--cream, #f5f1e7);
+    border-color: var(--gold, #c79b42);
+    color: var(--green-950, #173d2b);
+}
+
+.pagination-links .page-btn.active {
+    background: var(--green-900, #182e21);
+    border-color: var(--green-900, #182e21);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.pagination-links .page-btn.disabled {
+    color: #b0b5ae;
+    background: #faf9f6;
+    border-color: #eee9e0;
+    cursor: not-allowed;
 }
 
 .sidebar-backdrop {
