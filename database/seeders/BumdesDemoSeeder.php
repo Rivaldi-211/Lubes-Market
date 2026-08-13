@@ -37,14 +37,14 @@ class BumdesDemoSeeder extends Seeder
         foreach ($umkmRows as $i => $row)
             Umkm::create($row + ['user_id' => $sellerUsers[$i]->id, 'status' => 'aktif']);
         $products = [
-            [1, 1, 'Jalangkote Isi Sayur', 5000, 'Ready', 30, 'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.', 'Jalangkote isi sayur.png'],
-            [1, 1, 'Jalangkote Isi Telur', 6000, 'Ready', 24, 'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.', 'jalangkote isi telur.png'],
-            [2, 1, 'Pisang Epe Coklat Keju', 15000, 'Ready', 18, 'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.', 'pisang epe coklat keju.png'],
-            [2, 1, 'Bakso Bakar', 12000, 'Ready', 25, 'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.', 'bakso bakar.png'],
-            [2, 1, 'Jus Buah Segar', 10000, 'Ready', 20, 'Jus buah segar pilihan tanpa bahan pengawet.', 'jus buah segar.png'],
-            [3, 2, 'Kripik Pisang Original', 15000, 'Ready', 40, 'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.', 'kripik pisang original.png'],
-            [3, 2, 'Kripik Singkong Moncongloe', 13000, 'Ready', 36, 'Kripik singkong renyah tersedia rasa original dan pedas.', 'kripik singkong moncongloe.png'],
-            [3, 2, 'Kue Tradisional Campur', 20000, 'Pre-Order', 12, 'Paket kue tradisional dibuat sesuai jadwal pesanan.', 'kue tradisional campur.png'],
+            [1, 1, 'Jalangkote Isi Sayur', 5000, 'Ready', 30, 'Jalangkote renyah isi sayur wortel dan kentang, enak dinikmati hangat.', 'products/umkm-1/Jalangkote isi sayur.png'],
+            [1, 1, 'Jalangkote Isi Telur', 6000, 'Ready', 24, 'Jalangkote dengan isian telur dan sayur, dibuat segar setiap hari.', 'products/umkm-1/jalangkote isi telur.png'],
+            [2, 1, 'Pisang Epe Coklat Keju', 15000, 'Ready', 18, 'Pisang epe bakar dengan gula merah, cokelat, dan keju parut.', 'products/umkm-2/pisang epe coklat keju.png'],
+            [2, 1, 'Bakso Bakar', 12000, 'Ready', 25, 'Bakso bakar dengan bumbu gurih khas Moncongloe Lappara, isi 10 tusuk.', 'products/umkm-2/bakso bakar.png'],
+            [2, 1, 'Jus Buah Segar', 10000, 'Ready', 20, 'Jus buah segar pilihan tanpa bahan pengawet.', 'products/umkm-2/jus buah segar.png'],
+            [3, 2, 'Kripik Pisang Original', 15000, 'Ready', 40, 'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.', 'products/umkm-3/kripik pisang original.png'],
+            [3, 2, 'Kripik Singkong Moncongloe', 13000, 'Ready', 36, 'Kripik singkong renyah tersedia rasa original dan pedas.', 'products/umkm-3/kripik singkong moncongloe.png'],
+            [3, 2, 'Kue Tradisional Campur', 20000, 'Pre-Order', 12, 'Paket kue tradisional dibuat sesuai jadwal pesanan.', 'products/umkm-3/kue tradisional campur.png'],
             [4, 3, 'Anyaman Tas Bambu', 45000, 'Ready', 8, 'Tas anyaman bambu buatan tangan dengan karakter alami.', NULL],
             [4, 3, 'Suvenir Miniatur Desa Wisata', 25000, 'Pre-Order', 10, 'Suvenir miniatur khas desa wisata Moncongloe Lappara.', NULL],
             [5, 1, 'Donat Jumbo', 30000, 'Ready', 100, 'Donat lembut empuk isi 6.', NULL],
