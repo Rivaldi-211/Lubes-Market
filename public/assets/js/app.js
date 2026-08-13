@@ -164,7 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    /* --- Custom Dropdown Popup Menu --- */
+    });
+
     /* --- Custom Dropdown Popup Menu --- */
     function initLudesCustomDropdowns() {
         const selects = document.querySelectorAll('select');
