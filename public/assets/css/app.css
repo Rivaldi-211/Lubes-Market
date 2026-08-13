@@ -1982,12 +1982,15 @@ body.public-page.home-page {
     text-align: center;
     font: 700 15px var(--display);
     background: #fff;
+    -webkit-appearance: textfield;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 #qtyInput::-webkit-outer-spin-button,
 #qtyInput::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
