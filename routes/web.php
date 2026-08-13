@@ -92,6 +92,7 @@ Route::middleware(['auth','active'])->group(function () {
         Route::patch('/profil', [SellerProfileController::class,'update'])->name('profile.update');
         Route::resource('produk', SellerProductController::class)->except('show')->names('products');
         Route::get('/pesanan', [SellerOrderController::class,'index'])->name('orders.index');
+        Route::get('/pesanan/notifikasi-pembayaran', [SellerOrderController::class,'paymentNotifications'])->name('orders.notifications');
         Route::patch('/pesanan/{pesanan}', [SellerOrderController::class,'update'])->name('orders.update');
         Route::get('/laporan', [SellerReportController::class,'index'])->name('reports.index');
         Route::get('/laporan/csv', [SellerReportController::class,'csv'])->name('reports.csv');

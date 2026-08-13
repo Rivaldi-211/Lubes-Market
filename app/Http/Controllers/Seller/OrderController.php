@@ -17,4 +17,45 @@ class OrderController extends Controller
         DB::transaction(function() use($pesanan,$new,$umkmId){ $order=Pesanan::whereKey($pesanan->id)->lockForUpdate()->firstOrFail(); $order->loadMissing('produk'); abort_unless($order->produk->umkm_id===$umkmId,403); if($order->status==='Dibatalkan' && $new!=='Dibatalkan') throw ValidationException::withMessages(['status'=>'Pesanan yang dibatalkan tidak dapat diaktifkan kembali.']); if($new==='Dibatalkan' && $order->status!=='Dibatalkan'){ $p=Produk::whereKey($order->produk_id)->lockForUpdate()->firstOrFail(); $p->increment('stok_jumlah',$order->jumlah); if($p->stok_status==='Habis')$p->update(['stok_status'=>'Ready']); } $order->update(['status'=>$new]); });
         $logger->log("Mengubah status pesanan #{$pesanan->id} menjadi {$new}",$request->user(),$request->ip()); return back()->with('success','Status pesanan diperbarui.');
     }
+
+    public function paymentNotifications(Request $request)
+    {
+        $umkm = $request->user()->umkm;
+        if (!$umkm) {
+            return response()->json(['success' => true, 'notifications' => []]);
+        }
+
+        $notifications = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
+            ->where(function ($q) {
+                $q->where(function ($sub) {
+                    $sub->where('metode_pembayaran', 'QRIS')
+                        ->whereIn('status', ['Diproses', 'Selesai']);
+                })->orWhere(function ($sub) {
+                    $sub->whereNotNull('bukti_pembayaran');
+                });
+            })
+            ->with(['produk', 'pembeli'])
+            ->latest('updated_at')
+            ->take(10)
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'buyer_name' => $order->pembeli?->nama_lengkap ?? 'Pembeli',
+                    'product_name' => $order->produk?->nama_produk ?? 'Produk UMKM',
+                    'amount_formatted' => 'Rp' . number_format((float) $order->total_harga, 0, ',', '.'),
+                    'payment_method' => $order->metode_pembayaran,
+                    'status' => $order->status,
+                    'has_proof' => !empty($order->bukti_pembayaran),
+                    'updated_at' => optional($order->updated_at)->toISOString() ?? now()->toISOString(),
+                    'time_ago' => optional($order->updated_at)->diffForHumans() ?? 'Baru saja',
+                    'order_url' => route('seller.orders.index', ['status' => $order->status]),
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'notifications' => $notifications,
+        ]);
+    }
 }
