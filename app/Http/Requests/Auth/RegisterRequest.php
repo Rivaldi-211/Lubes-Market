@@ -18,4 +18,24 @@ class RegisterRequest extends FormRequest
             'alamat'=>['nullable','string','max:255'],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
+            'nama_lengkap.max' => 'Nama lengkap maksimal :max karakter.',
+            'username.required' => 'Username wajib diisi.',
+            'username.alpha_dash' => 'Username hanya boleh berisi huruf, angka, strip (-), dan underscore (_). Tidak boleh menggunakan spasi.',
+            'username.max' => 'Username maksimal :max karakter.',
+            'username.unique' => 'Username ini sudah digunakan.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah terdaftar.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal :min karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'role.required' => 'Silakan pilih peran akun.',
+            'role.in' => 'Peran akun tidak valid.',
+            'nama_umkm.required' => 'Nama UMKM wajib diisi jika mendaftar sebagai penjual.',
+            'nama_umkm.max' => 'Nama UMKM maksimal :max karakter.',
+        ];
+    }
 }
