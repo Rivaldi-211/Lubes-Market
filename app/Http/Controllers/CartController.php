@@ -10,8 +10,10 @@ class CartController extends Controller
     public function index(CartService $cart): View { return view('cart.index',['items'=>$cart->items(),'subtotal'=>$cart->subtotal()]); }
     public function add(Request $request, Produk $produk, CartService $cart): RedirectResponse
     {
-        $data=$request->validate(['jumlah'=>['required','integer','min:1']]); $cart->add($produk,(int)$data['jumlah']);
-        return redirect()->route('cart.index')->with('success','Produk ditambahkan ke keranjang.');
+        $data = $request->validate(['jumlah' => ['required', 'integer', 'min:1']]);
+        $cart->add($produk, (int)$data['jumlah']);
+
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
     public function update(Request $request, CartService $cart): RedirectResponse
     {

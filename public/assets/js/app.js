@@ -9,6 +9,21 @@ document.addEventListener('DOMContentLoaded', () => {
         a.addEventListener('click', () => menu?.classList.remove('open'));
     });
 
+    /* --- Sticky Header Scroll Effect --- */
+    const siteHeader = document.getElementById('siteHeader');
+    if (siteHeader) {
+        const scrollThreshold = 30;
+        function handleHeaderScroll() {
+            if (window.scrollY > scrollThreshold) {
+                siteHeader.classList.add('scrolled');
+            } else {
+                siteHeader.classList.remove('scrolled');
+            }
+        }
+        window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+        handleHeaderScroll(); // run on load in case page is already scrolled
+    }
+
     /* --- Add to Cart Modal --- */
     const modal = document.getElementById('addToCartModal');
     if (modal) {
@@ -128,4 +143,26 @@ document.addEventListener('DOMContentLoaded', () => {
             updateSubtotal();
         });
     }
+
+    /* --- Password Visibility Toggle --- */
+    document.addEventListener('click', function (e) {
+        const toggle = e.target.closest('[data-toggle-password]');
+        if (toggle) {
+            const field = toggle.closest('.password-field');
+            const input = field ? field.querySelector('input') : null;
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.classList.remove('bi-eye-slash', 'bi-lock');
+                    toggle.classList.add('bi-eye');
+                    toggle.setAttribute('title', 'Sembunyikan password');
+                } else {
+                    input.type = 'password';
+                    toggle.classList.remove('bi-eye');
+                    toggle.classList.add('bi-eye-slash');
+                    toggle.setAttribute('title', 'Lihat password');
+                }
+            }
+        }
+    });
 });

@@ -19,8 +19,8 @@
     <label>
         Password
         <div class="password-field">
-            <input type="password" name="password" autocomplete="current-password" required>
-            <i class="bi bi-lock"></i>
+            <input type="password" name="password" id="loginPassword" autocomplete="current-password" required>
+            <i class="bi bi-eye-slash" data-toggle-password title="Lihat password" aria-label="Tampilkan password"></i>
         </div>
     </label>
 

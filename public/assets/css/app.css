@@ -60,24 +60,49 @@ textarea {
     padding: 104px 0;
 }
 
+/* Compensate for fixed header */
+body.public-page {
+    padding-top: 88px;
+}
+
+/* Home page hero extends behind transparent header */
+body.public-page.home-page {
+    padding-top: 0;
+}
+
 /* --- Header & Navigation --- */
 .site-header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 50;
     width: 100%;
-    transition: .25s ease;
+    transition: background .3s ease, box-shadow .3s ease, border-color .3s ease;
 }
 
 .site-header-overlay {
-    position: absolute;
     color: #fff;
+    background: transparent;
     border-bottom: 1px solid rgba(255, 255, 255, .18);
+}
+
+.site-header-overlay.scrolled {
+    background: rgba(16, 45, 31, .92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: rgba(199, 155, 66, .25);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, .25);
 }
 
 .site-header-solid {
     background: #fff;
     color: var(--ink);
     border-bottom: 1px solid #ece9e2;
+}
+
+.site-header-solid.scrolled {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, .08);
+    border-bottom-color: rgba(0, 0, 0, .06);
 }
 
 .header-inner {
@@ -199,13 +224,19 @@ textarea {
 
 .button:hover {
     transform: translateY(-1px);
-    background: var(--green-950);
+    background: var(--green-700);
+    color: #fff;
 }
 
 .button-small {
     padding: 10px 17px;
     font-size: 13px;
     background: var(--gold);
+    color: var(--green-950);
+}
+
+.button-small:hover {
+    background: #dcae4f;
     color: var(--green-950);
 }
 
@@ -221,6 +252,14 @@ textarea {
 
 .button-dark {
     background: var(--green-950);
+    color: #fff;
+    border: 1px solid rgba(199, 155, 66, .3);
+}
+
+.button-dark:hover {
+    background: var(--green-900);
+    color: #fff;
+    border-color: var(--gold);
 }
 
 .menu-toggle {
@@ -1315,6 +1354,15 @@ textarea {
     border-radius: 10px !important;
     background: var(--gold);
     color: var(--green-950);
+    transition: all .2s ease;
+}
+
+.button.wide:hover,
+.wide:hover {
+    background: #dcae4f !important;
+    color: var(--green-950) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(199, 155, 66, .35);
 }
 
 .back-catalogue-btn {
@@ -1694,13 +1742,27 @@ textarea {
 
 .password-field {
     position: relative;
+    display: block;
+}
+
+.password-field input {
+    padding-right: 44px !important;
 }
 
 .password-field i {
     position: absolute;
     right: 14px;
-    top: 22px;
+    top: calc(50% + 3.5px);
+    transform: translateY(-50%);
     color: #889087;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 2;
+    transition: color .2s ease;
+}
+
+.password-field i:hover {
+    color: var(--green-950);
 }
 
 .check-row {

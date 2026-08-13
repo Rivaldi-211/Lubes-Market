@@ -45,11 +45,17 @@
         </label>
         <label>
             Password
-            <input type="password" name="password" required>
+            <div class="password-field">
+                <input type="password" name="password" required>
+                <i class="bi bi-eye-slash" data-toggle-password title="Lihat password" aria-label="Tampilkan password"></i>
+            </div>
         </label>
         <label>
             Konfirmasi password
-            <input type="password" name="password_confirmation" required>
+            <div class="password-field">
+                <input type="password" name="password_confirmation" required>
+                <i class="bi bi-eye-slash" data-toggle-password title="Lihat password" aria-label="Tampilkan password"></i>
+            </div>
         </label>
     </div>
 
