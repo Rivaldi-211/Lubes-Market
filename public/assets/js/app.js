@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selects = document.querySelectorAll('select');
 
         selects.forEach(select => {
-            if (select.closest('.ludes-custom-select') || select.closest('.swal2-container') || select.classList.contains('ludes-initialized')) return;
+            if (select.closest('.ludes-custom-select') || select.closest('.swal2-container') || select.classList.contains('swal2-select') || select.classList.contains('ludes-initialized')) return;
 
             select.classList.add('ludes-initialized');
             
