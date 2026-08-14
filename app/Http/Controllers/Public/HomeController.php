@@ -25,6 +25,12 @@ class HomeController extends Controller
             ->orderByDesc('ulasan_avg_rating')
             ->first();
 
+        $ulasanTerbaru = \App\Models\Ulasan::with(['pembeli', 'produk.umkm'])
+            ->where('rating', '>=', 4)
+            ->whereNotNull('komentar')
+            ->where('komentar', '!=', '')
+            ->latest()->take(3)->get();
+
         return view('public.home', [
             'totalProducts' => (clone $base)->count(),
             'totalUmkm' => Umkm::where('status', 'aktif')->count(),
@@ -32,6 +38,7 @@ class HomeController extends Controller
             'featured' => (clone $base)->with(['umkm', 'kategori'])->withAvg('ulasan', 'rating')->withCount('ulasan')->latest()->take(8)->get(),
             'categories' => Kategori::withCount('produk')->orderBy('nama_kategori')->get(),
             'producers' => Umkm::where('status', 'aktif')->withCount('produk')->orderByDesc('produk_count')->take(4)->get(),
+            'ulasanTerbaru' => $ulasanTerbaru,
         ]);
     }
 }

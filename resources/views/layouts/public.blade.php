@@ -24,6 +24,7 @@
             <nav class="desktop-nav" aria-label="Navigasi utama">
                 <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                 <a class="{{ request()->routeIs('catalogue') || request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('catalogue') }}">Katalog</a>
+                <a class="{{ request()->routeIs('umkm.*') ? 'active' : '' }}" href="{{ route('umkm.index') }}">Toko UMKM</a>
                 <a class="{{ request()->routeIs('keroyokan.*') ? 'active' : '' }}" href="{{ route('keroyokan.index') }}">Keroyokan</a>
                 <a href="{{ route('home') }}#tentang">Tentang</a>
                 <a href="{{ route('home') }}#mitra">Mitra UMKM</a>

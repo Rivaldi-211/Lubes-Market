@@ -20,7 +20,7 @@
     <article><small>Pesanan</small><strong>{{ $stats['orders'] }}</strong><span>Rp{{ number_format($stats['revenue'],0,',','.') }} selesai</span></article>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 24px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: start; margin-bottom: 24px;">
     @php
         $totalTerjualSum = $topProducts->sum(fn($p) => (int)($p->total_terjual ?? 0));
         $totalOmzetSum = $topProducts->sum(fn($p) => (float)($p->total_omzet ?? 0));
@@ -49,11 +49,17 @@
         @else
             <div class="stats-chart-wrapper">
                 <div class="stats-chart-grid">
-                    <div class="stats-chart-canvas-box">
-                        <canvas id="adminTopProductsChart"></canvas>
-                        <div class="stats-chart-center-text" id="adminChartCenterText">
-                            <small id="adminCenterLabel">Total Terjual</small>
-                            <strong id="adminCenterValue">{{ number_format($totalTerjualSum, 0, ',', '.') }} <span style="font-size:11px; font-weight:600;">porsi</span></strong>
+                    <div class="stats-chart-left-col">
+                        <div class="stats-chart-canvas-box">
+                            <canvas id="adminTopProductsChart"></canvas>
+                            <div class="stats-chart-center-text" id="adminChartCenterText">
+                                <small id="adminCenterLabel">Total Terjual</small>
+                                <strong id="adminCenterValue">{{ number_format($totalTerjualSum, 0, ',', '.') }} <span style="font-size:11px; font-weight:600;">porsi</span></strong>
+                            </div>
+                        </div>
+                        <div class="stats-chart-summary-box">
+                            <small>Total Omzet Top 10</small>
+                            <strong>Rp{{ number_format($totalOmzetSum, 0, ',', '.') }}</strong>
                         </div>
                     </div>
 

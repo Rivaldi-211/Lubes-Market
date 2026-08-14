@@ -13,6 +13,25 @@
     <a class="button" href="{{ route('seller.products.create') }}"><i class="bi bi-plus-lg"></i> Tambah produk</a>
 </section>
 
+@if(isset($rekomendasiBelumDibaca) && $rekomendasiBelumDibaca > 0)
+<div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; gap:12px; box-shadow: 0 2px 6px rgba(5,150,105,0.08);">
+    <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:38px; height:38px; background:#10b981; color:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
+            <i class="bi bi-lightbulb-fill"></i>
+        </div>
+        <div>
+            <strong style="color:#065f46; font-size:0.98rem; display:block;">
+                Ada {{ $rekomendasiBelumDibaca }} rekomendasi strategi baru dari BUMDes!
+            </strong>
+            <span style="color:#047857; font-size:0.85rem;">Dapatkan saran konkret pengembangan produk dan penawaran toko Anda.</span>
+        </div>
+    </div>
+    <a href="{{ route('seller.analytics') }}" class="button" style="padding:8px 16px; font-size:12px; border-radius:8px; white-space:nowrap; background:#059669; border-color:#059669;">
+        Lihat Sekarang →
+    </a>
+</div>
+@endif
+
 <div class="metric-grid">
     <article><small>Produk aktif</small><strong>{{ $stats['products'] }}</strong><span>Katalog usaha</span></article>
     <article><small>Total pesanan</small><strong>{{ $stats['orders'] }}</strong><span>Semua status</span></article>
@@ -28,7 +47,7 @@
     </article>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 24px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: start; margin-bottom: 24px;">
     @php
         $totalTerjualSum = $topProducts->sum(fn($p) => (int)($p->total_terjual ?? 0));
         $totalOmzetSum = $topProducts->sum(fn($p) => (float)($p->total_omzet ?? 0));
@@ -57,11 +76,17 @@
         @else
             <div class="stats-chart-wrapper">
                 <div class="stats-chart-grid">
-                    <div class="stats-chart-canvas-box">
-                        <canvas id="sellerTopProductsChart"></canvas>
-                        <div class="stats-chart-center-text" id="sellerChartCenterText">
-                            <small id="sellerCenterLabel">Total Terjual</small>
-                            <strong id="sellerCenterValue">{{ number_format($totalTerjualSum, 0, ',', '.') }} <span style="font-size:11px; font-weight:600;">porsi</span></strong>
+                    <div class="stats-chart-left-col">
+                        <div class="stats-chart-canvas-box">
+                            <canvas id="sellerTopProductsChart"></canvas>
+                            <div class="stats-chart-center-text" id="sellerChartCenterText">
+                                <small id="sellerCenterLabel">Total Terjual</small>
+                                <strong id="sellerCenterValue">{{ number_format($totalTerjualSum, 0, ',', '.') }} <span style="font-size:11px; font-weight:600;">porsi</span></strong>
+                            </div>
+                        </div>
+                        <div class="stats-chart-summary-box">
+                            <small>Total Omzet Sales</small>
+                            <strong>Rp{{ number_format($totalOmzetSum, 0, ',', '.') }}</strong>
                         </div>
                     </div>
 

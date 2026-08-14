@@ -28,6 +28,8 @@ use App\Http\Controllers\Admin\KeroyokanController as AdminKeroyokanController;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/katalog',[CatalogController::class,'index'])->name('catalogue');
+Route::get('/toko', [\App\Http\Controllers\Public\UmkmController::class, 'index'])->name('umkm.index');
+Route::get('/toko/{umkm}', [\App\Http\Controllers\Public\UmkmController::class, 'show'])->name('umkm.show');
 Route::get('/produk/{produk}',[ProductController::class,'show'])->name('products.show');
 Route::get('/keroyokan', [PublicKeroyokanController::class, 'index'])->name('keroyokan.index');
 Route::get('/keroyokan/{kelompokKeroyokan}', [PublicKeroyokanController::class, 'show'])->name('keroyokan.show');
@@ -83,6 +85,9 @@ Route::middleware(['auth','active'])->group(function () {
         Route::patch('/pesanan/{pesanan}', [AdminOrderController::class,'update'])->name('orders.update');
         Route::get('/laporan', [AdminReportController::class,'index'])->name('reports.index');
         Route::get('/laporan/csv', [AdminReportController::class,'csv'])->name('reports.csv');
+        Route::get('/analitik-umkm', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'index'])->name('umkm.analytics');
+        Route::get('/analitik-umkm/{umkm}/rekomendasi', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'rekomendasiCreate'])->name('umkm.rekomendasi.create');
+        Route::post('/analitik-umkm/{umkm}/rekomendasi', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'rekomendasiStore'])->name('umkm.rekomendasi.store');
         Route::get('/aktivitas', [AdminActivityLogController::class,'index'])->name('logs.index');
     });
 
@@ -96,5 +101,6 @@ Route::middleware(['auth','active'])->group(function () {
         Route::patch('/pesanan/{pesanan}', [SellerOrderController::class,'update'])->name('orders.update');
         Route::get('/laporan', [SellerReportController::class,'index'])->name('reports.index');
         Route::get('/laporan/csv', [SellerReportController::class,'csv'])->name('reports.csv');
+        Route::get('/analitik', [\App\Http\Controllers\Seller\AnalyticsController::class, 'index'])->name('analytics');
     });
 });

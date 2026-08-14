@@ -174,6 +174,40 @@
     </div>
 </section>
 
+@if(isset($ulasanTerbaru) && $ulasanTerbaru->isNotEmpty())
+<section class="section" style="background:#faf8f5;">
+    <div class="shell">
+        <div class="section-heading">
+            <div>
+                <div class="eyebrow"><span></span>Suara Pelanggan</div>
+                <h2>Apa kata mereka yang<br>sudah mencoba.</h2>
+            </div>
+            <a class="outline-link" href="{{ route('umkm.index') }}">
+                Lihat semua toko <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;">
+            @foreach($ulasanTerbaru as $ulasan)
+            <article style="background:#fff; border:1px solid #e6e1d6; border-radius:14px; padding:24px;">
+                <div style="display:flex; gap:4px; margin-bottom:10px;">
+                    @for($i=1;$i<=5;$i++)
+                        <i class="bi bi-star-fill" style="color:{{ $i<=$ulasan->rating?'#f59e0b':'#e5e7eb' }};"></i>
+                    @endfor
+                </div>
+                <p style="color:#374151; font-size:0.92rem; line-height:1.6; margin-bottom:14px;">
+                    "{{ Str::limit($ulasan->komentar, 120) }}"
+                </p>
+                <div style="font-size:0.82rem; color:#6b7280;">
+                    <strong>{{ $ulasan->pembeli?->nama_lengkap }}</strong> ·
+                    {{ $ulasan->produk?->nama_produk }}
+                </div>
+            </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <section class="section location-section">
     <div class="shell location-grid">
         <div class="location-card">

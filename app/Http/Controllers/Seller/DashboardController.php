@@ -45,6 +45,9 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('seller.dashboard', compact('umkm', 'stats', 'recent', 'topProducts'));
+        $rekomendasiBelumDibaca = \App\Models\RekomendasiStrategi::where('umkm_id', $umkm->id)
+            ->where('dibaca', false)->count();
+
+        return view('seller.dashboard', compact('umkm', 'stats', 'recent', 'topProducts', 'rekomendasiBelumDibaca'));
     }
 }
