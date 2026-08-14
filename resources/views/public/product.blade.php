@@ -80,39 +80,40 @@
         </div>
 
         <div style="background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 36px;">
-                <!-- Summary Rating & Progress Bars -->
-                <div style="display: flex; gap: 24px; align-items: center; background: #f9fafb; padding: 24px; border-radius: 16px; border: 1px solid #f3f4f6; align-self: start;">
-                    <div style="text-align: center; padding-right: 24px; border-right: 1px solid #e5e7eb; min-width: 110px;">
-                        <div style="font-size: 2.8rem; font-weight: 800; color: #111827; line-height: 1;">{{ number_format($avgRating, 1) }}</div>
-                        <div style="color: #f59e0b; font-size: 1.1rem; margin: 6px 0;">
-                            @for($i=1; $i<=5; $i++)
-                                <i class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }}"></i>
-                            @endfor
-                        </div>
-                        <small style="color: #6b7280; font-weight: 600;">{{ $totalUlasan }} ulasan</small>
+            <!-- 1. Summary Rating Box (ON TOP - Full Width) -->
+            <div style="background: #f9fafb; padding: 24px 28px; border-radius: 16px; border: 1px solid #f3f4f6; margin-bottom: 32px; display: flex; gap: 36px; align-items: center; flex-wrap: wrap;">
+                <!-- Left: Big Score & Stars -->
+                <div style="text-align: center; padding-right: 32px; border-right: 1px solid #e5e7eb; min-width: 140px;">
+                    <div style="font-size: 3.2rem; font-weight: 800; color: #111827; line-height: 1;">{{ number_format($avgRating, 1) }}</div>
+                    <div style="color: #f59e0b; font-size: 1.25rem; margin: 6px 0;">
+                        @for($i=1; $i<=5; $i++)
+                            <i class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }}"></i>
+                        @endfor
                     </div>
-
-                    <!-- Star Distribution Progress Bars -->
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                        @foreach([5, 4, 3, 2, 1] as $star)
-                            @php $d = $ratingDistribusi[$star] ?? ['pct' => 0, 'count' => 0]; @endphp
-                            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #4b5563;">
-                                <span style="width: 14px; font-weight: 700;">{{ $star }}</span>
-                                <i class="bi bi-star-fill" style="color: #f59e0b; font-size: 11px;"></i>
-                                <div style="flex: 1; height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden;">
-                                    <div style="width: {{ $d['pct'] }}%; height: 100%; background: #f59e0b; border-radius: 999px;"></div>
-                                </div>
-                                <span style="width: 32px; text-align: right; color: #9ca3af; font-size: 11px;">{{ $d['count'] }}</span>
-                            </div>
-                        @endforeach
-                    </div>
+                    <small style="color: #6b7280; font-weight: 600; font-size: 0.88rem;">{{ $totalUlasan }} ulasan</small>
                 </div>
 
-                <!-- Review Cards List -->
-                <div style="display: flex; flex-direction: column; gap: 14px;">
-                    @forelse($produk->ulasan as $review)
-                        <article style="background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 14px; padding: 18px;">
+                <!-- Right: Star Distribution Progress Bars -->
+                <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 8px;">
+                    @foreach([5, 4, 3, 2, 1] as $star)
+                        @php $d = $ratingDistribusi[$star] ?? ['pct' => 0, 'count' => 0]; @endphp
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #4b5563;">
+                            <span style="width: 16px; font-weight: 700; text-align: right;">{{ $star }}</span>
+                            <i class="bi bi-star-fill" style="color: #f59e0b; font-size: 12px;"></i>
+                            <div style="flex: 1; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden;">
+                                <div style="width: {{ $d['pct'] }}%; height: 100%; background: #f59e0b; border-radius: 999px;"></div>
+                            </div>
+                            <span style="width: 40px; text-align: right; color: #9ca3af; font-size: 12px; font-weight: 600;">{{ $d['count'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- 2. Review Cards Grid (BELOW RATING BOX) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                @forelse($produk->ulasan as $review)
+                    <article style="background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                                 <strong style="font-size: 0.95rem; color: #111827;">{{ $review->pembeli->nama_lengkap }}</strong>
                                 <div style="color: #f59e0b; font-size: 0.85rem;">
@@ -122,14 +123,12 @@
                                 </div>
                             </div>
                             <small style="color: #6b7280; display: block; margin-bottom: 8px; font-size: 0.78rem;">{{ $review->created_at->translatedFormat('d M Y') }}</small>
-                            <p style="color: #4b5563; font-size: 0.9rem; margin: 0; line-height: 1.5;">"{{ $review->komentar ?: 'Pembeli memberi penilaian tanpa komentar.' }}"</p>
-                        </article>
-                    @empty
-                        <div style="text-align: center; padding: 32px; background: #f9fafb; border-radius: 14px; color: #9ca3af; font-style: italic;">
-                            Belum ada ulasan untuk produk ini.
+                            <p style="color: #4b5563; font-size: 0.9rem; margin: 0; line-height: 1.55;">"{{ $review->komentar ?: 'Pembeli memberi penilaian tanpa komentar.' }}"</p>
                         </div>
-                    @endforelse
-                </div>
+                    </article>
+                @empty
+                    <p style="color: #9ca3af; font-style: italic; grid-column: 1 / -1;">Belum ada ulasan untuk produk ini.</p>
+                @endforelse
             </div>
         </div>
     </div>
