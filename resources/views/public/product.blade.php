@@ -41,6 +41,14 @@
 
                 <div class="price-line">Rp{{ number_format((float)$produk->harga, 0, ',', '.') }}</div>
                 <x-stock-badge :product="$produk" />
+                @if($produk->stok_status === 'Pre-Order')
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 12px 16px; margin: 16px 0; font-size: 0.88rem; display: flex; align-items: center; gap: 10px;">
+                        <i class="bi bi-clock-history" style="font-size: 1.25rem; color: #3b82f6;"></i>
+                        <div>
+                            <strong>Produk Pre-Order:</strong> Estimasi pengerjaan & pengiriman <strong>{{ $produk->estimasi_po_hari ? $produk->estimasi_po_hari . ' Hari Kerja' : 'sesuai jadwal penjual' }}</strong> setelah pemesanan.
+                        </div>
+                    </div>
+                @endif
                 <p class="product-description">{{ $produk->deskripsi }}</p>
 
                 @if($produk->isAvailable())

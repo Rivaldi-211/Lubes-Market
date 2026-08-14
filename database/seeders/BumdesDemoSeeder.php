@@ -103,51 +103,51 @@ class BumdesDemoSeeder extends Seeder
             // UMKM 3
             [3, 2, 'Kripik Pisang Original', 15000, 'Ready', 60, 'Kripik pisang gurih kemasan 250 gram, cocok untuk oleh-oleh.', 'products/umkm-3/kripik pisang original.png', true, 13000, 'Hemat 2k', now()->addDays(14)],
             [3, 2, 'Kripik Singkong Moncongloe', 13000, 'Ready', 50, 'Kripik singkong renyah tersedia rasa original dan pedas.', 'products/umkm-3/kripik singkong moncongloe.png', false, null, null, null],
-            [3, 2, 'Kue Tradisional Campur', 20000, 'Pre-Order', 20, 'Paket kue tradisional dibuat sesuai jadwal pesanan.', 'products/umkm-3/kue tradisional campur.png', false, null, null, null],
+            [3, 2, 'Kue Tradisional Campur', 20000, 'Pre-Order', 20, 'Paket kue tradisional dibuat sesuai jadwal pesanan.', 'products/umkm-3/kue tradisional campur.png', false, null, null, null, 3],
 
             // UMKM 4
-            [4, 3, 'Anyaman Tas Bambu', 45000, 'Ready', 15, 'Tas anyaman bambu buatan tangan dengan karakter alami.', null, false, null, null, null],
-            [4, 3, 'Suvenir Miniatur Desa Wisata', 25000, 'Pre-Order', 20, 'Suvenir miniatur khas desa wisata Moncongloe Lappara.', null, false, null, null, null],
+            [4, 3, 'Anyaman Tas Bambu', 45000, 'Ready', 15, 'Tas anyaman bambu buatan tangan dengan karakter alami.', null, false, null, null, null, null],
+            [4, 3, 'Suvenir Miniatur Desa Wisata', 25000, 'Pre-Order', 20, 'Suvenir miniatur khas desa wisata Moncongloe Lappara.', null, false, null, null, null, 7],
 
             // UMKM 5 (Moammar Donat Shop - fully active!)
-            [5, 1, 'Donat Jumbo Mix', 30000, 'Ready', 40, 'Donat empuk ukuran jumbo isi 6 dengan topping aneka rasa.', null, true, 25000, 'Best Deal', now()->addDays(5)],
-            [5, 1, 'Donat Karakter Hias', 50000, 'Pre-Order', 15, 'Donat hias karakter ulu ulang tahun atau acara spesial.', null, false, null, null, null],
-            [5, 4, 'Es Cendol Moammar', 10000, 'Ready', 30, 'Es cendol gula merah santan segar racikan rumah.', null, false, null, null, null],
+            [5, 1, 'Donat Jumbo Mix', 30000, 'Ready', 40, 'Donat empuk ukuran jumbo isi 6 dengan topping aneka rasa.', null, true, 25000, 'Best Deal', now()->addDays(5), null],
+            [5, 1, 'Donat Karakter Hias', 50000, 'Pre-Order', 15, 'Donat hias karakter ulu ulang tahun atau acara spesial.', null, false, null, null, null, 2],
+            [5, 4, 'Es Cendol Moammar', 10000, 'Ready', 30, 'Es cendol gula merah santan segar racikan rumah.', null, false, null, null, null, null],
 
             // UMKM 6
-            [6, 5, 'Madu Hutan Murni 500ml', 85000, 'Ready', 25, 'Madu murni alami 100% dipanen dari hutan Moncongloe.', null, true, 75000, 'Promo Sehat', now()->addDays(12)],
-            [6, 5, 'Madu Sarang Asli 250g', 65000, 'Ready', 15, 'Madu sarang murni utuh kaya nutrisi alami.', null, false, null, null, null],
+            [6, 5, 'Madu Hutan Murni 500ml', 85000, 'Ready', 25, 'Madu murni alami 100% dipanen dari hutan Moncongloe.', null, true, 75000, 'Promo Sehat', now()->addDays(12), null],
+            [6, 5, 'Madu Sarang Asli 250g', 65000, 'Ready', 15, 'Madu sarang murni utuh kaya nutrisi alami.', null, false, null, null, null, null],
 
             // UMKM 7
-            [7, 3, 'Kain Batik Tulis Moncongloe', 180000, 'Ready', 10, 'Kain batik tulis halus dengan motif flora khas desa.', null, false, null, null, null],
-            [7, 3, 'Selendang Batik Sutra', 120000, 'Ready', 8, 'Selendang cantik elegan corak tradisional.', null, true, 100000, 'Spesial Batik', now()->addDays(15)],
+            [7, 3, 'Kain Batik Tulis Moncongloe', 180000, 'Ready', 10, 'Kain batik tulis halus dengan motif flora khas desa.', null, false, null, null, null, null],
+            [7, 3, 'Selendang Batik Sutra', 120000, 'Ready', 8, 'Selendang cantik elegan corak tradisional.', null, true, 100000, 'Spesial Batik', now()->addDays(15), null],
 
             // UMKM 8
-            [8, 4, 'Kopi Robusta Sangrai 200g', 35000, 'Ready', 45, 'Bubuk kopi robusta sangrai medium-dark rasa kuat.', null, true, 30000, 'Promo Kopi', now()->addDays(8)],
-            [8, 4, 'Kopi House Blend Sachet', 25000, 'Ready', 50, 'Paket kopi sachet siap seduh praktis.', null, false, null, null, null],
+            [8, 4, 'Kopi Robusta Sangrai 200g', 35000, 'Ready', 45, 'Bubuk kopi robusta sangrai medium-dark rasa kuat.', null, true, 30000, 'Promo Kopi', now()->addDays(8), null],
+            [8, 4, 'Kopi House Blend Sachet', 25000, 'Ready', 50, 'Paket kopi sachet siap seduh praktis.', null, false, null, null, null, null],
 
             // UMKM 9
-            [9, 1, 'Tempe Organik Papan', 8000, 'Ready', 60, 'Tempe kedelai murni sehat diproduksi higienis.', null, false, null, null, null],
-            [9, 1, 'Tahu Sutra Segar', 10000, 'Ready', 40, 'Tahu sutra lembut isi 10 potong segar.', null, false, null, null, null],
+            [9, 1, 'Tempe Organik Papan', 8000, 'Ready', 60, 'Tempe kedelai murni sehat diproduksi higienis.', null, false, null, null, null, null],
+            [9, 1, 'Tahu Sutra Segar', 10000, 'Ready', 40, 'Tahu sutra lembut isi 10 potong segar.', null, false, null, null, null, null],
 
             // UMKM 10
-            [10, 2, 'Sambal Cumi Pedas 150g', 28000, 'Ready', 35, 'Sambal botol cumi asin pedas mantap rasanya.', null, true, 24000, 'Hemat Cumi', now()->addDays(10)],
-            [10, 2, 'Sambal Roa Makassar 150g', 32000, 'Ready', 30, 'Sambal ikan roa asap pedas harum khas Sulawesi.', null, false, null, null, null],
+            [10, 2, 'Sambal Cumi Pedas 150g', 28000, 'Ready', 35, 'Sambal botol cumi asin pedas mantap rasanya.', null, true, 24000, 'Hemat Cumi', now()->addDays(10), null],
+            [10, 2, 'Sambal Roa Makassar 150g', 32000, 'Ready', 30, 'Sambal ikan roa asap pedas harum khas Sulawesi.', null, false, null, null, null, null],
 
             // UMKM 11
-            [11, 5, 'Telur Ayam Kampung 1 Tray (30 Butir)', 65000, 'Ready', 20, 'Telur ayam kampung murni segar langsung dari kandang.', null, false, null, null, null],
+            [11, 5, 'Telur Ayam Kampung 1 Tray (30 Butir)', 65000, 'Ready', 20, 'Telur ayam kampung murni segar langsung dari kandang.', null, false, null, null, null, null],
 
             // UMKM 12
-            [12, 2, 'Kerupuk Ikan Tenggiri 250g', 18000, 'Ready', 40, 'Kerupuk ikan tenggiri renyah tidak amis.', null, true, 15000, 'Promo Kerupuk', now()->addDays(7)],
+            [12, 2, 'Kerupuk Ikan Tenggiri 250g', 18000, 'Ready', 40, 'Kerupuk ikan tenggiri renyah tidak amis.', null, true, 15000, 'Promo Kerupuk', now()->addDays(7), null],
 
             // UMKM 13
-            [13, 5, 'Tepung Mocaf Gluten-Free 1kg', 22000, 'Ready', 50, 'Tepung mocaf sehat penganti tepung terigu.', null, false, null, null, null],
+            [13, 5, 'Tepung Mocaf Gluten-Free 1kg', 22000, 'Ready', 50, 'Tepung mocaf sehat penganti tepung terigu.', null, false, null, null, null, null],
 
             // UMKM 14
-            [14, 3, 'Sabun Herbal VCO & Lidah Buaya', 15000, 'Ready', 30, 'Sabun mandi alami melembutkan kulit tanpa bahan kimia keras.', null, false, null, null, null],
+            [14, 3, 'Sabun Herbal VCO & Lidah Buaya', 15000, 'Ready', 30, 'Sabun mandi alami melembutkan kulit tanpa bahan kimia keras.', null, false, null, null, null, null],
 
             // UMKM 15
-            [15, 3, 'Taplak Meja Sulam Tangan', 95000, 'Ready', 10, 'Taplak meja hiasan sulam renda cantik.', null, false, null, null, null],
+            [15, 3, 'Taplak Meja Sulam Tangan', 95000, 'Pre-Order', 10, 'Taplak meja hiasan sulam renda cantik.', null, false, null, null, null, 14],
         ];
 
         foreach ($productsData as $p) {
@@ -164,6 +164,7 @@ class BumdesDemoSeeder extends Seeder
                 'harga_promo' => $p[9],
                 'label_promo' => $p[10],
                 'promo_selesai' => $p[11],
+                'estimasi_po_hari' => $p[12] ?? ($p[4] === 'Pre-Order' ? 7 : null),
             ]);
         }
 
