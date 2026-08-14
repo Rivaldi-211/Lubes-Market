@@ -337,6 +337,9 @@ body.public-page.home-page {
 .desktop-nav a {
     position: relative;
     opacity: .82;
+    padding: 6px 0;
+    transition: opacity .25s ease, color .25s ease;
+    text-decoration: none;
 }
 
 .desktop-nav a:hover,
@@ -344,14 +347,35 @@ body.public-page.home-page {
     opacity: 1;
 }
 
-.desktop-nav a.active:after {
+.desktop-nav a:after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -10px;
-    height: 2px;
+    bottom: -6px;
+    height: 2.5px;
     background: var(--gold);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .25s cubic-bezier(0.4, 0, 0.2, 1), opacity .2s ease;
+    opacity: 0;
+}
+
+.desktop-nav a:hover:after,
+.desktop-nav a.active:after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+/* Scroll margin offset for sticky header */
+#beranda,
+#tentang,
+#mitra,
+#kontak,
+.section[id],
+footer[id] {
+    scroll-margin-top: 90px;
 }
 
 .header-actions {
@@ -2318,8 +2342,33 @@ body.public-page.home-page {
         background: #fff;
         color: var(--ink);
         padding: 18px 24px;
-        gap: 10px;
+        gap: 4px;
         box-shadow: 0 20px 35px rgba(0, 0, 0, .12);
+        z-index: 100;
+    }
+
+    .mobile-menu a {
+        padding: 10px 0;
+        font-weight: 600;
+        color: var(--ink);
+        border-bottom: 1px solid #f3f0e8;
+        transition: color .2s ease, transform .2s ease;
+        text-decoration: none;
+    }
+
+    .mobile-menu a:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu a.active {
+        color: #173d2b;
+        font-weight: 700;
+        transform: translateX(4px);
+    }
+
+    .mobile-menu a.active {
+        color: var(--gold);
     }
 
     .product-grid {

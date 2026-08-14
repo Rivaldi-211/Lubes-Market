@@ -24,6 +24,50 @@ document.addEventListener('DOMContentLoaded', () => {
         handleHeaderScroll(); // run on load in case page is already scrolled
     }
 
+    /* --- ScrollSpy for Landing Page Navbar (Beranda, Tentang, Mitra, Kontak) --- */
+    const navItems = document.querySelectorAll('.desktop-nav a[data-nav], .mobile-menu a[data-nav]');
+    if (navItems.length > 0 && document.body.classList.contains('home-page')) {
+        const sections = [
+            { id: 'beranda', el: document.getElementById('beranda') },
+            { id: 'tentang', el: document.getElementById('tentang') },
+            { id: 'mitra', el: document.getElementById('mitra') },
+            { id: 'kontak', el: document.getElementById('kontak') }
+        ];
+
+        function onScrollSpy() {
+            const scrollPos = window.scrollY + 130;
+            const windowHeight = window.innerHeight;
+            const docHeight = document.documentElement.scrollHeight;
+
+            let activeNav = 'beranda';
+
+            if (window.scrollY + windowHeight >= docHeight - 80) {
+                activeNav = 'kontak';
+            } else {
+                for (let i = sections.length - 1; i >= 0; i--) {
+                    const sec = sections[i];
+                    if (sec.el && scrollPos >= sec.el.offsetTop) {
+                        activeNav = sec.id;
+                        break;
+                    }
+                }
+            }
+
+            navItems.forEach(link => {
+                const navKey = link.getAttribute('data-nav');
+                if (navKey === activeNav) {
+                    link.classList.add('active');
+                } else if (['beranda', 'tentang', 'mitra', 'kontak'].includes(navKey)) {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', onScrollSpy, { passive: true });
+        window.addEventListener('resize', onScrollSpy, { passive: true });
+        onScrollSpy();
+    }
+
     /* --- Add to Cart Modal --- */
     const modal = document.getElementById('addToCartModal');
     if (modal) {

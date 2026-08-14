@@ -22,13 +22,13 @@
             </a>
             
             <nav class="desktop-nav" aria-label="Navigasi utama">
-                <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
+                <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}" data-nav="beranda">Beranda</a>
+                <a href="{{ route('home') }}#tentang" data-nav="tentang">Tentang</a>
+                <a href="{{ route('home') }}#mitra" data-nav="mitra">Mitra UMKM</a>
+                <a href="{{ route('home') }}#kontak" data-nav="kontak">Kontak</a>
                 <a class="{{ request()->routeIs('catalogue') || request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('catalogue') }}">Katalog</a>
                 <a class="{{ request()->routeIs('umkm.*') ? 'active' : '' }}" href="{{ route('umkm.index') }}">Toko UMKM</a>
                 <a class="{{ request()->routeIs('keroyokan.*') ? 'active' : '' }}" href="{{ route('keroyokan.index') }}">Keroyokan</a>
-                <a href="{{ route('home') }}#tentang">Tentang</a>
-                <a href="{{ route('home') }}#mitra">Mitra UMKM</a>
-                <a href="{{ route('home') }}#kontak">Kontak</a>
             </nav>
 
             <div class="header-actions">
@@ -51,12 +51,12 @@
         </div>
 
         <div class="mobile-menu" data-mobile-menu>
-            <a href="{{ route('home') }}">Beranda</a>
-            <a href="{{ route('catalogue') }}">Katalog</a>
-            <a href="{{ route('keroyokan.index') }}">Keroyokan</a>
-            <a href="{{ route('home') }}#tentang">Tentang</a>
-            <a href="{{ route('home') }}#mitra">Mitra UMKM</a>
-            <a href="{{ route('home') }}#kontak">Kontak</a>
+            <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}" data-nav="beranda">Beranda</a>
+            <a class="{{ request()->routeIs('catalogue') || request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('catalogue') }}">Katalog</a>
+            <a class="{{ request()->routeIs('keroyokan.*') ? 'active' : '' }}" href="{{ route('keroyokan.index') }}">Keroyokan</a>
+            <a href="{{ route('home') }}#tentang" data-nav="tentang">Tentang</a>
+            <a href="{{ route('home') }}#mitra" data-nav="mitra">Mitra UMKM</a>
+            <a href="{{ route('home') }}#kontak" data-nav="kontak">Kontak</a>
             @guest
                 <a href="{{ route('login') }}">Masuk</a>
                 <a href="{{ route('register') }}">Daftar</a>

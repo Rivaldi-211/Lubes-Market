@@ -4,7 +4,7 @@
 @section('body_class', 'home-page')
 
 @section('content')
-<section class="hero-home">
+<section class="hero-home" id="beranda">
     <div class="hero-photo" aria-hidden="true"></div>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="shell hero-content">
