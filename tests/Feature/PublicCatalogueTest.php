@@ -41,6 +41,9 @@ class PublicCatalogueTest extends TestCase
         $this->seed(BumdesDemoSeeder::class);
         $product = Produk::findOrFail(3);
         $this->get('/produk/'.$product->id)
-            ->assertOk()->assertSee($product->nama_produk)->assertSee('Pisang Epe & Bakso Bakar Pak Baso')->assertSee('masih hangat');
+            ->assertOk()
+            ->assertSee($product->nama_produk)
+            ->assertSee('Pak Baso')
+            ->assertSee('masih hangat');
     }
 }

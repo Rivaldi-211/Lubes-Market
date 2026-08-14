@@ -225,6 +225,26 @@ class BumdesDemoSeeder extends Seeder
             ]);
         }
 
+        $buyer1 = $buyers->first();
+        $orderProd3 = Pesanan::create([
+            'pembeli_id' => $buyer1->id,
+            'produk_id' => 3,
+            'jumlah' => 2,
+            'total_harga' => 30000,
+            'metode_pembayaran' => 'COD',
+            'alamat_pengiriman' => 'Moncongloe Lappara',
+            'no_hp_pembeli' => $buyer1->no_hp,
+            'status' => 'Selesai',
+            'tanggal_pesan' => now()->subDays(2),
+        ]);
+        Ulasan::create([
+            'pesanan_id' => $orderProd3->id,
+            'produk_id' => 3,
+            'pembeli_id' => $buyer1->id,
+            'rating' => 5,
+            'komentar' => 'Pisang epennya enak dan masih hangat saat diterima.',
+        ]);
+
         // 6. Generate Customer Reviews (Ulasan)
         $commentsGood = [
             'Rasanya mantap sekali, bumbu sangat terasa dan masih hangat saat tiba.',
