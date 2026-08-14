@@ -367,6 +367,44 @@
     color: #604e78;
 }
 
+/* --- Payment Status Badges --- */
+.payment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    white-space: nowrap;
+}
+
+.payment-paid {
+    background: #d1fae5;
+    color: #047857;
+    border: 1px solid #6ee7b7;
+}
+
+.payment-unpaid {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.payment-cod {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+.payment-cancelled {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+}
+
 .buyer-order-meta {
     display: flex;
     gap: 32px;

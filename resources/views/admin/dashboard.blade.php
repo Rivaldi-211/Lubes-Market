@@ -24,7 +24,7 @@
     @php
         $totalTerjualSum = $topProducts->sum(fn($p) => (int)($p->total_terjual ?? 0));
         $totalOmzetSum = $topProducts->sum(fn($p) => (float)($p->total_omzet ?? 0));
-        $themeColors = ['#173d2b', '#2d6a4f', '#d97706', '#52b788', '#c28b38', '#3d5a80', '#e76f51', '#74c69d', '#8338ec', '#ff006e'];
+        $themeColors = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16', '#d946ef', '#6366f1'];
     @endphp
 
     <section class="data-panel">
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const rawLabels = @json($topProducts->pluck('nama_produk'));
     const rawTerjual = @json($topProducts->map(fn($p) => (int)($p->total_terjual ?? 0)));
     const rawOmzet = @json($topProducts->map(fn($p) => (float)($p->total_omzet ?? 0)));
-    const themeColors = ['#173d2b', '#2d6a4f', '#d97706', '#52b788', '#c28b38', '#3d5a80', '#e76f51', '#74c69d', '#8338ec', '#ff006e'];
+    const themeColors = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16', '#d946ef', '#6366f1'];
 
     const totalTerjual = {{ $totalTerjualSum }};
     const totalOmzet = {{ $totalOmzetSum }};

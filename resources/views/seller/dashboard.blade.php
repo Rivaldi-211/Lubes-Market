@@ -16,15 +16,23 @@
 <div class="metric-grid">
     <article><small>Produk aktif</small><strong>{{ $stats['products'] }}</strong><span>Katalog usaha</span></article>
     <article><small>Total pesanan</small><strong>{{ $stats['orders'] }}</strong><span>Semua status</span></article>
-    <article><small>Menunggu</small><strong>{{ $stats['waiting'] }}</strong><span>Perlu diproses</span></article>
-    <article><small>Omzet selesai</small><strong>Rp{{ number_format($stats['revenue'],0,',','.') }}</strong><span>Transaksi selesai</span></article>
+    <article style="border-left: 3px solid #10b981;">
+        <small style="color:#059669; font-weight:700;">Sudah Dibayar</small>
+        <strong style="color:#065f46;">{{ $stats['paid_count'] }} <span style="font-size:13px; font-weight:600;">pesanan</span></strong>
+        <span>Rp{{ number_format($stats['paid_revenue'],0,',','.') }} terverifikasi</span>
+    </article>
+    <article style="border-left: 3px solid #f59e0b;">
+        <small style="color:#d97706; font-weight:700;">Belum Dibayar / COD</small>
+        <strong style="color:#b45309;">{{ $stats['unpaid_count'] }} <span style="font-size:13px; font-weight:600;">pesanan</span></strong>
+        <span>Menunggu pembayaran / COD</span>
+    </article>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 24px;">
     @php
         $totalTerjualSum = $topProducts->sum(fn($p) => (int)($p->total_terjual ?? 0));
         $totalOmzetSum = $topProducts->sum(fn($p) => (float)($p->total_omzet ?? 0));
-        $themeColors = ['#173d2b', '#2d6a4f', '#d97706', '#52b788', '#c28b38', '#3d5a80', '#e76f51', '#74c69d'];
+        $themeColors = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
     @endphp
 
     <section class="data-panel">
@@ -112,21 +120,28 @@
                         <th>Produk</th>
                         <th>Pembeli</th>
                         <th>Total</th>
-                        <th>Status</th>
+                        <th>Pembayaran</th>
+                        <th>Status Pesanan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($recent as $order)
+                        @php $payInfo = $order->payment_status_info; @endphp
                         <tr>
                             <td>#{{ $order->id }}<br><small>{{ optional($order->tanggal_pesan)->format('d/m/Y') }}</small></td>
                             <td>{{ $order->produk->nama_produk }}</td>
                             <td>{{ $order->pembeli->nama_lengkap }}</td>
-                            <td>Rp{{ number_format((float)$order->total_harga,0,',','.') }}</td>
+                            <td><strong>Rp{{ number_format((float)$order->total_harga,0,',','.') }}</strong></td>
+                            <td>
+                                <span class="payment-badge {{ $payInfo['class'] }}">
+                                    <i class="bi {{ $payInfo['icon'] }}"></i> {{ $payInfo['label'] }}
+                                </span>
+                            </td>
                             <td><x-status-badge :status="$order->status"/></td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5"><x-empty-state title="Belum ada pesanan" text="Pesanan baru akan tampil di sini."/></td>
+                            <td colspan="6"><x-empty-state title="Belum ada pesanan" text="Pesanan baru akan tampil di sini."/></td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -145,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const rawLabels = @json($topProducts->pluck('nama_produk'));
     const rawTerjual = @json($topProducts->map(fn($p) => (int)($p->total_terjual ?? 0)));
     const rawOmzet = @json($topProducts->map(fn($p) => (float)($p->total_omzet ?? 0)));
-    const themeColors = ['#173d2b', '#2d6a4f', '#d97706', '#52b788', '#c28b38', '#3d5a80', '#e76f51', '#74c69d'];
+    const themeColors = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
 
     const totalTerjual = {{ $totalTerjualSum }};
     const totalOmzet = {{ $totalOmzetSum }};

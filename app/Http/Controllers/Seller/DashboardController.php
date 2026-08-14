@@ -17,6 +17,9 @@ class DashboardController extends Controller
             ->selectRaw("
                 COUNT(*) as orders,
                 COUNT(CASE WHEN status = 'Menunggu' THEN 1 END) as waiting,
+                COUNT(CASE WHEN status IN ('Diproses', 'Selesai') THEN 1 END) as paid_count,
+                COUNT(CASE WHEN status = 'Menunggu' THEN 1 END) as unpaid_count,
+                COALESCE(SUM(CASE WHEN status IN ('Diproses', 'Selesai') THEN total_harga ELSE 0 END), 0) as paid_revenue,
                 COALESCE(SUM(CASE WHEN status = 'Selesai' THEN total_harga ELSE 0 END), 0) as revenue
             ")
             ->first();
@@ -24,9 +27,12 @@ class DashboardController extends Controller
             'products' => $umkm->produk_count,
             'orders' => (int) ($orderStats->orders ?? 0),
             'waiting' => (int) ($orderStats->waiting ?? 0),
+            'paid_count' => (int) ($orderStats->paid_count ?? 0),
+            'unpaid_count' => (int) ($orderStats->unpaid_count ?? 0),
+            'paid_revenue' => (float) ($orderStats->paid_revenue ?? 0),
             'revenue' => (float) ($orderStats->revenue ?? 0),
         ];
-        $recent = (clone $base)->with(['produk', 'pembeli'])->latest('tanggal_pesan')->limit(8)->get();
+        $recent = (clone $base)->with(['produk', 'pembeli', 'payments'])->latest('tanggal_pesan')->limit(8)->get();
 
         $topProducts = Produk::where('umkm_id', $umkm->id)
             ->withSum(['pesanan as total_terjual' => function ($q) {
