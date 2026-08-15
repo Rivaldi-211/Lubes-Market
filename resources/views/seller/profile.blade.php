@@ -7,7 +7,7 @@
 <section class="dash-intro">
     <div>
         <p class="eyebrow"><span></span>Pengaturan Mitra UMKM</p>
-        <h1>Kelola Profil Usaha & Kredensial Akun</h1>
+        <h1>Kelola Profil Usaha &amp; Kredensial Akun</h1>
         <p>Perbarui identitas toko yang tampil pada katalog atau amankan informasi akun login Anda.</p>
     </div>
 </section>
@@ -18,10 +18,10 @@
         <i class="bi bi-shop"></i> Profil Usaha (UMKM)
     </button>
     <button type="button" class="profile-tab-btn {{ request('tab') === 'akun' ? 'active' : '' }}" data-tab-target="tab-akun">
-        <i class="bi bi-person-badge"></i> Data Akun Penjual
+        <i class="bi bi-person-badge"></i> Data Akun &amp; Profil Penjual
     </button>
     <button type="button" class="profile-tab-btn {{ request('tab') === 'keamanan' ? 'active' : '' }}" data-tab-target="tab-keamanan">
-        <i class="bi bi-shield-lock"></i> Keamanan & Kata Sandi
+        <i class="bi bi-shield-lock"></i> Keamanan &amp; Kata Sandi
     </button>
 </div>
 
@@ -59,13 +59,13 @@
             <h2>Foto Tempat Usaha / Logo</h2>
             <div class="image-preview" id="umkmPhotoBox">
                 @if($umkm->foto)
-                    <img id="umkmPhotoImg" src="{{ asset('storage/'.$umkm->foto) }}" alt="{{ $umkm->nama_umkm }}">
+                    <img src="{{ asset('storage/' . $umkm->foto) }}" alt="{{ $umkm->nama_umkm }}" id="umkmPhotoImg">
                 @else
-                    <i id="umkmPhotoPlaceholder" class="bi bi-shop" style="font-size:44px;color:#708071"></i>
+                    <i class="bi bi-image" style="font-size:44px;color:#708071"></i>
                 @endif
             </div>
             <label style="display:block;margin-top:14px;font-size:11px;font-weight:700">
-                Ganti Foto Toko
+                Pilih foto tempat usaha / logo
                 <input class="form-control" type="file" name="foto" id="umkmPhotoInput" accept="image/jpeg,image/png,image/webp">
             </label>
             <p class="help">Format JPG, PNG, atau WebP maksimal 2 MB. Gunakan foto tempat usaha atau logo yang jelas dan menarik.</p>
@@ -73,39 +73,87 @@
     </form>
 </div>
 
-{{-- TAB 2: DATA AKUN PENJUAL --}}
+{{-- TAB 2: DATA AKUN & PROFIL PENJUAL --}}
 <div class="profile-tab-content {{ request('tab') === 'akun' ? 'active' : '' }}" id="tab-akun">
-    <form class="form-page" method="post" action="{{ route('seller.profile.account') }}">
+    <form class="form-page" method="post" action="{{ route('seller.profile.account') }}" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
 
         <div class="form-card">
-            <h2>Informasi Akun Penjual</h2>
+            <h2>Informasi Akun &amp; Profil Penjual</h2>
             <p style="font-size:12px;color:#64748b;margin-top:0;margin-bottom:18px;">
-                Data ini digunakan untuk keperluan login akun dan komunikasi resmi platform.
+                Data ini digunakan untuk profil pengelola toko, identitas akun, dan komunikasi resmi platform.
             </p>
+
+            {{-- Foto Profil Avatar Section --}}
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                <div style="position: relative; width: 76px; height: 76px; border-radius: 50%; overflow: hidden; background: #123825; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 800; border: 3px solid #cbd5e1; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex-shrink: 0;">
+                    @if($user->foto_profil)
+                        <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="{{ $user->nama_lengkap }}" id="sellerAvatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <span id="sellerAvatarInitials">{{ strtoupper(substr($user->nama_lengkap, 0, 1)) }}</span>
+                        <img src="" alt="" id="sellerAvatarPreview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                    @endif
+                </div>
+                <div style="flex: 1; min-width: 220px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #1e293b;">Foto Profil Avatar Penjual</label>
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <label for="sellerAvatarInput" class="button" style="cursor: pointer; padding: 8px 16px; font-size: 12.5px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; margin: 0; background: #123825; border: 1px solid #123825; color: #ffffff; box-shadow: 0 2px 4px rgba(18, 56, 37, 0.2); transition: all 0.15s ease;">
+                            <i class="bi bi-camera-fill" style="color: #eab308; font-size: 14px;"></i> Pilih Foto
+                            <input type="file" name="foto_profil" id="sellerAvatarInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                        </label>
+                        <span id="sellerAvatarFileName" style="font-size: 12px; color: #64748b; font-style: italic;">Belum ada foto baru dipilih</span>
+                    </div>
+                    <small style="color: #64748b; font-size: 11.5px; display: block; margin-top: 6px;">Format: JPG, PNG, atau WebP (Maksimal 2 MB).</small>
+                </div>
+            </div>
+
             <div class="field-grid">
                 <label class="full">Nama Lengkap Pengguna <span style="color:#b91c1c">*</span>
                     <input name="nama_lengkap" value="{{ old('nama_lengkap', $user->nama_lengkap) }}" required placeholder="Nama lengkap Anda">
                 </label>
+
                 <label>Username Login <span style="color:#b91c1c">*</span>
                     <input name="username" value="{{ old('username', $user->username) }}" required placeholder="Username unik (tanpa spasi)">
                 </label>
+
                 <label>Alamat Email
                     <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="contoh@email.com">
                 </label>
-                <label class="full">Nomor HP Pribadi
+
+                <label>Nomor HP Pribadi
                     <input name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" placeholder="08xxxxxxxxxx">
                 </label>
+
+                <label>Jenis Kelamin
+                    <select name="jenis_kelamin">
+                        <option value="">— Pilih Jenis Kelamin —</option>
+                        <option value="Laki-laki" @selected(old('jenis_kelamin', $user->jenis_kelamin) === 'Laki-laki')>Laki-laki</option>
+                        <option value="Perempuan" @selected(old('jenis_kelamin', $user->jenis_kelamin) === 'Perempuan')>Perempuan</option>
+                    </select>
+                </label>
+
+                <label>Tanggal Lahir
+                    <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($user->tanggal_lahir)->format('Y-m-d')) }}">
+                </label>
+
+                <label class="full">Alamat Domisili Pengelola
+                    <textarea name="alamat_utama" rows="3" placeholder="Alamat tempat tinggal pengelola usaha saat ini">{{ old('alamat_utama', $user->alamat_utama) }}</textarea>
+                </label>
             </div>
+
             <button class="button" style="margin-top:20px">
                 <i class="bi bi-check2-circle"></i> Simpan Informasi Akun
             </button>
         </div>
 
         <aside class="profile-badge-card">
-            <div class="profile-avatar-circle">
-                {{ strtoupper(substr($user->nama_lengkap, 0, 1)) }}
+            <div class="profile-avatar-circle" style="overflow: hidden; padding: 0;">
+                @if($user->foto_profil)
+                    <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="{{ $user->nama_lengkap }}" style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    {{ strtoupper(substr($user->nama_lengkap, 0, 1)) }}
+                @endif
             </div>
             <div>
                 <h3>{{ $user->nama_lengkap }}</h3>
@@ -263,6 +311,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Seller Avatar Live Preview & Filename updater
+    const sellerAvatarInput = document.getElementById('sellerAvatarInput');
+    const sellerAvatarPreview = document.getElementById('sellerAvatarPreview');
+    const sellerAvatarInitials = document.getElementById('sellerAvatarInitials');
+    const sellerAvatarFileName = document.getElementById('sellerAvatarFileName');
+
+    if (sellerAvatarInput && sellerAvatarPreview) {
+        sellerAvatarInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                if (sellerAvatarFileName) {
+                    sellerAvatarFileName.textContent = file.name;
+                    sellerAvatarFileName.style.fontStyle = 'normal';
+                    sellerAvatarFileName.style.fontWeight = '600';
+                    sellerAvatarFileName.style.color = '#123825';
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    sellerAvatarPreview.src = e.target.result;
+                    sellerAvatarPreview.style.display = 'block';
+                    if (sellerAvatarInitials) sellerAvatarInitials.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                if (sellerAvatarFileName) {
+                    sellerAvatarFileName.textContent = 'Belum ada foto baru dipilih';
+                    sellerAvatarFileName.style.fontStyle = 'italic';
+                    sellerAvatarFileName.style.fontWeight = 'normal';
+                    sellerAvatarFileName.style.color = '#64748b';
+                }
             }
         });
     }

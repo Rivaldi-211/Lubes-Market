@@ -11,12 +11,33 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['username','password','nama_lengkap','email','no_hp','role','status'];
+    protected $fillable = [
+        'username',
+        'password',
+        'nama_lengkap',
+        'foto_profil',
+        'email',
+        'no_hp',
+        'alamat_utama',
+        'zona_pengiriman',
+        'jenis_kelamin',
+        'tanggal_lahir',
+        'role',
+        'status',
+    ];
     protected $hidden = ['password','remember_token'];
 
     protected function casts(): array
     {
-        return ['password' => 'hashed'];
+        return [
+            'password' => 'hashed',
+            'tanggal_lahir' => 'date',
+        ];
+    }
+
+    public function avatarUrl(): ?string
+    {
+        return $this->foto_profil ? asset('storage/' . $this->foto_profil) : null;
     }
 
     public function umkm(): HasOne { return $this->hasOne(Umkm::class, 'user_id'); }

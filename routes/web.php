@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 use App\Http\Controllers\Admin\RekeningBankController as AdminRekeningBankController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
 use App\Http\Controllers\Public\KeroyokanController as PublicKeroyokanController;
 use App\Http\Controllers\Admin\KeroyokanController as AdminKeroyokanController;
@@ -86,6 +87,9 @@ Route::middleware(['auth','active'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function(){
         Route::get('/', AdminDashboardController::class)->name('dashboard');
+        Route::get('/profil', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profil', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::patch('/profil/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
         Route::resource('umkm', AdminUmkmController::class)->except('show');
         Route::resource('produk', AdminProductController::class)->except('show')->names('products');
         Route::resource('keroyokan', AdminKeroyokanController::class)->except('show')->names('keroyokan');

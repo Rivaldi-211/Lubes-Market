@@ -45,12 +45,21 @@ class ProfileController extends Controller
     public function updateAccount(AccountUpdateRequest $request, ActivityLogger $logger): RedirectResponse
     {
         $user = $request->user();
-        $user->update($request->validated());
+        $data = $request->validated();
 
-        $logger->log('Memperbarui informasi akun penjual', $user, $request->ip());
+        if ($request->hasFile('foto_profil')) {
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
+            }
+            $data['foto_profil'] = $request->file('foto_profil')->store('avatars', 'public');
+        }
+
+        $user->update($data);
+
+        $logger->log('Memperbarui informasi profil dan akun penjual', $user, $request->ip());
 
         return redirect()->route('seller.profile.edit', ['tab' => 'akun'])
-            ->with('success', 'Informasi akun penjual berhasil diperbarui.');
+            ->with('success', 'Informasi akun dan foto profil penjual berhasil diperbarui.');
     }
 
     public function updatePassword(PasswordUpdateRequest $request, ActivityLogger $logger): RedirectResponse

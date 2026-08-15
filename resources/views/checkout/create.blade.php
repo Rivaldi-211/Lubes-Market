@@ -43,7 +43,7 @@
                                     <option value="{{ $zona->nama_zona }}"
                                             data-biaya="{{ $zona->biaya }}"
                                             data-keterangan="{{ $zona->keterangan }}"
-                                            @selected(old('zona_pengiriman') === $zona->nama_zona)>
+                                            @selected(old('zona_pengiriman', $user->zona_pengiriman) === $zona->nama_zona)>
                                         {{ $zona->nama_zona }} — Rp{{ number_format($zona->biaya, 0, ',', '.') }}
                                     </option>
                                 @endforeach
@@ -57,7 +57,7 @@
 
                         <label class="span-2">
                             Alamat Lengkap / Patokan Pengiriman <span class="required">*</span>
-                            <textarea name="alamat_pengiriman" rows="3" required placeholder="Dusun, RT/RW, nomor rumah, atau patokan lokasi pengiriman">{{ old('alamat_pengiriman') }}</textarea>
+                            <textarea name="alamat_pengiriman" rows="3" required placeholder="Dusun, RT/RW, nomor rumah, atau patokan lokasi pengiriman">{{ old('alamat_pengiriman', $user->alamat_utama) }}</textarea>
                         </label>
                         <label class="span-2">
                             Catatan Pesanan <span>(opsional)</span>

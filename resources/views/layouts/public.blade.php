@@ -47,7 +47,12 @@
                 </a>
 
                 @auth
-                    <a class="account-link" href="{{ auth()->user()->dashboardPath() }}">{{ Str::limit(auth()->user()->nama_lengkap, 18) }}</a>
+                    <a class="account-link" href="{{ auth()->user()->dashboardPath() }}" style="display:inline-flex;align-items:center;gap:8px;">
+                        @if(auth()->user()->foto_profil)
+                            <img src="{{ asset('storage/' . auth()->user()->foto_profil) }}" alt="{{ auth()->user()->nama_lengkap }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">
+                        @endif
+                        <span>{{ Str::limit(auth()->user()->nama_lengkap, 18) }}</span>
+                    </a>
                 @else
                     <a class="login-link" href="{{ route('login') }}">Masuk</a>
                     <a class="button button-small" href="{{ route('register') }}">Daftar</a>

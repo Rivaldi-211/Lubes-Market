@@ -1786,5 +1786,28 @@ td .ludes-select-trigger,
     line-height: 1.6;
 }
 
+/* --- Themed File Upload Input --- */
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+    background: #123825;
+    color: #ffffff;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+input[type="file"]::file-selector-button:hover,
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #194f34;
+    color: #eab308;
+}
+
+
 
 

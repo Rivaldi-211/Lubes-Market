@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\PasswordUpdateRequest;
 use App\Http\Requests\Buyer\ProfileUpdateRequest;
 use App\Models\Pesanan;
+use App\Models\ZonaPengiriman;
 use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -23,29 +25,47 @@ class ProfileController extends Controller
                 COUNT(*) as total,
                 COUNT(CASE WHEN status = 'Menunggu' THEN 1 END) as menunggu,
                 COUNT(CASE WHEN status = 'Diproses' THEN 1 END) as diproses,
-                COUNT(CASE WHEN status = 'Selesai' THEN 1 END) as selesai
+                COUNT(CASE WHEN status = 'Selesai' THEN 1 END) as selesai,
+                COALESCE(SUM(CASE WHEN status = 'Selesai' THEN total_harga ELSE 0 END), 0) as total_belanja
             ")
             ->first();
 
+        $totalUlasan = \App\Models\Ulasan::where('pembeli_id', $user->id)->count();
+
         $stats = [
-            'total'    => (int) ($statsRaw->total ?? 0),
-            'menunggu' => (int) ($statsRaw->menunggu ?? 0),
-            'diproses' => (int) ($statsRaw->diproses ?? 0),
-            'selesai'  => (int) ($statsRaw->selesai ?? 0),
+            'total'         => (int) ($statsRaw->total ?? 0),
+            'menunggu'      => (int) ($statsRaw->menunggu ?? 0),
+            'diproses'      => (int) ($statsRaw->diproses ?? 0),
+            'selesai'       => (int) ($statsRaw->selesai ?? 0),
+            'total_belanja' => (float) ($statsRaw->total_belanja ?? 0),
+            'total_ulasan'  => $totalUlasan,
         ];
 
-        return view('buyer.profile', compact('user', 'stats'));
+        $zonaPengiriman = ZonaPengiriman::aktif()->orderBy('urutan')->get();
+
+        return view('buyer.profile', compact('user', 'stats', 'zonaPengiriman'));
     }
 
     public function update(ProfileUpdateRequest $request, ActivityLogger $logger): RedirectResponse
     {
         $user = $request->user();
-        $user->update($request->validated());
+        $data = $request->validated();
 
-        $logger->log('Memperbarui informasi akun pembeli', $user, $request->ip());
+        if ($request->hasFile('foto_profil')) {
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
+            }
+            $data['foto_profil'] = $request->file('foto_profil')->store('avatars', 'public');
+        }
 
-        return redirect()->route('buyer.profile.edit', ['tab' => 'akun'])
-            ->with('success', 'Informasi profil akun Anda berhasil diperbarui.');
+        $user->update($data);
+
+        $logger->log('Memperbarui informasi profil akun pembeli', $user, $request->ip());
+
+        $tab = $request->input('redirect_tab', 'akun');
+
+        return redirect()->route('buyer.profile.edit', ['tab' => $tab])
+            ->with('success', 'Informasi profil dan data akun Anda berhasil disimpan.');
     }
 
     public function updatePassword(PasswordUpdateRequest $request, ActivityLogger $logger): RedirectResponse
