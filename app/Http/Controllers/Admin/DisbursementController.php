@@ -9,17 +9,24 @@ use App\Models\Umkm;
 use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DisbursementController extends Controller
 {
     public function index(): View
     {
+        // 1. Permintaan masuk dari mitra UMKM (status: diajukan)
+        $permintaanMasuk = Disbursement::with(['umkm', 'requester', 'rekeningBank', 'pesanan'])
+            ->where('status', 'diajukan')
+            ->latest('diajukan_at')
+            ->get();
+
+        // 2. Daftar saldo pending pesanan selesai per UMKM (siap dicairkan langsung oleh admin)
         $umkmList = Umkm::with(['user'])->get()->map(function ($umkm) {
-            // Find all completed and paid orders for products belonging to this UMKM that haven't been disbursed yet
             $pesananPending = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
                 ->where('status', 'Selesai')
-                ->whereDoesntHave('disbursements')
+                ->whereDoesntHave('disbursements', fn($q) => $q->whereIn('status', ['diajukan', 'diproses', 'dibayar']))
                 ->get();
 
             $umkm->total_pesanan_pending = $pesananPending->count();
@@ -28,37 +35,109 @@ class DisbursementController extends Controller
             return $umkm;
         });
 
-        $riwayat = Disbursement::with(['umkm', 'admin', 'pesanan'])->latest()->paginate(15);
+        // 3. Riwayat disbursement selesai / ditolak
+        $riwayat = Disbursement::with(['umkm', 'admin', 'requester', 'rekeningBank', 'pesanan'])
+            ->whereIn('status', ['dibayar', 'ditolak'])
+            ->latest()
+            ->paginate(15);
 
-        return view('admin.disbursement.index', compact('umkmList', 'riwayat'));
+        return view('admin.disbursement.index', compact('permintaanMasuk', 'umkmList', 'riwayat'));
+    }
+
+    public function approve(Request $request, Disbursement $disbursement, ActivityLogger $logger): RedirectResponse
+    {
+        return DB::transaction(function () use ($request, $disbursement, $logger) {
+            $locked = Disbursement::where('id', $disbursement->id)->lockForUpdate()->firstOrFail();
+
+            if (!in_array($locked->status, ['diajukan', 'diproses'])) {
+                return back()->with('error', 'Permintaan pencairan ini sudah diproses sebelumnya.');
+            }
+
+            $catatan = $request->catatan ?: ($locked->catatan ?: "Pencairan dana telah ditransfer oleh Admin");
+
+            $locked->update([
+                'status'     => 'dibayar',
+                'dibayar_at' => now(),
+                'admin_id'   => auth()->id(),
+                'catatan'    => $catatan,
+            ]);
+
+            $logger->log(
+                "Menyetujui pencairan dana #DISB-{$locked->id} sebesar Rp" . number_format($locked->jumlah, 0, ',', '.') . " ke UMKM {$locked->umkm->nama_umkm}",
+                auth()->user(),
+                $request->ip()
+            );
+
+            return back()->with('success', "Pencairan dana sebesar Rp" . number_format($locked->jumlah, 0, ',', '.') . " ke {$locked->umkm->nama_umkm} berhasil disetujui.");
+        });
+    }
+
+    public function reject(Request $request, Disbursement $disbursement, ActivityLogger $logger): RedirectResponse
+    {
+        $request->validate([
+            'alasan_penolakan' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        return DB::transaction(function () use ($request, $disbursement, $logger) {
+            $locked = Disbursement::where('id', $disbursement->id)->lockForUpdate()->firstOrFail();
+
+            if (!in_array($locked->status, ['diajukan', 'diproses'])) {
+                return back()->with('error', 'Permintaan pencairan ini sudah diproses sebelumnya.');
+            }
+
+            // Lepas semua pesanan agar bisa diajukan kembali oleh penjual
+            $locked->pesanan()->detach();
+
+            $alasan = $request->alasan_penolakan
+                ? ("Ditolak: " . $request->alasan_penolakan)
+                : 'Pengajuan pencairan ditolak oleh admin.';
+
+            $locked->update([
+                'status'     => 'ditolak',
+                'ditolak_at' => now(),
+                'admin_id'   => auth()->id(),
+                'catatan'    => $alasan,
+            ]);
+
+            $logger->log(
+                "Menolak pengajuan pencairan dana #DISB-{$locked->id} UMKM {$locked->umkm->nama_umkm}. Alasan: {$alasan}",
+                auth()->user(),
+                $request->ip()
+            );
+
+            return back()->with('success', "Pengajuan pencairan dana #DISB-{$locked->id} berhasil ditolak dan saldo dikembalikan ke penjual.");
+        });
     }
 
     public function store(Request $request, Umkm $umkm, ActivityLogger $logger): RedirectResponse
     {
-        $pesanan = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
-            ->where('status', 'Selesai')
-            ->whereDoesntHave('disbursements')
-            ->get();
+        return DB::transaction(function () use ($request, $umkm, $logger) {
+            $pesanan = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
+                ->where('status', 'Selesai')
+                ->whereDoesntHave('disbursements', fn($q) => $q->whereIn('status', ['diajukan', 'diproses', 'dibayar']))
+                ->lockForUpdate()
+                ->get();
 
-        if ($pesanan->isEmpty()) {
-            return back()->with('error', "Tidak ada saldo pesanan selesai yang dapat dicairkan untuk {$umkm->nama_umkm}.");
-        }
+            if ($pesanan->isEmpty()) {
+                return back()->with('error', "Tidak ada saldo pesanan selesai yang dapat dicairkan untuk {$umkm->nama_umkm}.");
+            }
 
-        $jumlah = (float) $pesanan->sum('pendapatan_penjual');
+            $jumlah = (float) $pesanan->sum('pendapatan_penjual');
 
-        $disbursement = Disbursement::create([
-            'umkm_id'    => $umkm->id,
-            'jumlah'     => $jumlah,
-            'status'     => 'dibayar',
-            'dibayar_at' => now(),
-            'admin_id'   => auth()->id(),
-            'catatan'    => $request->catatan ?: "Pencairan dana pesanan selesai untuk {$umkm->nama_umkm}",
-        ]);
+            $disbursement = Disbursement::create([
+                'umkm_id'    => $umkm->id,
+                'jumlah'     => $jumlah,
+                'status'     => 'dibayar',
+                'dibayar_at' => now(),
+                'admin_id'   => auth()->id(),
+                'catatan'    => $request->catatan ?: "Pencairan dana langsung oleh Admin untuk {$umkm->nama_umkm}",
+            ]);
 
-        $disbursement->pesanan()->attach($pesanan->pluck('id'));
+            $disbursement->pesanan()->attach($pesanan->pluck('id'));
 
-        $logger->log("Mencatat pencairan dana Rp" . number_format($jumlah, 0, ',', '.') . " ke UMKM {$umkm->nama_umkm}", auth()->user(), $request->ip());
+            $logger->log("Mencatat pencairan dana langsung Rp" . number_format($jumlah, 0, ',', '.') . " ke UMKM {$umkm->nama_umkm}", auth()->user(), $request->ip());
 
-        return back()->with('success', "Pencairan dana sebesar Rp" . number_format($jumlah, 0, ',', '.') . " ke {$umkm->nama_umkm} berhasil dicatat.");
+            return back()->with('success', "Pencairan dana sebesar Rp" . number_format($jumlah, 0, ',', '.') . " ke {$umkm->nama_umkm} berhasil dicatat.");
+        });
     }
 }

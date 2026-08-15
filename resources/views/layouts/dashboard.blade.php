@@ -73,9 +73,10 @@
 
     <div class="sidebar-section" data-section-id="seller-performa">
         <button type="button" class="sidebar-section-header" data-toggle-section>
-            <span><i class="bi bi-chevron-down section-arrow"></i> Performa</span>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Keuangan &amp; Performa</span>
         </button>
         <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('seller.saldo.*')?'active':'' }}" href="{{ route('seller.saldo.index') }}"><i class="bi bi-wallet2"></i>Saldo &amp; Pencairan</a>
             <a class="{{ request()->routeIs('seller.reports.*')?'active':'' }}" href="{{ route('seller.reports.index') }}"><i class="bi bi-bar-chart"></i>Laporan</a>
             <a class="{{ request()->routeIs('seller.analytics*')?'active':'' }}" href="{{ route('seller.analytics') }}"><i class="bi bi-graph-up-arrow"></i>Analitik Usaha</a>
         </div>

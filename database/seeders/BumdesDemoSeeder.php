@@ -19,8 +19,6 @@ class BumdesDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(RekeningBankSeeder::class);
-
         // 1. Users (Admin, 5 Pembeli, 15 Penjual)
         $users = [
             ['username' => 'admin', 'nama_lengkap' => 'Ketua BUMDes Berkah', 'email' => 'admin@bumdesberkah.id', 'no_hp' => '081234500001', 'role' => 'admin'],
@@ -88,6 +86,8 @@ class BumdesDemoSeeder extends Seeder
         foreach ($umkmRows as $i => $row) {
             Umkm::create($row + ['user_id' => $sellerUsers[$i]->id, 'status' => 'aktif']);
         }
+
+        $this->call(RekeningBankSeeder::class);
 
         // 4. Products List (1: Kreatif, 2: Kuliner, 3: Oleh-oleh)
         $productsData = [

@@ -27,10 +27,13 @@ class DashboardController extends Controller
         $pendapatanBersih = (float) $pesananSelesai->sum('pendapatan_penjual');
         $komisiTotal = (float) $pesananSelesai->sum('komisi_admin');
 
-        $pesananCair = (clone $base)->where('status', 'Selesai')->whereHas('disbursements')->get();
+        $pesananCair = (clone $base)->where('status', 'Selesai')->whereHas('disbursements', fn($q) => $q->where('status', 'dibayar'))->get();
         $saldoDicairkan = (float) $pesananCair->sum('pendapatan_penjual');
 
-        $pesananPending = (clone $base)->where('status', 'Selesai')->whereDoesntHave('disbursements')->get();
+        $pesananDiajukan = (clone $base)->where('status', 'Selesai')->whereHas('disbursements', fn($q) => $q->whereIn('status', ['diajukan', 'diproses']))->get();
+        $saldoDiajukan = (float) $pesananDiajukan->sum('pendapatan_penjual');
+
+        $pesananPending = (clone $base)->where('status', 'Selesai')->whereDoesntHave('disbursements', fn($q) => $q->whereIn('status', ['diajukan', 'diproses', 'dibayar']))->get();
         $saldoPending = (float) $pesananPending->sum('pendapatan_penjual');
 
         $stats = [
@@ -44,6 +47,7 @@ class DashboardController extends Controller
             'pendapatan_bersih' => $pendapatanBersih,
             'komisi_admin' => $komisiTotal,
             'saldo_dicairkan' => $saldoDicairkan,
+            'saldo_diajukan' => $saldoDiajukan,
             'saldo_pending' => $saldoPending,
         ];
         $recent = (clone $base)->with(['produk', 'pembeli', 'payments'])->latest('tanggal_pesan')->limit(8)->get();

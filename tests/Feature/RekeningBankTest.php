@@ -67,7 +67,13 @@ class RekeningBankTest extends TestCase
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('role', 'pembeli')->firstOrFail();
         $product = Produk::where('stok_status', 'Ready')->firstOrFail();
-        $bank = RekeningBank::aktif()->firstOrFail();
+        $bank = RekeningBank::whereNull('umkm_id')->where('aktif', true)->firstOrFail();
+
+        \App\Models\ZonaPengiriman::create([
+            'nama_zona' => 'Moncongloe Lappara',
+            'biaya' => 0,
+            'aktif' => true,
+        ]);
 
         // Put item in cart
         $this->actingAs($buyer)->post('/keranjang/tambah/' . $product->id, ['jumlah' => 1]);
@@ -76,6 +82,7 @@ class RekeningBankTest extends TestCase
         $response = $this->actingAs($buyer)->post('/checkout', [
             'metode_pembayaran' => 'Transfer',
             'alamat_pengiriman' => 'Moncongloe Lappara',
+            'zona_pengiriman' => 'Moncongloe Lappara',
             'no_hp_pembeli' => '08123456789',
         ]);
         $response->assertSessionHasErrors(['rekening_bank_id']);
@@ -85,6 +92,7 @@ class RekeningBankTest extends TestCase
             'metode_pembayaran' => 'Transfer',
             'rekening_bank_id' => $bank->id,
             'alamat_pengiriman' => 'Moncongloe Lappara',
+            'zona_pengiriman' => 'Moncongloe Lappara',
             'no_hp_pembeli' => '08123456789',
         ]);
         $responseSuccess->assertRedirect('/pembeli');

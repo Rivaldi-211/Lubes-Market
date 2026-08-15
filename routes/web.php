@@ -99,6 +99,8 @@ Route::middleware(['auth','active'])->group(function () {
         Route::post('/verifikasi-penjual/{umkm}/approve', [\App\Http\Controllers\Admin\VerifikasiPenjualController::class, 'approve'])->name('verifikasi-penjual.approve');
         Route::post('/verifikasi-penjual/{umkm}/reject', [\App\Http\Controllers\Admin\VerifikasiPenjualController::class, 'reject'])->name('verifikasi-penjual.reject');
         Route::get('/disbursement', [\App\Http\Controllers\Admin\DisbursementController::class, 'index'])->name('disbursement.index');
+        Route::post('/disbursement/{disbursement}/setujui', [\App\Http\Controllers\Admin\DisbursementController::class, 'approve'])->name('disbursement.approve');
+        Route::post('/disbursement/{disbursement}/tolak', [\App\Http\Controllers\Admin\DisbursementController::class, 'reject'])->name('disbursement.reject');
         Route::post('/disbursement/{umkm}', [\App\Http\Controllers\Admin\DisbursementController::class, 'store'])->name('disbursement.store');
         Route::resource('zona-pengiriman', \App\Http\Controllers\Admin\ZonaPengirimanController::class)->only(['index', 'update']);
         Route::get('/aktivitas', [AdminActivityLogController::class,'index'])->name('logs.index');
@@ -122,6 +124,9 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/pesanan/notifikasi-pembayaran', [SellerOrderController::class,'paymentNotifications'])->name('orders.notifications');
         Route::patch('/pesanan/{pesanan}', [SellerOrderController::class,'update'])->name('orders.update');
         Route::patch('/pesanan/{pesanan}/pembayaran', [SellerOrderController::class,'updatePaymentStatus'])->name('orders.payment.update');
+        Route::get('/saldo', [\App\Http\Controllers\Seller\SaldoController::class, 'index'])->name('saldo.index');
+        Route::post('/saldo/ajukan', [\App\Http\Controllers\Seller\SaldoController::class, 'store'])->name('saldo.ajukan')->middleware('throttle:5,1');
+        Route::post('/saldo/rekening', [\App\Http\Controllers\Seller\SaldoController::class, 'storeRekening'])->name('saldo.rekening.store');
         Route::get('/laporan', [SellerReportController::class,'index'])->name('reports.index');
         Route::get('/laporan/csv', [SellerReportController::class,'csv'])->name('reports.csv');
         Route::get('/analitik', [\App\Http\Controllers\Seller\AnalyticsController::class, 'index'])->name('analytics');

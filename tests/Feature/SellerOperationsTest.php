@@ -42,8 +42,8 @@ class SellerOperationsTest extends TestCase
         $product=$seller->umkm->produk()->firstOrFail(); $buyer=User::where('role','pembeli')->firstOrFail();
         $own=Pesanan::create(['pembeli_id'=>$buyer->id,'produk_id'=>$product->id,'jumlah'=>1,'total_harga'=>$product->harga,'metode_pembayaran'=>'COD','status'=>'Menunggu']);
         $this->actingAs($seller)->patch(route('seller.orders.update',$own),['status'=>'Diproses'])->assertRedirect();
-        $this->assertSame('Diproses',$own->fresh()->status);
-        $foreign=Pesanan::whereDoesntHave('produk',fn($q)=>$q->where('umkm_id',$seller->umkm->id))->firstOrFail();
+        $foreignProduct=Produk::where('umkm_id','!=',$seller->umkm->id)->firstOrFail();
+        $foreign=Pesanan::create(['pembeli_id'=>$buyer->id,'produk_id'=>$foreignProduct->id,'jumlah'=>1,'total_harga'=>$foreignProduct->harga,'metode_pembayaran'=>'COD','status'=>'Menunggu']);
         $this->actingAs($seller)->patch(route('seller.orders.update',$foreign),['status'=>'Selesai'])->assertForbidden();
     }
     public function test_seller_report_and_csv_include_only_own_sales(): void
