@@ -24,7 +24,6 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px;">
         @forelse($umkms as $u)
             @php
-                $hasPromo = $u->produk->isNotEmpty();
                 $avgRate = $u->avg_rating ? number_format((float)$u->avg_rating, 1) : null;
             @endphp
             <a href="{{ route('umkm.show', $u) }}" class="umkm-interactive-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative;">
@@ -34,7 +33,7 @@
 
                 <div style="padding: 24px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; gap: 20px;">
                     <div>
-                        <!-- Header row: Avatar, Category & Promo badge -->
+                        <!-- Header row: Avatar & Category -->
                         <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
                             <div style="display: flex; align-items: center; gap: 14px;">
                                 <div style="width: 50px; height: 50px; background: #f4efe6; border: 1.5px solid #d4af37; color: #123825; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; box-shadow: inset 0 0 6px rgba(0,0,0,0.03); flex-shrink: 0;">
@@ -49,12 +48,6 @@
                                     </small>
                                 </div>
                             </div>
-
-                            @if($hasPromo)
-                                <span style="background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px;">
-                                    <i class="bi bi-tag-fill"></i> Promo
-                                </span>
-                            @endif
                         </div>
 
                         <!-- Store Title -->

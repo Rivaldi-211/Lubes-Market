@@ -14,10 +14,7 @@ class UmkmController extends Controller
         $category = $request->query('kategori');
 
         $query = Umkm::where('status', 'aktif')
-            ->withCount('produk')
-            ->with(['produk' => fn($q) => $q->where('is_promo', true)->where(function($p) {
-                $p->whereNull('promo_selesai')->orWhere('promo_selesai', '>=', now());
-            })]);
+            ->withCount('produk');
 
         if ($category) {
             $query->where('kategori_usaha', $category);
@@ -47,13 +44,6 @@ class UmkmController extends Controller
         $produk = $umkm->produk()
             ->with('kategori')
             ->where('stok_jumlah', '>', 0)
-            ->get();
-
-        $produkPromo = $umkm->produk()
-            ->where('is_promo', true)
-            ->where(function($q) {
-                $q->whereNull('promo_selesai')->orWhere('promo_selesai', '>=', now());
-            })
             ->get();
 
         $ulasanQuery = Ulasan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id));
@@ -87,7 +77,6 @@ class UmkmController extends Controller
         return view('public.umkm.show', compact(
             'umkm',
             'produk',
-            'produkPromo',
             'ulasan',
             'ratingDistribusi',
             'avgRating',

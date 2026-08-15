@@ -53,62 +53,11 @@
                     <!-- Contact & Location Footer Row -->
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: #475569; border-top: 1px dashed #e2e8f0; padding-top: 16px;">
                         <span><i class="bi bi-geo-alt-fill" style="color: #10b981;"></i> {{ $umkm->alamat }}</span>
-                        
-                        @if($umkm->no_hp)
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $umkm->no_hp) }}" target="_blank" rel="noopener" style="color: #059669; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                <i class="bi bi-whatsapp" style="color: #25d366;"></i> {{ $umkm->no_hp }}
-                            </a>
-                        @endif
-
-                        @if($umkm->instagram)
-                            <a href="https://instagram.com/{{ ltrim($umkm->instagram, '@') }}" target="_blank" rel="noopener" style="color: #475569; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                <i class="bi bi-instagram" style="color: #e1306c;"></i> {{ $umkm->instagram }}
-                            </a>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Section Promo Aktif (Redesigned: Sophisticated & Elegant Card Container) -->
-    @if($produkPromo->isNotEmpty())
-    <section style="margin-bottom: 44px; background: #ffffff; border: 1px solid #fee2e2; border-radius: 20px; padding: 30px; box-shadow: 0 4px 16px -4px rgba(220, 38, 38, 0.05);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
-            <div>
-                <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">
-                    <i class="bi bi-fire"></i> Penawaran Spesial Toko
-                </span>
-                <h2 style="font-size: 1.4rem; font-weight: 800; margin: 6px 0 0 0; color: #1e293b;">Promo &amp; Diskon Berlangsung</h2>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
-            @foreach($produkPromo as $p)
-                <div style="background: #fafafa; border: 1px solid #fee2e2; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
-                    @if($p->label_promo)
-                        <span style="position: absolute; top: 12px; right: 12px; background: #dc2626; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px;">{{ $p->label_promo }}</span>
-                    @endif
-                    <div>
-                        <h4 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 700; padding-right: 60px;">
-                            <a href="{{ route('products.show', $p) }}" style="color: #0f172a; text-decoration: none;">{{ $p->nama_produk }}</a>
-                        </h4>
-                        <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px;">
-                            <strong style="color: #dc2626; font-size: 1.25rem;">Rp{{ number_format((float)$p->harga_promo, 0, ',', '.') }}</strong>
-                            <del style="color: #94a3b8; font-size: 0.85rem;">Rp{{ number_format((float)$p->harga, 0, ',', '.') }}</del>
-                            @if($p->diskonPersen() > 0)
-                                <span style="background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">-{{ $p->diskonPersen() }}%</span>
-                            @endif
-                        </div>
-                    </div>
-                    <a href="{{ route('products.show', $p) }}" class="button" style="padding: 8px 16px; font-size: 13px; text-align: center; border-radius: 8px; background: #dc2626; border-color: #dc2626; font-weight: 700; color: #fff;">
-                        Lihat Promo →
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </section>
-    @endif
 
     <!-- Catalog Produk Toko -->
     <div style="margin-bottom: 48px;">
@@ -125,7 +74,9 @@
                 @endforeach
             </div>
         @endif
-    </di    <!-- Section Ulasan Pelanggan Toko -->
+    </div>
+
+    <!-- Section Ulasan Pelanggan Toko -->
     <section style="background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top:48px;">
         <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 24px 0; color: #0f172a;">Ulasan Pelanggan Toko</h2>
 
