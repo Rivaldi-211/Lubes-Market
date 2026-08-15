@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Nota #{{ $order->id }} — LUDES-MARKET</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -169,9 +171,12 @@
 <body>
     <div class="receipt">
         <div class="head">
-            <div>
-                <div class="brand">LUDES-MARKET</div>
-                <small>Moncongloe Lappara · Produk Lokal</small>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LM" style="width: 48px; height: 48px; border-radius: 50%; object-fit: contain; flex-shrink: 0;">
+                <div>
+                    <div class="brand">LUDES-MARKET</div>
+                    <small>Moncongloe Lappara · Produk Lokal</small>
+                </div>
             </div>
             <div style="text-align:right">
                 <b>NOTA PESANAN</b><br>

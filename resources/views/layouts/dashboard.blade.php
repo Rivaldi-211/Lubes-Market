@@ -1,7 +1,8 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>@yield('title','Dashboard') — LUDES-MARKET</title>
+<link rel="icon" type="image/png" href="{{ asset('assets/img/favicon-32x32.png') }}"><link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"><link rel="stylesheet" href="{{ asset('assets/css/app.css') }}"><link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">@stack('head')</head>
 <body class="dashboard-body"><div class="dashboard-shell">
-<aside class="dashboard-sidebar" data-sidebar><div class="sidebar-brand"><a class="brand" href="{{ route('home') }}"><span class="brand-mark">LM</span><span><b>LUDES</b>-MARKET<small>Moncongloe Lappara</small></span></a><button type="button" data-sidebar-close aria-label="Tutup menu"><i class="bi bi-x-lg"></i></button></div>
+<aside class="dashboard-sidebar" data-sidebar><div class="sidebar-brand"><a class="brand" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LUDES-MARKET" class="brand-mark"><span><b>LUDES</b>-MARKET<small>Moncongloe Lappara</small></span></a><button type="button" data-sidebar-close aria-label="Tutup menu"><i class="bi bi-x-lg"></i></button></div>
 <div class="sidebar-context"><small>Ruang kerja</small><strong>{{ auth()->user()->isAdmin()?'Administrator':(auth()->user()->isSeller()?'Mitra UMKM':'Pembeli') }}</strong></div>
 <nav class="sidebar-nav">
 @if(auth()->user()->isAdmin())

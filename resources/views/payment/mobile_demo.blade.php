@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran QRIS Mobile Demo — LUDES-MARKET</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,7 +199,7 @@
 <body>
     <div class="mobile-card">
         <div class="merchant-head">
-            <div class="merchant-logo">LM</div>
+            <img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LUDES-MARKET" style="width: 60px; height: 60px; border-radius: 50%; object-fit: contain; margin: 0 auto 12px; display: block; box-shadow: 0 4px 12px rgba(23, 61, 43, 0.12);">
             <div class="merchant-title">LUDES-MARKET</div>
             <div class="merchant-sub">Pembayaran Digital QRIS (Simulasi Demo)</div>
         </div>

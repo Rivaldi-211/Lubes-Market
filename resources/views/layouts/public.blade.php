@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'LUDES-MARKET — Produk Lokal Moncongloe Lappara')</title>
     <meta name="description" content="Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +19,7 @@
     <header class="site-header {{ request()->routeIs('home') ? 'site-header-overlay' : 'site-header-solid' }}" id="siteHeader">
         <div class="shell header-inner">
             <a class="brand" href="{{ route('home') }}">
-                <span class="brand-mark">LM</span>
+                <img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LUDES-MARKET" class="brand-mark">
                 <span><b>LUDES</b>-MARKET<small>Moncongloe Lappara</small></span>
             </a>
             
@@ -53,14 +55,46 @@
         <div class="mobile-menu" data-mobile-menu>
             <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}" data-nav="beranda">Beranda</a>
             <a class="{{ request()->routeIs('catalogue') || request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('catalogue') }}">Katalog</a>
+            <a class="{{ request()->routeIs('umkm.*') ? 'active' : '' }}" href="{{ route('umkm.index') }}">Toko UMKM</a>
             <a class="{{ request()->routeIs('keroyokan.*') ? 'active' : '' }}" href="{{ route('keroyokan.index') }}">Keroyokan</a>
             <a href="{{ route('home') }}#tentang" data-nav="tentang">Tentang</a>
             <a href="{{ route('home') }}#mitra" data-nav="mitra">Mitra UMKM</a>
             <a href="{{ route('home') }}#kontak" data-nav="kontak">Kontak</a>
-            @guest
-                <a href="{{ route('login') }}">Masuk</a>
-                <a href="{{ route('register') }}">Daftar</a>
-            @endguest
+            @auth
+                <div class="mobile-auth-box">
+                    <a class="mobile-user-card" href="{{ auth()->user()->dashboardPath() }}">
+                        <span class="mobile-user-avatar">{{ strtoupper(substr(auth()->user()->nama_lengkap, 0, 1)) }}</span>
+                        <div>
+                            <strong>{{ auth()->user()->nama_lengkap }}</strong>
+                            <small>{{ auth()->user()->isAdmin() ? 'Administrator' : (auth()->user()->isSeller() ? 'Mitra UMKM' : 'Pembeli') }}</small>
+                        </div>
+                        <i class="bi bi-chevron-right" style="margin-left: auto; color: #858b86;"></i>
+                    </a>
+                    <a class="mobile-menu-link" href="{{ auth()->user()->dashboardPath() }}">
+                        <i class="bi bi-speedometer2"></i> Dashboard Saya
+                    </a>
+                    @if(auth()->user()->isSeller())
+                        <a class="mobile-menu-link" href="{{ route('seller.profile.edit') }}">
+                            <i class="bi bi-shop"></i> Profil & Akun Penjual
+                        </a>
+                    @elseif(auth()->user()->isBuyer())
+                        <a class="mobile-menu-link" href="{{ route('buyer.profile.edit') }}">
+                            <i class="bi bi-person-gear"></i> Pengaturan Akun
+                        </a>
+                    @endif
+                    <form method="post" action="{{ route('logout') }}" style="margin: 4px 0 0 0;">
+                        @csrf
+                        <button type="submit" class="mobile-logout-btn">
+                            <i class="bi bi-box-arrow-right"></i> Keluar
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="mobile-guest-box">
+                    <a class="button button-outline button-small" href="{{ route('login') }}" style="justify-content:center; width:100%;">Masuk</a>
+                    <a class="button button-small" href="{{ route('register') }}" style="justify-content:center; width:100%;">Daftar</a>
+                </div>
+            @endauth
         </div>
     </header>
 
@@ -72,7 +106,7 @@
         <div class="shell footer-grid">
             <div>
                 <a class="brand footer-brand" href="{{ route('home') }}">
-                    <span class="brand-mark">LM</span>
+                    <img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LUDES-MARKET" class="brand-mark">
                     <span><b>LUDES</b>-MARKET<small>Moncongloe Lappara</small></span>
                 </a>
                 <p>Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.</p>

@@ -25,9 +25,11 @@
 
 <section class="section intro-section" id="tentang">
     <div class="shell intro-grid">
-        <div>
-            <div class="eyebrow"><span></span>LUDES-MARKET</div>
-            <h2>Bukan sekadar etalase.<br>Ini jalan masuk ke usaha warga.</h2>
+        <div style="display: flex; gap: 20px; align-items: flex-start;">
+            <div>
+                <div class="eyebrow"><span></span>LUDES-MARKET</div>
+                <h2>Bukan sekadar etalase.<br>Ini jalan masuk ke usaha warga.</h2>
+            </div>
         </div>
         <div class="intro-copy">
             <p>LUDES-MARKET membantu produk-produk warga Moncongloe Lappara hadir lebih rapi, mudah ditemukan, dan lebih dekat dengan pembeli.</p>
