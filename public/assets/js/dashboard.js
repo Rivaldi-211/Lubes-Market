@@ -100,8 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('.ludes-custom-select.is-open').forEach(w => w.classList.remove('is-open'));
 
                 buildMenuOptions();
-                if (!document.body.contains(menu)) {
-                    document.body.appendChild(menu);
+                const container = select.closest('dialog') || document.body;
+                if (!container.contains(menu)) {
+                    container.appendChild(menu);
                 }
                 positionMenu();
                 wrapper.classList.add('is-open');

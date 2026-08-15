@@ -8,6 +8,98 @@
 @if($order->status==='Menunggu')<form method="post" action="{{ route('buyer.orders.cancel',$order) }}" onsubmit="return confirm('Batalkan pesanan ini?')">@csrf @method('PATCH')<button class="btn-danger">Batalkan</button></form>@endif
 @if(in_array($order->metode_pembayaran,['Transfer','QRIS']) && $order->status!=='Dibatalkan')<form class="proof-form" method="post" enctype="multipart/form-data" action="{{ route('buyer.orders.proof',$order) }}">@csrf<label class="btn-secondary"><i class="bi bi-upload"></i> {{ $order->bukti_pembayaran?'Ganti bukti':'Upload bukti' }}<input type="file" name="bukti_pembayaran" accept="image/jpeg,image/png,image/webp" onchange="const f = this.files[0]; if (f && f.size > 5 * 1024 * 1024) { alert('Ukuran foto terlalu besar (' + (f.size / (1024*1024)).toFixed(1) + ' MB). Maksimal ukuran bukti pembayaran adalah 5 MB.'); this.value = ''; return false; } this.form.submit();"></label></form>@endif
 @if($order->status==='Selesai' && !$order->ulasan)<button class="btn-primary" type="button" data-review-open="review-{{ $order->id }}"><i class="bi bi-star"></i> Beri ulasan</button>@elseif($order->ulasan)<span class="review-done"><i class="bi bi-star-fill"></i> {{ $order->ulasan->rating }}/5</span>@endif</div>
-@if($order->status==='Selesai' && !$order->ulasan)<dialog id="review-{{ $order->id }}" class="review-dialog"><form method="post" action="{{ route('buyer.orders.review',$order) }}">@csrf<div class="dialog-head"><div><small>ULAS PRODUK</small><h3>{{ $order->produk->nama_produk }}</h3></div><button type="button" data-review-close="review-{{ $order->id }}">×</button></div><label>Rating<select name="rating" required><option value="5">5 — Sangat puas</option><option value="4">4 — Puas</option><option value="3">3 — Cukup</option><option value="2">2 — Kurang</option><option value="1">1 — Tidak puas</option></select></label><label>Komentar<textarea name="komentar" rows="4" placeholder="Ceritakan pengalaman Anda..."></textarea></label><button class="button wide">Kirim ulasan</button></form></dialog>@endif
+@if($order->status==='Selesai' && !$order->ulasan)
+<dialog id="review-{{ $order->id }}" class="review-dialog" style="border-radius: 16px; border: 1px solid #e2e8f0; max-width: 480px; width: 90%;">
+    <form method="post" action="{{ route('buyer.orders.review',$order) }}" style="padding: 24px;">
+        @csrf
+        <div class="dialog-head" style="margin-bottom: 20px;">
+            <div>
+                <small style="color: #64748b; font-weight: 700; font-size: 10px; letter-spacing: 0.05em;">ULAS PRODUK</small>
+                <h3 style="margin: 4px 0 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">{{ $order->produk->nama_produk }}</h3>
+            </div>
+            <button type="button" data-review-close="review-{{ $order->id }}" style="font-size: 24px; color: #94a3b8; line-height: 1; border: none; background: none; cursor: pointer;">&times;</button>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+            <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #475569; margin-bottom: 8px;">Rating Pengalaman</label>
+            <div class="review-star-picker" style="display: flex; align-items: center; gap: 12px; background: #f8fafc; padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <div class="stars-wrap" style="display: flex; gap: 6px; font-size: 26px; cursor: pointer;">
+                    @for($s = 1; $s <= 5; $s++)
+                        <i class="bi bi-star-fill star-btn" data-val="{{ $s }}" style="color: #f59e0b; transition: transform 0.15s, color 0.15s;" title="{{ $s }} Bintang"></i>
+                    @endfor
+                </div>
+                <span class="rating-text-feedback" style="font-size: 13px; font-weight: 700; color: #166534; margin-left: 4px;">5 — Sangat Puas</span>
+            </div>
+            <input type="hidden" name="rating" value="5" class="review-rating-input" required>
+        </div>
+
+        <label style="display: block; margin-bottom: 20px;">
+            <span style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #475569; margin-bottom: 6px;">Komentar</span>
+            <textarea name="komentar" rows="4" placeholder="Ceritakan pengalaman Anda membeli produk ini..." style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-family: inherit; font-size: 13px; resize: vertical;" required></textarea>
+        </label>
+
+        <button class="button wide" style="width: 100%; justify-content: center; font-weight: 700; padding: 12px 20px;">Kirim ulasan</button>
+    </form>
+</dialog>
+@endif
 </article>@endforeach</div><div class="pagination-wrap">{{ $orders->links() }}</div>@else<x-empty-state title="Belum ada pesanan" text="Katalog UMKM lokal sudah siap dijelajahi."/>@endif</section>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const starLabels = {
+        1: '1 — Tidak Puas',
+        2: '2 — Kurang',
+        3: '3 — Cukup',
+        4: '4 — Puas',
+        5: '5 — Sangat Puas'
+    };
+
+    document.querySelectorAll('.review-dialog').forEach(dialog => {
+        const starsWrap = dialog.querySelector('.stars-wrap');
+        const ratingInput = dialog.querySelector('.review-rating-input');
+        const labelFeedback = dialog.querySelector('.rating-text-feedback');
+        if (!starsWrap || !ratingInput || !labelFeedback) return;
+
+        const stars = starsWrap.querySelectorAll('.star-btn');
+
+        const updateStars = (val) => {
+            stars.forEach(s => {
+                const sVal = parseInt(s.dataset.val);
+                if (sVal <= val) {
+                    s.style.color = '#f59e0b';
+                    s.style.transform = 'scale(1.1)';
+                } else {
+                    s.style.color = '#cbd5e1';
+                    s.style.transform = 'scale(1)';
+                }
+            });
+            setTimeout(() => {
+                stars.forEach(s => s.style.transform = 'scale(1)');
+            }, 150);
+            labelFeedback.textContent = starLabels[val] || (val + ' Bintang');
+            labelFeedback.style.color = val >= 4 ? '#166534' : (val === 3 ? '#d97706' : '#dc2626');
+        };
+
+        stars.forEach(star => {
+            star.addEventListener('mouseenter', () => {
+                updateStars(parseInt(star.dataset.val));
+            });
+
+            star.addEventListener('click', () => {
+                const val = parseInt(star.dataset.val);
+                ratingInput.value = val;
+                updateStars(val);
+            });
+        });
+
+        starsWrap.addEventListener('mouseleave', () => {
+            const currentVal = parseInt(ratingInput.value) || 5;
+            updateStars(currentVal);
+        });
+    });
+});
+</script>
+@endpush
+
