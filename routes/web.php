@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Buyer\DashboardController as BuyerDashboardController;
 use App\Http\Controllers\Buyer\OrderController as BuyerOrderController;
+use App\Http\Controllers\Buyer\ProfileController as BuyerProfileController;
 use App\Http\Controllers\Receipt\ReceiptController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProfileController as SellerProfileController;
@@ -70,6 +71,9 @@ Route::middleware(['auth','active'])->group(function () {
         }
         Route::post('/keroyokan/{kelompokKeroyokan}/konfirmasi', [PublicKeroyokanController::class, 'confirm'])->name('keroyokan.confirm');
         Route::get('/pembeli', BuyerDashboardController::class)->name('buyer.dashboard');
+        Route::get('/pembeli/profil', [BuyerProfileController::class, 'edit'])->name('buyer.profile.edit');
+        Route::patch('/pembeli/profil', [BuyerProfileController::class, 'update'])->name('buyer.profile.update');
+        Route::patch('/pembeli/profil/password', [BuyerProfileController::class, 'updatePassword'])->name('buyer.profile.password');
         Route::patch('/pembeli/pesanan/{pesanan}/batal',[BuyerOrderController::class,'cancel'])->name('buyer.orders.cancel');
         Route::post('/pembeli/pesanan/{pesanan}/bukti',[BuyerOrderController::class,'uploadProof'])->name('buyer.orders.proof');
         Route::post('/pembeli/pesanan/{pesanan}/ulasan',[BuyerOrderController::class,'review'])->name('buyer.orders.review');
@@ -98,6 +102,8 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/', SellerDashboardController::class)->name('dashboard');
         Route::get('/profil', [SellerProfileController::class,'edit'])->name('profile.edit');
         Route::patch('/profil', [SellerProfileController::class,'update'])->name('profile.update');
+        Route::patch('/profil/akun', [SellerProfileController::class,'updateAccount'])->name('profile.account');
+        Route::patch('/profil/password', [SellerProfileController::class,'updatePassword'])->name('profile.password');
         Route::resource('produk', SellerProductController::class)->except('show')->names('products');
         Route::resource('rekening-bank', \App\Http\Controllers\Seller\RekeningBankController::class)->except('show')->names('rekening-bank');
         Route::patch('/rekening-bank/{rekeningBank}/status', [\App\Http\Controllers\Seller\RekeningBankController::class, 'status'])->name('rekening-bank.status');

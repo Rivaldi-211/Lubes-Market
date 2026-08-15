@@ -1,105 +1,59 @@
 @extends('layouts.dashboard')
-@section('title', 'Profil & Akun Penjual')
-@section('eyebrow', 'Mitra UMKM')
-@section('page_title', 'Profil & Akun')
+@section('title', 'Pengaturan Akun')
+@section('eyebrow', 'Akun Pembeli')
+@section('page_title', 'Pengaturan Akun')
 
 @section('content')
 <section class="dash-intro">
     <div>
-        <p class="eyebrow"><span></span>Pengaturan Mitra UMKM</p>
-        <h1>Kelola Profil Usaha & Kredensial Akun</h1>
-        <p>Perbarui identitas toko yang tampil pada katalog atau amankan informasi akun login Anda.</p>
+        <p class="eyebrow"><span></span>Profil & Keamanan Akun</p>
+        <h1>Kelola Informasi Akun Anda</h1>
+        <p>Perbarui biodata profil dan amankan kata sandi akun untuk kenyamanan bertransaksi di LUDES-MARKET.</p>
     </div>
+    <a class="button button-outline" href="{{ route('buyer.dashboard') }}">
+        <i class="bi bi-bag-check"></i> Riwayat Pesanan
+    </a>
 </section>
 
 {{-- Tab Switcher --}}
 <div class="profile-tabs-header">
-    <button type="button" class="profile-tab-btn {{ request('tab', 'umkm') === 'umkm' ? 'active' : '' }}" data-tab-target="tab-umkm">
-        <i class="bi bi-shop"></i> Profil Usaha (UMKM)
-    </button>
-    <button type="button" class="profile-tab-btn {{ request('tab') === 'akun' ? 'active' : '' }}" data-tab-target="tab-akun">
-        <i class="bi bi-person-badge"></i> Data Akun Penjual
+    <button type="button" class="profile-tab-btn {{ request('tab', 'akun') === 'akun' ? 'active' : '' }}" data-tab-target="tab-akun">
+        <i class="bi bi-person-badge"></i> Informasi Akun
     </button>
     <button type="button" class="profile-tab-btn {{ request('tab') === 'keamanan' ? 'active' : '' }}" data-tab-target="tab-keamanan">
         <i class="bi bi-shield-lock"></i> Keamanan & Kata Sandi
     </button>
 </div>
 
-{{-- TAB 1: PROFIL UMKM --}}
-<div class="profile-tab-content {{ request('tab', 'umkm') === 'umkm' ? 'active' : '' }}" id="tab-umkm">
-    <form class="form-page" method="post" enctype="multipart/form-data" action="{{ route('seller.profile.update') }}">
+{{-- TAB 1: INFORMASI AKUN PEMBELI --}}
+<div class="profile-tab-content {{ request('tab', 'akun') === 'akun' ? 'active' : '' }}" id="tab-akun">
+    <form class="form-page" method="post" action="{{ route('buyer.profile.update') }}">
         @csrf
         @method('PATCH')
 
         <div class="form-card">
-            <h2>Identitas Usaha UMKM</h2>
-            <div class="field-grid">
-                <label>Nama UMKM <span style="color:#b91c1c">*</span>
-                    <input name="nama_umkm" value="{{ old('nama_umkm', $umkm->nama_umkm) }}" required placeholder="Contoh: Aneka Keripik Berkah">
-                </label>
-                <label>Nama Pemilik <span style="color:#b91c1c">*</span>
-                    <input name="pemilik" value="{{ old('pemilik', $umkm->pemilik) }}" required placeholder="Nama pemilik usaha">
-                </label>
-                <label>No. HP / WhatsApp Usaha
-                    <input name="no_hp" value="{{ old('no_hp', $umkm->no_hp) }}" placeholder="Contoh: 08123456789">
-                </label>
-                <label class="full">Alamat Lengkap Usaha
-                    <input name="alamat" value="{{ old('alamat', $umkm->alamat) }}" placeholder="Contoh: Dusun Moncongloe, RT 01 / RW 02">
-                </label>
-                <label class="full">Deskripsi Usaha
-                    <textarea name="deskripsi" rows="6" placeholder="Ceritakan sejarah singkat, keunggulan, atau ciri khas produk toko Anda...">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
-                </label>
-            </div>
-            <button class="button" style="margin-top:20px">
-                <i class="bi bi-check2-circle"></i> Simpan Profil Usaha
-            </button>
-        </div>
-
-        <aside class="form-card">
-            <h2>Foto Tempat Usaha / Logo</h2>
-            <div class="image-preview" id="umkmPhotoBox">
-                @if($umkm->foto)
-                    <img id="umkmPhotoImg" src="{{ asset('storage/'.$umkm->foto) }}" alt="{{ $umkm->nama_umkm }}">
-                @else
-                    <i id="umkmPhotoPlaceholder" class="bi bi-shop" style="font-size:44px;color:#708071"></i>
-                @endif
-            </div>
-            <label style="display:block;margin-top:14px;font-size:11px;font-weight:700">
-                Ganti Foto Toko
-                <input class="form-control" type="file" name="foto" id="umkmPhotoInput" accept="image/jpeg,image/png,image/webp">
-            </label>
-            <p class="help">Format JPG, PNG, atau WebP maksimal 2 MB. Gunakan foto tempat usaha atau logo yang jelas dan menarik.</p>
-        </aside>
-    </form>
-</div>
-
-{{-- TAB 2: DATA AKUN PENJUAL --}}
-<div class="profile-tab-content {{ request('tab') === 'akun' ? 'active' : '' }}" id="tab-akun">
-    <form class="form-page" method="post" action="{{ route('seller.profile.account') }}">
-        @csrf
-        @method('PATCH')
-
-        <div class="form-card">
-            <h2>Informasi Akun Penjual</h2>
+            <h2>Biodata Akun Pembeli</h2>
             <p style="font-size:12px;color:#64748b;margin-top:0;margin-bottom:18px;">
-                Data ini digunakan untuk keperluan login akun dan komunikasi resmi platform.
+                Informasi ini digunakan pada formulir checkout pesanan dan pengiriman nota transaksi.
             </p>
+
             <div class="field-grid">
-                <label class="full">Nama Lengkap Pengguna <span style="color:#b91c1c">*</span>
+                <label class="full">Nama Lengkap <span style="color:#b91c1c">*</span>
                     <input name="nama_lengkap" value="{{ old('nama_lengkap', $user->nama_lengkap) }}" required placeholder="Nama lengkap Anda">
                 </label>
                 <label>Username Login <span style="color:#b91c1c">*</span>
                     <input name="username" value="{{ old('username', $user->username) }}" required placeholder="Username unik (tanpa spasi)">
                 </label>
                 <label>Alamat Email
-                    <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="contoh@email.com">
+                    <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="nama@email.com">
                 </label>
-                <label class="full">Nomor HP Pribadi
-                    <input name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" placeholder="08xxxxxxxxxx">
+                <label class="full">Nomor WhatsApp / HP
+                    <input name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" placeholder="Contoh: 081234567890">
                 </label>
             </div>
+
             <button class="button" style="margin-top:20px">
-                <i class="bi bi-check2-circle"></i> Simpan Informasi Akun
+                <i class="bi bi-check2-circle"></i> Simpan Perubahan Akun
             </button>
         </div>
 
@@ -116,31 +70,39 @@
             <div class="profile-meta-list">
                 <div class="profile-meta-item">
                     <span>Peran Akun</span>
-                    <strong>Mitra UMKM</strong>
-                </div>
-                <div class="profile-meta-item">
-                    <span>Toko Terdaftar</span>
-                    <strong>{{ $umkm->nama_umkm ?: '-' }}</strong>
+                    <strong>Pembeli Terdaftar</strong>
                 </div>
                 <div class="profile-meta-item">
                     <span>Terdaftar Sejak</span>
                     <strong>{{ $user->created_at ? $user->created_at->translatedFormat('d M Y') : '-' }}</strong>
                 </div>
+                <div class="profile-meta-item">
+                    <span>Total Pesanan</span>
+                    <strong>{{ $stats['total'] }} Transaksi</strong>
+                </div>
+                <div class="profile-meta-item">
+                    <span>Pesanan Selesai</span>
+                    <strong style="color:var(--green-800)">{{ $stats['selesai'] }} Selesai</strong>
+                </div>
             </div>
+
+            <a href="{{ route('buyer.dashboard') }}" class="btn-secondary" style="margin-top:8px;width:100%;justify-content:center;padding:9px 12px;font-size:11px;">
+                <i class="bi bi-bag-check"></i> Lihat Riwayat Belanja
+            </a>
         </aside>
     </form>
 </div>
 
-{{-- TAB 3: KEAMANAN & KATA SANDI --}}
+{{-- TAB 2: KEAMANAN & KATA SANDI --}}
 <div class="profile-tab-content {{ request('tab') === 'keamanan' ? 'active' : '' }}" id="tab-keamanan">
     <div class="form-page">
-        <form class="form-card" method="post" action="{{ route('seller.profile.password') }}">
+        <form class="form-card" method="post" action="{{ route('buyer.profile.password') }}">
             @csrf
             @method('PATCH')
 
             <h2>Ganti Kata Sandi</h2>
             <p style="font-size:12px;color:#64748b;margin-top:0;margin-bottom:18px;">
-                Pastikan Anda menggunakan kata sandi yang kuat dan tidak membagikannya kepada pihak lain.
+                Gunakan kombinasi kata sandi yang aman untuk melindungi akun dan riwayat transaksi Anda.
             </p>
 
             <div class="field-grid">
@@ -168,8 +130,8 @@
                 <h4><i class="bi bi-info-circle"></i> Petunjuk Keamanan</h4>
                 <ul>
                     <li>Kata sandi baru wajib berisi minimal <strong>8 karakter</strong>.</li>
-                    <li>Gunakan kombinasi huruf besar, huruf kecil, angka, atau simbol agar lebih aman.</li>
-                    <li>Setelah kata sandi diperbarui, sesi login Anda akan tetap aktif.</li>
+                    <li>Gunakan kombinasi huruf, angka, dan karakter khusus.</li>
+                    <li>Jangan gunakan kata sandi yang mudah ditebak seperti tanggal lahir atau nomor telepon.</li>
                 </ul>
             </div>
 
@@ -183,15 +145,15 @@
             <div style="font-size:12px;color:#555e56;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;gap:10px;align-items:flex-start;">
                     <i class="bi bi-lock-fill" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
-                    <span>Jangan pernah memberitahukan kata sandi Anda kepada siapa pun termasuk pengurus BUMDes.</span>
+                    <span>Jaga kerahasiaan kata sandi Anda dan jangan berikan kepada orang lain.</span>
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;">
-                    <i class="bi bi-phone-fill" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
-                    <span>Pastikan nomor WhatsApp dan email Anda aktif untuk menerima notifikasi pesanan secara berkala.</span>
+                    <i class="bi bi-check-circle-fill" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
+                    <span>Pastikan nomor WhatsApp aktif untuk konfirmasi pesanan dari pihak UMKM.</span>
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;">
-                    <i class="bi bi-clock-history" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
-                    <span>Disarankan mengganti kata sandi secara berkala setiap 3 hingga 6 bulan.</span>
+                    <i class="bi bi-shield-fill-check" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
+                    <span>Hubungi admin BUMDes jika Anda menemukan aktivitas mencurigakan pada akun Anda.</span>
                 </div>
             </div>
         </aside>
@@ -243,29 +205,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
-    // UMKM Live Photo Preview
-    const photoInput = document.getElementById('umkmPhotoInput');
-    const photoBox = document.getElementById('umkmPhotoBox');
-    if (photoInput && photoBox) {
-        photoInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    let img = photoBox.querySelector('img');
-                    if (!img) {
-                        photoBox.innerHTML = '';
-                        img = document.createElement('img');
-                        img.id = 'umkmPhotoImg';
-                        photoBox.appendChild(img);
-                    }
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
 });
 </script>
 @endpush
