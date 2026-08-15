@@ -30,8 +30,8 @@
                 <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 14px;">
                         <div>
-                            <span style="background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;">
-                                ⏳ Menunggu Verifikasi
+                            <span style="background: #fef3c7; color: #b45309; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px;">
+                                <i class="bi bi-hourglass-split"></i> Menunggu Verifikasi
                             </span>
                             <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 6px 0 2px 0;">{{ $u->nama_umkm }}</h3>
                             <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Pemilik: <strong>{{ $u->pemilik }}</strong> ({{ $u->user->email ?? $u->no_hp }}) · Alamat: {{ $u->alamat }}</p>
@@ -136,9 +136,9 @@
                         </td>
                         <td>
                             @if($r->status_verifikasi === 'disetujui')
-                                <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px;">✓ Disetujui</span>
+                                <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px;"><i class="bi bi-check-circle-fill"></i> Disetujui</span>
                             @else
-                                <span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px;">✕ Ditolak</span>
+                                <span style="background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px;"><i class="bi bi-x-circle-fill"></i> Ditolak</span>
                             @endif
                         </td>
                         <td>{{ optional($r->verified_at)->format('d/m/Y H:i') ?? '-' }}</td>

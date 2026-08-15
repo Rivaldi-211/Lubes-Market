@@ -59,7 +59,7 @@
                                 @if($pAvailable)
                                     <small style="display:block; color:var(--green-700); font-weight:600;">Stok: {{ number_format($p->stok_jumlah) }}</small>
                                 @else
-                                    <small style="display:block; color:#d9534f; font-weight:700;">⚠️ Stok Habis</small>
+                                    <small style="display:block; color:#dc2626; font-weight:700;"><i class="bi bi-exclamation-circle-fill"></i> Stok Habis</small>
                                 @endif
                             </div>
                         </li>
@@ -95,8 +95,8 @@
 
         @if(isset($simulation))
             <div style="background:#fff; border:2px solid var(--green-700); border-radius:var(--radius); padding:28px;">
-                <h2 style="margin:0 0 16px; font-family:var(--display); font-size:1.4rem;">
-                    🤝 RENCANA KEROYOKAN
+                <h2 style="margin:0 0 16px; font-family:var(--display); font-size:1.4rem; display:flex; align-items:center; gap:8px;">
+                    <i class="bi bi-people-fill" style="color:var(--green-700)"></i> RENCANA KEROYOKAN
                 </h2>
 
                 @if($simulation['status'] === 'success')

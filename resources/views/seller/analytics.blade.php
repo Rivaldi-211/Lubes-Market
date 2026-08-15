@@ -90,7 +90,7 @@
         <div class="panel-heading" style="margin-bottom: 16px;">
             <div>
                 <small style="color: #059669; font-weight: 700;">PERFORMANSA TINGGI</small>
-                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0 0 0;">🌟 Produk Terlaris & Favorit</h3>
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0 0 0;"><i class="bi bi-star-fill" style="color: #f59e0b; margin-right: 4px;"></i> Produk Terlaris &amp; Favorit</h3>
             </div>
         </div>
         <div class="data-table-wrap">
@@ -124,7 +124,7 @@
         <div class="panel-heading" style="margin-bottom: 16px;">
             <div>
                 <small style="color: #dc2626; font-weight: 700;">EVALUASI KUALITAS</small>
-                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0 0 0;">⚠️ Perlu Perhatian (Rating < 3.5)</h3>
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 2px 0 0 0;"><i class="bi bi-exclamation-triangle-fill" style="color: #ef4444; margin-right: 4px;"></i> Perlu Perhatian (Rating &lt; 3.5)</h3>
             </div>
         </div>
         <div class="data-table-wrap">
@@ -161,7 +161,7 @@
     <div class="panel-heading" style="margin-bottom: 20px;">
         <div>
             <small style="color: #059669; font-weight: 700;">AKSELERASI PLATFORM</small>
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0;">💡 Rekomendasi Strategi dari Admin</h2>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0;"><i class="bi bi-lightbulb-fill" style="color: #f59e0b; margin-right: 6px;"></i> Rekomendasi Strategi dari Admin</h2>
         </div>
     </div>
 

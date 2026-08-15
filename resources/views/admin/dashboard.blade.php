@@ -32,7 +32,7 @@
             <div class="panel-heading">
                 <div>
                     <small>STATISTIK PLATFORM</small>
-                    <h2>🏆 Top 10 Menu Terlaris Desa</h2>
+                    <h2><i class="bi bi-trophy-fill" style="color: #d97706; font-size: 1.15rem; margin-right: 6px;"></i> Top 10 Menu Terlaris Desa</h2>
                 </div>
                 <div class="stats-chart-header-actions">
                     @if($topProducts->isNotEmpty())
@@ -74,14 +74,17 @@
                                     $omzet = (float) ($prod->total_omzet ?? 0);
                                     $pctTerjual = $totalTerjualSum > 0 ? round(($terjual / $totalTerjualSum) * 100, 1) : 0;
                                     $pctOmzet = $totalOmzetSum > 0 ? round(($omzet / $totalOmzetSum) * 100, 1) : 0;
-                                    $medal = $rank === 0 ? '🥇' : ($rank === 1 ? '🥈' : ($rank === 2 ? '🥉' : '#' . ($rank + 1)));
                                 @endphp
                                 <div class="stats-legend-item" data-index="{{ $rank }}" data-name="{{ $prod->nama_produk }}">
                                     <div class="stats-legend-left">
                                         <span class="stats-legend-dot" style="background-color: {{ $color }};"></span>
                                         <div class="stats-legend-info">
-                                            <span class="stats-legend-name" title="{{ $prod->nama_produk }}">{{ $medal }}
-                                                {{ $prod->nama_produk }}</span>
+                                            <span class="stats-legend-name" title="{{ $prod->nama_produk }}">
+                                                <span style="display: inline-block; font-size: 10px; font-weight: 800; padding: 1px 5px; border-radius: 4px; margin-right: 4px; {{ $rank === 0 ? 'background: #fef3c7; color: #b45309; border: 1px solid #fde68a;' : ($rank === 1 ? 'background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;' : ($rank === 2 ? 'background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa;' : 'background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;')) }}">
+                                                    #{{ $rank + 1 }}
+                                                </span>
+                                                {{ $prod->nama_produk }}
+                                            </span>
                                             <span class="stats-legend-sub">{{ $prod->umkm->nama_umkm ?? '-' }} ·
                                                 Rp{{ number_format($prod->harga, 0, ',', '.') }}</span>
                                         </div>

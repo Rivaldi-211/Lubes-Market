@@ -1,11 +1,11 @@
 @extends('layouts.public')
 
-@section('title', '🤝 LUDES KEROYOKAN — Satu Pesanan. Banyak UMKM. Satu Kekuatan Desa.')
+@section('title', 'LUDES KEROYOKAN — Satu Pesanan. Banyak UMKM. Satu Kekuatan Desa.')
 
 @section('content')
 <section class="public-hero" style="background:linear-gradient(135deg, var(--green-950), var(--green-900)); color:var(--white); padding: 60px 0;">
     <div class="shell">
-        <span class="eyebrow" style="color:var(--gold); display:inline-block; margin-bottom:12px; font-weight:700;">🤝 PROGRAM UNGGULAN DESA</span>
+        <span class="eyebrow" style="color:var(--gold); display:inline-flex; align-items:center; gap:6px; margin-bottom:12px; font-weight:700;"><i class="bi bi-people-fill"></i> PROGRAM UNGGULAN DESA</span>
         <h1 style="font-size: 2.8rem; margin:0 0 16px; font-family:var(--display);">LUDES KEROYOKAN</h1>
         <p style="font-size: 1.25rem; max-width:640px; margin:0 0 24px; opacity:0.9; line-height:1.6;">
             Satu Pesanan. Banyak UMKM. Satu Kekuatan Desa.

@@ -54,11 +54,15 @@
                 @forelse($umkms as $rank => $u)
                     <tr>
                         <td>
-                            <strong style="font-size: 1.05rem;">
-                                @if($rank === 0) 🥇 @elseif($rank === 1) 🥈 @elseif($rank === 2) 🥉 @else #{{ $rank + 1 }} @endif
-                                {{ $u->nama_umkm }}
-                            </strong>
-                            <br><small style="color: #6b7280;">Pemilik: {{ $u->pemilik }}</small>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; font-size: 11px; font-weight: 800; border-radius: 6px; flex-shrink: 0; {{ $rank === 0 ? 'background: #fef3c7; color: #b45309; border: 1px solid #fde68a;' : ($rank === 1 ? 'background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;' : ($rank === 2 ? 'background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa;' : 'background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;')) }}">
+                                    #{{ $rank + 1 }}
+                                </span>
+                                <div>
+                                    <strong style="font-size: 1rem; color: #0f172a; display: block;">{{ $u->nama_umkm }}</strong>
+                                    <small style="color: #6b7280;">Pemilik: {{ $u->pemilik }}</small>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <span style="font-size: 11px; font-weight: 600; color: #059669; background: #ecfdf5; padding: 3px 8px; border-radius: 999px;">

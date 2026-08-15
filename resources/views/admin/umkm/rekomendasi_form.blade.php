@@ -51,10 +51,10 @@
                 <div>
                     <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #374151;">Fokus Strategi (Tipe)</label>
                     <select name="tipe" class="form-control" required style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px;">
-                        <option value="promosi" @selected(old('tipe') === 'promosi')>📣 Promosi & Diskon</option>
-                        <option value="produk" @selected(old('tipe') === 'produk')>📦 Inovasi & Kemasan Produk</option>
-                        <option value="harga" @selected(old('tipe') === 'harga')>🏷️ Penyesuaian Harga</option>
-                        <option value="distribusi" @selected(old('tipe') === 'distribusi')>🚚 Jangkauan & Distribusi</option>
+                        <option value="promosi" @selected(old('tipe') === 'promosi')>Promosi &amp; Diskon</option>
+                        <option value="produk" @selected(old('tipe') === 'produk')>Inovasi &amp; Kemasan Produk</option>
+                        <option value="harga" @selected(old('tipe') === 'harga')>Penyesuaian Harga</option>
+                        <option value="distribusi" @selected(old('tipe') === 'distribusi')>Jangkauan &amp; Distribusi</option>
                     </select>
                 </div>
 

@@ -53,17 +53,17 @@
     </h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px;">
-            <small style="color: #166534; font-weight: 700; display: block; margin-bottom: 4px;">💰 Pendapatan Bersih</small>
+            <small style="color: #166534; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="bi bi-cash-stack"></i> Pendapatan Bersih</small>
             <strong style="font-size: 1.25rem; color: #14532d; display: block;">Rp{{ number_format($stats['pendapatan_bersih'], 0, ',', '.') }}</strong>
             <span style="font-size: 11px; color: #166534;">Dari pesanan selesai (setelah potong 10%)</span>
         </div>
         <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px;">
-            <small style="color: #b45309; font-weight: 700; display: block; margin-bottom: 4px;">📋 Menunggu Pencairan Admin</small>
+            <small style="color: #b45309; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="bi bi-clock-history"></i> Menunggu Pencairan Admin</small>
             <strong style="font-size: 1.25rem; color: #78350f; display: block;">Rp{{ number_format($stats['saldo_pending'], 0, ',', '.') }}</strong>
             <span style="font-size: 11px; color: #92400e;">Akan ditransfer oleh Admin Platform</span>
         </div>
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 14px;">
-            <small style="color: #1e40af; font-weight: 700; display: block; margin-bottom: 4px;">✅ Sudah Dicairkan</small>
+            <small style="color: #1e40af; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="bi bi-check2-circle"></i> Sudah Dicairkan</small>
             <strong style="font-size: 1.25rem; color: #1e3a8a; display: block;">Rp{{ number_format($stats['saldo_dicairkan'], 0, ',', '.') }}</strong>
             <span style="font-size: 11px; color: #1d4ed8;">Telah ditransfer ke rekening usaha</span>
         </div>

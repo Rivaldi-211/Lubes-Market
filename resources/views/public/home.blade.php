@@ -73,8 +73,8 @@
                     @php $p = $kategori->top_produk; @endphp
                     <div style="border: 1px solid #e6e1d6; border-radius: 16px; overflow: hidden; background: #faf8f5; display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
-                            <div style="padding: 12px 16px; background: var(--green-950); color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px;">
-                                🏆 TERLARIS — {{ strtoupper($kategori->nama_kategori) }}
+                            <div style="padding: 12px 16px; background: var(--green-950); color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <i class="bi bi-trophy-fill" style="color: #d4af37;"></i> TERLARIS — {{ strtoupper($kategori->nama_kategori) }}
                             </div>
                             @if($p->foto)
                                 <img src="{{ asset('storage/' . $p->foto) }}" alt="{{ $p->nama_produk }}"

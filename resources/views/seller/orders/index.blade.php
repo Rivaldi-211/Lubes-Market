@@ -47,7 +47,7 @@
                             <b>#{{ $order->id }}</b><br>
                             <small>{{ optional($order->tanggal_pesan)->format('d/m/Y H:i') }}</small>
                             @if($order->batch_keroyokan_id)
-                                <br><small style="color:var(--green-800);font-weight:700;">🤝 Keroyokan #KR-{{ str_pad($order->batch_keroyokan_id,5,'0',STR_PAD_LEFT) }}</small>
+                                <br><small style="color:var(--green-800);font-weight:700;"><i class="bi bi-people-fill"></i> Keroyokan #KR-{{ str_pad($order->batch_keroyokan_id,5,'0',STR_PAD_LEFT) }}</small>
                             @endif
                         </td>
                         <td>
