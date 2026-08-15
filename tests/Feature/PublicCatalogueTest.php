@@ -18,14 +18,15 @@ class PublicCatalogueTest extends TestCase
     {
         $this->seed(BumdesDemoSeeder::class);
         $this->get('/')->assertOk()->assertSee('LUDES-MARKET');
-        $this->get('/katalog')->assertOk()->assertSee('Jalangkote Isi Sayur');
+        $this->get('/katalog')->assertOk()->assertSee('Bakso Bakar');
     }
 
     public function test_catalogue_hides_products_from_inactive_umkm(): void
     {
         $this->seed(BumdesDemoSeeder::class);
-        Umkm::first()->update(['status' => 'nonaktif']);
-        $this->get('/katalog')->assertDontSee('Jalangkote Isi Sayur');
+        $umkm = Umkm::where('nama_umkm', 'Pisang Epe & Bakso Bakar Pak Baso')->firstOrFail();
+        $umkm->update(['status' => 'nonaktif']);
+        $this->get('/katalog')->assertDontSee('Bakso Bakar');
     }
 
     public function test_catalogue_can_filter_by_keyword_and_category(): void

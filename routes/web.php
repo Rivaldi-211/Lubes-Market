@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
+use App\Http\Controllers\Admin\RekeningBankController as AdminRekeningBankController;
 
 use App\Http\Controllers\Public\KeroyokanController as PublicKeroyokanController;
 use App\Http\Controllers\Admin\KeroyokanController as AdminKeroyokanController;
@@ -79,6 +80,8 @@ Route::middleware(['auth','active'])->group(function () {
         Route::resource('umkm', AdminUmkmController::class)->except('show');
         Route::resource('produk', AdminProductController::class)->except('show')->names('products');
         Route::resource('keroyokan', AdminKeroyokanController::class)->except('show')->names('keroyokan');
+        Route::resource('rekening-bank', AdminRekeningBankController::class)->except('show')->names('rekening-bank');
+        Route::patch('/rekening-bank/{rekeningBank}/status', [AdminRekeningBankController::class, 'status'])->name('rekening-bank.status');
         Route::get('/pengguna', [AdminUserController::class,'index'])->name('users.index');
         Route::patch('/pengguna/{user}/status', [AdminUserController::class,'status'])->name('users.status');
         Route::get('/pesanan', [AdminOrderController::class,'index'])->name('orders.index');
@@ -96,9 +99,12 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/profil', [SellerProfileController::class,'edit'])->name('profile.edit');
         Route::patch('/profil', [SellerProfileController::class,'update'])->name('profile.update');
         Route::resource('produk', SellerProductController::class)->except('show')->names('products');
+        Route::resource('rekening-bank', \App\Http\Controllers\Seller\RekeningBankController::class)->except('show')->names('rekening-bank');
+        Route::patch('/rekening-bank/{rekeningBank}/status', [\App\Http\Controllers\Seller\RekeningBankController::class, 'status'])->name('rekening-bank.status');
         Route::get('/pesanan', [SellerOrderController::class,'index'])->name('orders.index');
         Route::get('/pesanan/notifikasi-pembayaran', [SellerOrderController::class,'paymentNotifications'])->name('orders.notifications');
         Route::patch('/pesanan/{pesanan}', [SellerOrderController::class,'update'])->name('orders.update');
+        Route::patch('/pesanan/{pesanan}/pembayaran', [SellerOrderController::class,'updatePaymentStatus'])->name('orders.payment.update');
         Route::get('/laporan', [SellerReportController::class,'index'])->name('reports.index');
         Route::get('/laporan/csv', [SellerReportController::class,'csv'])->name('reports.csv');
         Route::get('/analitik', [\App\Http\Controllers\Seller\AnalyticsController::class, 'index'])->name('analytics');

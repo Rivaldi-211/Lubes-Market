@@ -52,6 +52,16 @@ class CheckoutService
                 ]);
             }
 
+            $rekeningBankId = null;
+            $rekeningSnapshot = null;
+            if ($payload['metode_pembayaran'] === 'Transfer' && !empty($payload['rekening_bank_id'])) {
+                $bank = \App\Models\RekeningBank::find($payload['rekening_bank_id']);
+                if ($bank) {
+                    $rekeningBankId = $bank->id;
+                    $rekeningSnapshot = "{$bank->nama_bank} - {$bank->nomor_rekening} a.n. {$bank->atas_nama}";
+                }
+            }
+
             foreach ($raw as $productId => $quantity) {
                 $product = Produk::query()->whereKey((int)$productId)->lockForUpdate()->first();
                 if (!$product || !$product->umkm()->where('status', 'aktif')->exists()) {
@@ -86,6 +96,8 @@ class CheckoutService
                     'jumlah' => $quantity,
                     'total_harga' => (float)$product->harga * $quantity,
                     'metode_pembayaran' => $payload['metode_pembayaran'],
+                    'rekening_bank_id' => $rekeningBankId,
+                    'rekening_bank_snapshot' => $rekeningSnapshot,
                     'alamat_pengiriman' => $payload['alamat_pengiriman'],
                     'no_hp_pembeli' => $payload['no_hp_pembeli'],
                     'status' => 'Menunggu',

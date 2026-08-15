@@ -9,10 +9,16 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'metode_pembayaran'=>['required',Rule::in(['COD','Transfer','QRIS','Moncongloe'])],
+            'rekening_bank_id' => [
+                Rule::requiredIf(fn () => $this->input('metode_pembayaran') === 'Transfer'),
+                'nullable',
+                'integer',
+                Rule::exists('rekening_bank', 'id')->where('aktif', true),
+            ],
             'alamat_pengiriman'=>['required','string','max:255'],
             'no_hp_pembeli'=>['required','string','max:20'],
             'catatan'=>['nullable','string','max:255'],
         ];
     }
-    public function messages(): array { return ['alamat_pengiriman.required'=>'Alamat atau titik pengambilan wajib diisi.','no_hp_pembeli.required'=>'Nomor HP pembeli wajib diisi.']; }
+    public function messages(): array { return ['alamat_pengiriman.required'=>'Alamat atau titik pengambilan wajib diisi.','no_hp_pembeli.required'=>'Nomor HP pembeli wajib diisi.','rekening_bank_id.required'=>'Silakan pilih salah satu rekening bank BUMDes tujuan transfer.','rekening_bank_id.exists'=>'Rekening bank yang dipilih tidak valid atau sedang tidak aktif.']; }
 }

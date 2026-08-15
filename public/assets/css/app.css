@@ -535,7 +535,6 @@ footer[id] {
 .inner-hero h1 {
     font: 800 clamp(54px, 7.2vw, 104px)/.93 var(--display);
     letter-spacing: -.055em;
-    margin: 0;
     max-width: 900px;
 }
 
@@ -543,6 +542,7 @@ footer[id] {
 .inner-hero h1 em {
     font-style: normal;
     color: #d9d5ae;
+    
 }
 
 .hero-content p {

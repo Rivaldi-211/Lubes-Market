@@ -60,7 +60,7 @@
                             ['Moncongloe', 'Ambil / bayar di kawasan Moncongloe Lappara', 'bi-shop']
                         ] as $payment)
                             <label class="payment-option">
-                                <input type="radio" name="metode_pembayaran" value="{{ $payment[0] }}" @checked(old('metode_pembayaran', 'COD') === $payment[0])>
+                                <input type="radio" name="metode_pembayaran" value="{{ $payment[0] }}" @checked(old('metode_pembayaran', 'COD') === $payment[0]) onchange="document.getElementById('bankAccountSection').style.display = (this.value === 'Transfer') ? 'block' : 'none'">
                                 <span class="payment-card">
                                     <i class="bi {{ $payment[2] }}"></i>
                                     <strong>{{ $payment[0] }}</strong>
@@ -68,6 +68,42 @@
                                 </span>
                             </label>
                         @endforeach
+                    </div>
+
+                    <!-- Rekening Bank Selection Box -->
+                    <div id="bankAccountSection" style="{{ old('metode_pembayaran') === 'Transfer' ? 'display: block;' : 'display: none;' }} margin-top: 20px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px;">
+                        <h3 style="font-size: 0.95rem; font-weight: 700; color: #1e293b; margin: 0 0 6px 0; display: flex; align-items: center; gap: 8px;">
+                            <i class="bi bi-bank" style="color: #2563eb; font-size: 1.1rem;"></i> Pilih Rekening Bank Tujuan Transfer (BUMDes)
+                        </h3>
+                        <p style="font-size: 0.82rem; color: #64748b; margin: 0 0 14px 0;">Pilih rekening BUMDes Berkah tujuan pembayaran Anda:</p>
+                        
+                        @if(isset($rekeningBankList) && $rekeningBankList->isNotEmpty())
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                @foreach($rekeningBankList as $bank)
+                                    <label style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#cbd5e1'">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <input type="radio" name="rekening_bank_id" value="{{ $bank->id }}" @checked(old('rekening_bank_id') == $bank->id || $loop->first) style="width: 18px; height: 18px;">
+                                            <div>
+                                                <strong style="font-size: 0.95rem; color: #0f172a; display: block;">
+                                                    {{ $bank->nama_bank }}
+                                                    @if($bank->umkm)
+                                                        <span style="font-weight: normal; color: #2563eb; font-size: 0.82rem;"> — {{ $bank->umkm->nama_umkm }}</span>
+                                                    @endif
+                                                </strong>
+                                                <small style="color: #64748b; font-size: 0.82rem;">a.n. {{ $bank->atas_nama }}</small>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <code style="font-size: 1rem; font-weight: 700; color: #1e3a8a; background: #eff6ff; padding: 4px 8px; border-radius: 6px;">{{ $bank->nomor_rekening }}</code>
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @else
+                            <div style="color: #94a3b8; font-style: italic; font-size: 0.85rem;">
+                                Belum ada rekening bank yang aktif. Silakan hubungi admin.
+                            </div>
+                        @endif
                     </div>
                 </section>
             </div>
