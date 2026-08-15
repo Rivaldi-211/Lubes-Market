@@ -14,19 +14,19 @@
 </section>
 
 @if(isset($rekomendasiBelumDibaca) && $rekomendasiBelumDibaca > 0)
-<div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; gap:12px; box-shadow: 0 2px 6px rgba(5,150,105,0.08);">
-    <div style="display:flex; align-items:center; gap:12px;">
+<div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; box-shadow: 0 2px 6px rgba(5,150,105,0.08);">
+    <div style="display:flex; align-items:center; gap:12px; min-width:0; flex:1;">
         <div style="width:38px; height:38px; background:#10b981; color:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
             <i class="bi bi-lightbulb-fill"></i>
         </div>
-        <div>
+        <div style="min-width:0;">
             <strong style="color:#065f46; font-size:0.98rem; display:block;">
                 Ada {{ $rekomendasiBelumDibaca }} rekomendasi strategi baru dari BUMDes!
             </strong>
             <span style="color:#047857; font-size:0.85rem;">Dapatkan saran konkret pengembangan produk dan penawaran toko Anda.</span>
         </div>
     </div>
-    <a href="{{ route('seller.analytics') }}" class="button" style="padding:8px 16px; font-size:12px; border-radius:8px; white-space:nowrap; background:#059669; border-color:#059669;">
+    <a href="{{ route('seller.analytics') }}" class="button" style="padding:8px 16px; font-size:12px; border-radius:8px; white-space:nowrap; background:#059669; border-color:#059669; flex-shrink:0;">
         Lihat Sekarang →
     </a>
 </div>

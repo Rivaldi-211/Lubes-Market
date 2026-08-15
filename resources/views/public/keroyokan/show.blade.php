@@ -3,6 +3,20 @@
 @section('title', 'Keroyokan — ' . $kelompok->nama_kelompok)
 
 @section('content')
+@push('head')
+<style>
+    .keroyokan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+    .keroyokan-confirm-row { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 2px solid var(--line); gap: 16px; flex-wrap: wrap; }
+    .keroyokan-sim-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .keroyokan-sim-table { width: 100%; border-collapse: collapse; min-width: 400px; }
+    @media (max-width: 700px) {
+        .keroyokan-grid { grid-template-columns: 1fr; }
+        .keroyokan-confirm-row { flex-direction: column; align-items: stretch; text-align: center; }
+        .keroyokan-confirm-row .button { width: 100%; justify-content: center; }
+        .keroyokan-confirm-row > div { text-align: center; }
+    }
+</style>
+@endpush
 <section class="public-hero" style="background:var(--green-950); color:var(--white); padding: 40px 0;">
     <div class="shell">
         <a href="{{ route('keroyokan.index') }}" style="color:var(--gold); font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; margin-bottom:12px;">
@@ -27,7 +41,7 @@
             </div>
         @endif
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; margin-bottom:32px;">
+        <div class="keroyokan-grid">
             <div style="background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:24px;">
                 <h3 style="margin:0 0 16px; font-size:1.1rem;"><i class="bi bi-shop" style="color:var(--gold)"></i> UMKM Anggota & Stok</h3>
                 <ul style="list-style:none; padding:0; margin:0;">
@@ -90,7 +104,8 @@
                         <p style="margin:0 0 8px; font-size:1rem;"><strong>Target:</strong> {{ number_format($simulation['target_quantity']) }} unit</p>
                         
                         <div style="background:#f8f9fa; border-radius:12px; padding:16px; margin:16px 0;">
-                            <table style="width:100%; border-collapse:collapse;">
+                        <div class="keroyokan-sim-table-wrap">
+                            <table class="keroyokan-sim-table">
                                 <thead>
                                     <tr style="border-bottom:1px solid #ddd; text-align:left;">
                                         <th style="padding:8px 0;">UMKM / Produk</th>
@@ -116,6 +131,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        </div>
 
                         <div style="margin:20px 0; padding:16px; background:#eef7f2; border-radius:12px;">
                             <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-weight:700;">
@@ -130,7 +146,7 @@
                             </p>
                         </div>
 
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding-top:16px; border-top:2px solid var(--line);">
+                        <div class="keroyokan-confirm-row">
                             <div>
                                 <small style="display:block; color:var(--muted)">TOTAL PEMBAYARAN</small>
                                 <strong style="font-size:1.6rem; color:var(--green-950);">Rp{{ number_format($simulation['grand_total'],0,',','.') }}</strong>

@@ -22,7 +22,7 @@
     </div>
 
     @if($groups->count())
-        <div class="table-wrap">
+        <div class="data-table-wrap">
             <table class="data-table">
                 <thead>
                     <tr>

@@ -80,11 +80,11 @@
                         @if(isset($rekeningBankList) && $rekeningBankList->isNotEmpty())
                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                 @foreach($rekeningBankList as $bank)
-                                    <label style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#cbd5e1'">
-                                        <div style="display: flex; align-items: center; gap: 12px;">
-                                            <input type="radio" name="rekening_bank_id" value="{{ $bank->id }}" @checked(old('rekening_bank_id') == $bank->id || $loop->first) style="width: 18px; height: 18px;">
-                                            <div>
-                                                <strong style="font-size: 0.95rem; color: #0f172a; display: block;">
+                                    <label style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#cbd5e1'">
+                                        <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                                            <input type="radio" name="rekening_bank_id" value="{{ $bank->id }}" @checked(old('rekening_bank_id') == $bank->id || $loop->first) style="width: 18px; height: 18px; flex-shrink: 0;">
+                                            <div style="min-width: 0;">
+                                                <strong style="font-size: 0.95rem; color: #0f172a; display: block; word-break: break-word;">
                                                     {{ $bank->nama_bank }}
                                                     @if($bank->umkm)
                                                         <span style="font-weight: normal; color: #2563eb; font-size: 0.82rem;"> — {{ $bank->umkm->nama_umkm }}</span>
@@ -93,8 +93,8 @@
                                                 <small style="color: #64748b; font-size: 0.82rem;">a.n. {{ $bank->atas_nama }}</small>
                                             </div>
                                         </div>
-                                        <div style="text-align: right;">
-                                            <code style="font-size: 1rem; font-weight: 700; color: #1e3a8a; background: #eff6ff; padding: 4px 8px; border-radius: 6px;">{{ $bank->nomor_rekening }}</code>
+                                        <div>
+                                            <code style="font-size: 0.9rem; font-weight: 700; color: #1e3a8a; background: #eff6ff; padding: 4px 8px; border-radius: 6px; white-space: nowrap;">{{ $bank->nomor_rekening }}</code>
                                         </div>
                                     </label>
                                 @endforeach

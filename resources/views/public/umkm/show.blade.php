@@ -74,7 +74,7 @@
     <!-- Section Promo Aktif (Redesigned: Sophisticated & Elegant Card Container) -->
     @if($produkPromo->isNotEmpty())
     <section style="margin-bottom: 44px; background: #ffffff; border: 1px solid #fee2e2; border-radius: 20px; padding: 30px; box-shadow: 0 4px 16px -4px rgba(220, 38, 38, 0.05);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
             <div>
                 <span style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">
                     <i class="bi bi-fire"></i> Penawaran Spesial Toko
@@ -132,7 +132,7 @@
         <!-- Summary Rating Box (ON TOP - Full Width) -->
         <div style="background: #f9fafb; padding: 24px 28px; border-radius: 16px; border: 1px solid #f3f4f6; margin-bottom: 32px; display: flex; gap: 36px; align-items: center; flex-wrap: wrap;">
             <!-- Left: Big Score & Stars -->
-            <div style="text-align: center; padding-right: 32px; border-right: 1px solid #e5e7eb; min-width: 140px;">
+            <div style="text-align: center; padding-right: 32px; min-width: 120px;">
                 <div style="font-size: 3.2rem; font-weight: 800; color: #111827; line-height: 1;">{{ number_format($avgRating, 1) }}</div>
                 <div style="color: #f59e0b; font-size: 1.25rem; margin: 6px 0;">
                     @for($i=1; $i<=5; $i++)
