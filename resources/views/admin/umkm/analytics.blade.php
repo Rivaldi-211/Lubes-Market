@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Analitik Akselerasi UMKM — BUMDes')
+@section('title', 'Analitik Akselerasi UMKM — Platform')
 @section('eyebrow', 'Pengelolaan Desa')
 @section('page_title', 'Analitik Akselerasi UMKM')
 

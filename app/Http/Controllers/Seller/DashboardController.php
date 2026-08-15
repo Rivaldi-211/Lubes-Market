@@ -23,6 +23,16 @@ class DashboardController extends Controller
                 COALESCE(SUM(CASE WHEN status = 'Selesai' THEN total_harga ELSE 0 END), 0) as revenue
             ")
             ->first();
+        $pesananSelesai = (clone $base)->where('status', 'Selesai')->get();
+        $pendapatanBersih = (float) $pesananSelesai->sum('pendapatan_penjual');
+        $komisiTotal = (float) $pesananSelesai->sum('komisi_admin');
+
+        $pesananCair = (clone $base)->where('status', 'Selesai')->whereHas('disbursements')->get();
+        $saldoDicairkan = (float) $pesananCair->sum('pendapatan_penjual');
+
+        $pesananPending = (clone $base)->where('status', 'Selesai')->whereDoesntHave('disbursements')->get();
+        $saldoPending = (float) $pesananPending->sum('pendapatan_penjual');
+
         $stats = [
             'products' => $umkm->produk_count,
             'orders' => (int) ($orderStats->orders ?? 0),
@@ -31,6 +41,10 @@ class DashboardController extends Controller
             'unpaid_count' => (int) ($orderStats->unpaid_count ?? 0),
             'paid_revenue' => (float) ($orderStats->paid_revenue ?? 0),
             'revenue' => (float) ($orderStats->revenue ?? 0),
+            'pendapatan_bersih' => $pendapatanBersih,
+            'komisi_admin' => $komisiTotal,
+            'saldo_dicairkan' => $saldoDicairkan,
+            'saldo_pending' => $saldoPending,
         ];
         $recent = (clone $base)->with(['produk', 'pembeli', 'payments'])->latest('tanggal_pesan')->limit(8)->get();
 

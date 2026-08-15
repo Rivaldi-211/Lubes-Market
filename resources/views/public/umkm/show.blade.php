@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', $umkm->nama_umkm . ' — Profil Toko BUMDes')
+@section('title', $umkm->nama_umkm . ' — Profil Toko LUDES-MARKET')
 
 @section('content')
 <div class="shell" style="padding-top: 36px; padding-bottom: 64px;">
@@ -23,7 +23,7 @@
                     <!-- Badges Row -->
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
                         <span style="font-size: 11px; font-weight: 700; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 3px 10px; border-radius: 6px;">
-                            {{ $umkm->kategori_usaha ?? 'Mitra BUMDes' }}
+                            {{ $umkm->kategori_usaha ?? 'Mitra UMKM' }}
                         </span>
                         @if($umkm->tahun_berdiri)
                             <span style="font-size: 11px; font-weight: 600; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; padding: 3px 10px; border-radius: 6px;">

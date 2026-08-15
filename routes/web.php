@@ -95,18 +95,29 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/analitik-umkm', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'index'])->name('umkm.analytics');
         Route::get('/analitik-umkm/{umkm}/rekomendasi', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'rekomendasiCreate'])->name('umkm.rekomendasi.create');
         Route::post('/analitik-umkm/{umkm}/rekomendasi', [\App\Http\Controllers\Admin\UmkmAnalyticsController::class, 'rekomendasiStore'])->name('umkm.rekomendasi.store');
+        Route::get('/verifikasi-penjual', [\App\Http\Controllers\Admin\VerifikasiPenjualController::class, 'index'])->name('verifikasi-penjual.index');
+        Route::post('/verifikasi-penjual/{umkm}/approve', [\App\Http\Controllers\Admin\VerifikasiPenjualController::class, 'approve'])->name('verifikasi-penjual.approve');
+        Route::post('/verifikasi-penjual/{umkm}/reject', [\App\Http\Controllers\Admin\VerifikasiPenjualController::class, 'reject'])->name('verifikasi-penjual.reject');
+        Route::get('/disbursement', [\App\Http\Controllers\Admin\DisbursementController::class, 'index'])->name('disbursement.index');
+        Route::post('/disbursement/{umkm}', [\App\Http\Controllers\Admin\DisbursementController::class, 'store'])->name('disbursement.store');
+        Route::resource('zona-pengiriman', \App\Http\Controllers\Admin\ZonaPengirimanController::class)->only(['index', 'update']);
         Route::get('/aktivitas', [AdminActivityLogController::class,'index'])->name('logs.index');
     });
 
-    Route::prefix('penjual')->name('seller.')->middleware('role:penjual')->group(function(){
+    Route::middleware('auth')->prefix('penjual')->group(function () {
+        Route::get('/onboarding', [\App\Http\Controllers\Seller\OnboardingController::class, 'create'])->name('seller.onboarding');
+        Route::post('/onboarding', [\App\Http\Controllers\Seller\OnboardingController::class, 'store'])->name('seller.onboarding.store');
+        Route::get('/onboarding/menunggu', fn() => view('seller.onboarding-waiting'))->name('seller.onboarding.waiting');
+        Route::get('/onboarding/ditolak', fn() => view('seller.onboarding-rejected'))->name('seller.onboarding.rejected');
+    });
+
+    Route::prefix('penjual')->name('seller.')->middleware(['role:penjual', \App\Http\Middleware\EnsureSellerVerified::class])->group(function(){
         Route::get('/', SellerDashboardController::class)->name('dashboard');
         Route::get('/profil', [SellerProfileController::class,'edit'])->name('profile.edit');
         Route::patch('/profil', [SellerProfileController::class,'update'])->name('profile.update');
         Route::patch('/profil/akun', [SellerProfileController::class,'updateAccount'])->name('profile.account');
         Route::patch('/profil/password', [SellerProfileController::class,'updatePassword'])->name('profile.password');
         Route::resource('produk', SellerProductController::class)->except('show')->names('products');
-        Route::resource('rekening-bank', \App\Http\Controllers\Seller\RekeningBankController::class)->except('show')->names('rekening-bank');
-        Route::patch('/rekening-bank/{rekeningBank}/status', [\App\Http\Controllers\Seller\RekeningBankController::class, 'status'])->name('rekening-bank.status');
         Route::get('/pesanan', [SellerOrderController::class,'index'])->name('orders.index');
         Route::get('/pesanan/notifikasi-pembayaran', [SellerOrderController::class,'paymentNotifications'])->name('orders.notifications');
         Route::patch('/pesanan/{pesanan}', [SellerOrderController::class,'update'])->name('orders.update');

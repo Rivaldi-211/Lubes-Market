@@ -96,7 +96,7 @@ class AnalyticsController extends Controller
             ->take(3)
             ->values();
 
-        // Recommendations from BUMDes admin
+        // Recommendations from platform admin
         $rekomendasi = RekomendasiStrategi::where('umkm_id', $umkm->id)
             ->latest()
             ->take(5)

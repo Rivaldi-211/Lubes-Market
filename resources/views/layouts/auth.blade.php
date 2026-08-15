@@ -27,7 +27,7 @@
                     </div>
                 <p class="eyebrow light"><span></span>Produk lokal, akun nyata</p>
                 <h1>Belanja dan kelola usaha dari satu sistem.</h1>
-                <p>Dirancang untuk alur kerja BUMDes, penjual, dan pembeli—tanpa dekorasi yang mengganggu tugas utama.</p>
+                <p>Dirancang untuk alur kerja platform, penjual, dan pembeli—tanpa dekorasi yang mengganggu tugas utama.</p>
             </div>
         </section>
 

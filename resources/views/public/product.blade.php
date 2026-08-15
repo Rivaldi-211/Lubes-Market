@@ -98,7 +98,7 @@
                 <!-- Left: Big Score & Stars -->
                 <div style="text-align: center; padding-right: 32px; border-right: 1px solid #e5e7eb; min-width: 140px;">
                     <div style="font-size: 3.2rem; font-weight: 800; color: #111827; line-height: 1;">{{ number_format($avgRating, 1) }}</div>
-                    <div style="color: #f59e0b; font-size: 1.25rem; margin: 6px 0;">
+                    <div style="color: #f59e0b; font-size: 1.25rem; margin: 6px 0;" class="rating-display">
                         @for($i=1; $i<=5; $i++)
                             <i class="bi bi-star{{ $i <= round($avgRating) ? '-fill' : '' }}"></i>
                         @endfor
@@ -129,7 +129,7 @@
                         <div>
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                                 <strong style="font-size: 0.95rem; color: #111827;">{{ $review->pembeli->nama_lengkap }}</strong>
-                                <div style="color: #f59e0b; font-size: 0.85rem;">
+                                <div style="color: #f59e0b; font-size: 0.85rem;" class="rating-display">
                                     @for($i=1; $i<=5; $i++)
                                         <i class="bi bi-star{{ $i <= $review->rating ? '-fill' : '' }}"></i>
                                     @endfor

@@ -110,6 +110,54 @@
 </section>
 @endif
 
+@if(isset($topPerKategori) && $topPerKategori->isNotEmpty())
+<section class="section" style="padding: 64px 0; background: #fff;">
+    <div class="shell">
+        <div class="section-heading">
+            <div>
+                <div class="eyebrow"><span></span>Terfavorit di Tiap Kategori</div>
+                <h2>Produk terlaris<br>dari setiap kelompok.</h2>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+            @foreach($topPerKategori as $kategori)
+                @if($kategori->top_produk)
+                    @php $p = $kategori->top_produk; @endphp
+                    <div style="border: 1px solid #e6e1d6; border-radius: 16px; overflow: hidden; background: #faf8f5; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="padding: 12px 16px; background: var(--green-950); color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px;">
+                                🏆 TERLARIS — {{ strtoupper($kategori->nama_kategori) }}
+                            </div>
+                            @if($p->foto)
+                                <img src="{{ asset('storage/' . $p->foto) }}" alt="{{ $p->nama_produk }}"
+                                     style="width:100%; height:180px; object-fit:cover;">
+                            @else
+                                <div style="width:100%; height:180px; background:#f5f1e7; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:#205037;">
+                                    <i class="bi bi-bag"></i>
+                                </div>
+                            @endif
+                            <div style="padding: 16px;">
+                                <p style="font-size:0.78rem; color:#6e736c; margin:0 0 4px;">{{ $p->umkm->nama_umkm ?? '-' }}</p>
+                                <h3 style="font-size:1rem; font-weight:700; color:#173d2b; margin:0 0 8px; line-height:1.3;">{{ $p->nama_produk }}</h3>
+                                <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+                                    <span style="color:#205037; font-weight:700;">Rp{{ number_format($p->harga, 0, ',', '.') }}</span>
+                                    <span style="color:#9ca3af;">{{ number_format($p->total_terjual ?? 0, 0, ',', '.') }} terjual</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 0 16px 16px 16px;">
+                            <a href="{{ route('products.show', $p->id) }}" class="button" style="width:100%; text-align:center; display:block;">
+                                Lihat Produk <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <section class="section section-muted">
     <div class="shell">
         <div class="section-heading">

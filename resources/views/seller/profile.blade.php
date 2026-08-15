@@ -183,7 +183,7 @@
             <div style="font-size:12px;color:#555e56;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
                 <div style="display:flex;gap:10px;align-items:flex-start;">
                     <i class="bi bi-lock-fill" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
-                    <span>Jangan pernah memberitahukan kata sandi Anda kepada siapa pun termasuk pengurus BUMDes.</span>
+                    <span>Jangan pernah memberitahukan kata sandi Anda kepada siapa pun termasuk pengelola platform.</span>
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;">
                     <i class="bi bi-phone-fill" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>

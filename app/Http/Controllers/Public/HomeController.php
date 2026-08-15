@@ -31,10 +31,30 @@ class HomeController extends Controller
             ->where('komentar', '!=', '')
             ->latest()->take(3)->get();
 
+        $topPerKategori = collect();
+        foreach (Kategori::all() as $kategori) {
+            $topProduk = Produk::where('kategori_id', $kategori->id)
+                ->whereHas('umkm', fn($u) => $u->where('status', 'aktif'))
+                ->with('umkm')
+                ->withSum(['pesanan as total_terjual' => function ($p) {
+                    $p->whereIn('status', ['Diproses', 'Selesai']);
+                }], 'jumlah')
+                ->withAvg('ulasan', 'rating')
+                ->orderByDesc('total_terjual')
+                ->orderByDesc('ulasan_avg_rating')
+                ->first();
+
+            if ($topProduk) {
+                $kategori->top_produk = $topProduk;
+                $topPerKategori->push($kategori);
+            }
+        }
+
         return view('public.home', [
             'totalProducts' => (clone $base)->count(),
             'totalUmkm' => Umkm::where('status', 'aktif')->count(),
             'topProduct' => $topProduct,
+            'topPerKategori' => $topPerKategori,
             'featured' => (clone $base)->with(['umkm', 'kategori'])->withAvg('ulasan', 'rating')->withCount('ulasan')->latest()->take(8)->get(),
             'categories' => Kategori::withCount('produk')->orderBy('nama_kategori')->get(),
             'producers' => Umkm::where('status', 'aktif')->withCount('produk')->orderByDesc('produk_count')->take(4)->get(),

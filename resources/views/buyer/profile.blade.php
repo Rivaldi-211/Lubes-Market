@@ -153,7 +153,7 @@
                 </div>
                 <div style="display:flex;gap:10px;align-items:flex-start;">
                     <i class="bi bi-shield-fill-check" style="color:var(--gold);font-size:18px;margin-top:2px;"></i>
-                    <span>Hubungi admin BUMDes jika Anda menemukan aktivitas mencurigakan pada akun Anda.</span>
+                    <span>Hubungi admin platform jika Anda menemukan aktivitas mencurigakan pada akun Anda.</span>
                 </div>
             </div>
         </aside>

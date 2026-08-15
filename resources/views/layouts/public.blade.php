@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'LUDES-MARKET — Produk Lokal Moncongloe Lappara')</title>
-    <meta name="description" content="Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.">
+    <meta name="description" content="Platform Pemasaran Digital Produk Lokal LUDES-MARKET untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon-32x32.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
     
@@ -13,6 +13,13 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <style>
+        .rating-display, .star-display, .rating-line, .reviews-section .bi-star, .reviews-section .bi-star-fill {
+            pointer-events: none !important;
+            cursor: default !important;
+            user-select: none !important;
+        }
+    </style>
     @stack('head')
 </head>
 <body class="public-page @yield('body_class')">
@@ -109,7 +116,7 @@
                     <img src="{{ asset('assets/img/logo-mark.png') }}" alt="Logo LUDES-MARKET" class="brand-mark">
                     <span><b>LUDES</b>-MARKET<small>Moncongloe Lappara</small></span>
                 </a>
-                <p>Platform Pemasaran Digital Produk Lokal BUMDes untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.</p>
+                <p>Platform Pemasaran Digital Produk Lokal LUDES-MARKET untuk Memperluas Akses Pasar dan Mendorong Kemandirian Ekonomi Desa Moncongloe Lappara.</p>
             </div>
 
             <div>

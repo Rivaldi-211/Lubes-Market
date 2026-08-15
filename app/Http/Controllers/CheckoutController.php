@@ -22,19 +22,20 @@ class CheckoutController extends Controller
         if ($items->isEmpty()) {
             return redirect()->route('catalogue')->with('error', 'Keranjang masih kosong.');
         }
-        $umkmIds = $items->pluck('product.umkm_id')->unique()->filter();
         $rekeningBankList = \App\Models\RekeningBank::aktif()
-            ->where(function ($q) use ($umkmIds) {
-                $q->whereIn('umkm_id', $umkmIds)->orWhereNull('umkm_id');
-            })
-            ->with('umkm')
+            ->whereNull('umkm_id')
             ->orderBy('urutan')
             ->get();
+        $zonaPengiriman = \App\Models\ZonaPengiriman::aktif()->orderBy('urutan')->get();
+        $opsiPacking = \App\Models\OpsiPacking::aktif()->orderBy('urutan')->get();
+
         return view('checkout.create', [
             'items' => $items,
             'subtotal' => $cart->subtotal(),
             'user' => $request->user(),
             'rekeningBankList' => $rekeningBankList,
+            'zonaPengiriman' => $zonaPengiriman,
+            'opsiPacking' => $opsiPacking,
         ]);
     }
 

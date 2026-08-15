@@ -33,7 +33,7 @@ class RekeningBankController extends Controller
         $data['urutan'] = $data['urutan'] ?? 0;
 
         $account = RekeningBank::create($data);
-        $logger->log("Menambahkan rekening bank BUMDes {$account->nama_bank} ({$account->nomor_rekening})", $request->user(), $request->ip());
+        $logger->log("Menambahkan rekening bank platform {$account->nama_bank} ({$account->nomor_rekening})", $request->user(), $request->ip());
 
         return redirect()->route('admin.rekening-bank.index')->with('success', 'Rekening bank berhasil ditambahkan.');
     }
@@ -50,7 +50,7 @@ class RekeningBankController extends Controller
         $data['urutan'] = $data['urutan'] ?? 0;
 
         $rekeningBank->update($data);
-        $logger->log("Memperbarui rekening bank BUMDes {$rekeningBank->nama_bank} ({$rekeningBank->nomor_rekening})", $request->user(), $request->ip());
+        $logger->log("Memperbarui rekening bank platform {$rekeningBank->nama_bank} ({$rekeningBank->nomor_rekening})", $request->user(), $request->ip());
 
         return redirect()->route('admin.rekening-bank.index')->with('success', 'Rekening bank berhasil diperbarui.');
     }
@@ -73,7 +73,7 @@ class RekeningBankController extends Controller
         $nama = $rekeningBank->nama_bank;
         $no = $rekeningBank->nomor_rekening;
         $rekeningBank->delete();
-        $logger->log("Menghapus rekening bank BUMDes {$nama} ({$no})", request()->user(), request()->ip());
+        $logger->log("Menghapus rekening bank platform {$nama} ({$no})", request()->user(), request()->ip());
 
         return redirect()->route('admin.rekening-bank.index')->with('success', 'Rekening bank berhasil dihapus.');
     }

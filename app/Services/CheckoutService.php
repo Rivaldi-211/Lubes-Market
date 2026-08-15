@@ -55,12 +55,24 @@ class CheckoutService
             $rekeningBankId = null;
             $rekeningSnapshot = null;
             if ($payload['metode_pembayaran'] === 'Transfer' && !empty($payload['rekening_bank_id'])) {
-                $bank = \App\Models\RekeningBank::find($payload['rekening_bank_id']);
+                $bank = \App\Models\RekeningBank::whereNull('umkm_id')->find($payload['rekening_bank_id']);
                 if ($bank) {
                     $rekeningBankId = $bank->id;
                     $rekeningSnapshot = "{$bank->nama_bank} - {$bank->nomor_rekening} a.n. {$bank->atas_nama}";
                 }
             }
+
+            // Ongkir & Packing Calculation
+            $zona = isset($payload['zona_pengiriman']) ? \App\Models\ZonaPengiriman::where('nama_zona', $payload['zona_pengiriman'])->first() : null;
+            $ongkosKirimTotal = $zona ? (float)$zona->biaya : 0;
+
+            $opsiPackingNama = $payload['opsi_packing'] ?? 'Standar';
+            $packing = \App\Models\OpsiPacking::where('nama', $opsiPackingNama)->first();
+            $biayaPackingTotal = $packing ? (float)$packing->biaya : 0;
+
+            $itemCount = count($raw);
+            $ongkosPerItem = $itemCount > 0 ? round($ongkosKirimTotal / $itemCount, 2) : $ongkosKirimTotal;
+            $packingPerItem = $itemCount > 0 ? round($biayaPackingTotal / $itemCount, 2) : $biayaPackingTotal;
 
             foreach ($raw as $productId => $quantity) {
                 $product = Produk::query()->whereKey((int)$productId)->lockForUpdate()->first();
@@ -78,15 +90,13 @@ class CheckoutService
                     }
                 }
 
+                $subtotalProduk = (float)$product->harga * $quantity;
+                $komisiAdmin = round($subtotalProduk * 0.10, 2);
+                $pendapatanPenjual = $subtotalProduk - $komisiAdmin;
+                $totalHargaItem = $subtotalProduk + $ongkosPerItem + $packingPerItem;
+
                 if ($isQris) {
-                    $priceStr = (string) $product->harga;
-                    $parts = explode('.', $priceStr);
-                    $fraction = $parts[1] ?? '00';
-                    if ($fraction !== '00' && $fraction !== '0' && rtrim($fraction, '0') !== '') {
-                        throw ValidationException::withMessages(['cart' => "Harga {$product->nama_produk} mengandung nilai pecahan desimal yang tidak valid untuk QRIS."]);
-                    }
-                    $itemPrice = (int) $parts[0];
-                    $totalQrisAmount += ($itemPrice * $quantity);
+                    $totalQrisAmount += (int)round($totalHargaItem);
                 }
 
                 $orderData = [
@@ -94,7 +104,13 @@ class CheckoutService
                     'batch_keroyokan_id' => $batch?->id,
                     'produk_id' => $product->id,
                     'jumlah' => $quantity,
-                    'total_harga' => (float)$product->harga * $quantity,
+                    'total_harga' => $totalHargaItem,
+                    'ongkos_kirim' => $ongkosPerItem,
+                    'biaya_packing' => $packingPerItem,
+                    'komisi_admin' => $komisiAdmin,
+                    'pendapatan_penjual' => $pendapatanPenjual,
+                    'opsi_packing' => $opsiPackingNama,
+                    'zona_pengiriman' => $payload['zona_pengiriman'] ?? null,
                     'metode_pembayaran' => $payload['metode_pembayaran'],
                     'rekening_bank_id' => $rekeningBankId,
                     'rekening_bank_snapshot' => $rekeningSnapshot,

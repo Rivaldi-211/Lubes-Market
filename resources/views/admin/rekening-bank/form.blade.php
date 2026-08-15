@@ -7,7 +7,7 @@
 <section class="dash-intro">
     <div>
         <p class="eyebrow"><span></span>Master Pembayaran</p>
-        <h1>{{ $account->exists ? 'Perbarui data rekening bank.' : 'Tambahkan rekening bank BUMDes baru.' }}</h1>
+        <h1>{{ $account->exists ? 'Perbarui data rekening bank.' : 'Tambahkan rekening bank platform baru.' }}</h1>
         <p>Rekening ini akan ditampilkan sebagai opsi tujuan transfer bagi pembeli saat checkout.</p>
     </div>
 </section>
@@ -33,7 +33,7 @@
 
             <label class="full">
                 Atas Nama Pemilik Rekening
-                <input name="atas_nama" placeholder="Contoh: BUMDes Berkah Moncongloe" value="{{ old('atas_nama', $account->atas_nama) }}" required>
+                <input name="atas_nama" placeholder="Contoh: LUDES-MARKET Admin" value="{{ old('atas_nama', $account->atas_nama) }}" required>
             </label>
 
             <label>

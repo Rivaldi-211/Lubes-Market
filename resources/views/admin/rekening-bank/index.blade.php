@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 @section('title', 'Rekening Bank Transfer')
 @section('eyebrow', 'Administrator')
-@section('page_title', 'Rekening Bank BUMDes')
+@section('page_title', 'Rekening Bank Platform')
 
 @section('content')
 <section class="dash-intro">
     <div>
         <p class="eyebrow"><span></span>Master Pembayaran</p>
         <h1>Daftar Rekening Bank Tujuan Transfer.</h1>
-        <p>Kelola rekening bank BUMDes yang dapat dipilih oleh pembeli saat memilih pembayaran Transfer Bank.</p>
+        <p>Kelola rekening bank platform yang dapat dipilih oleh pembeli saat memilih pembayaran Transfer Bank.</p>
     </div>
     <a class="button" href="{{ route('admin.rekening-bank.create') }}">
         <i class="bi bi-plus-lg"></i> Tambah Rekening
@@ -86,7 +86,7 @@
             {{ $accounts->links() }}
         </div>
     @else
-        <x-empty-state title="Belum Ada Rekening Bank" text="Tambahkan data rekening bank BUMDes agar pembeli dapat melakukan pembayaran via Transfer." />
+        <x-empty-state title="Belum Ada Rekening Bank" text="Tambahkan data rekening bank platform agar pembeli dapat melakukan pembayaran via Transfer." />
     @endif
 </section>
 @endsection

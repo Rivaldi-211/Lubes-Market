@@ -21,6 +21,8 @@ class DashboardController extends Controller
             'umkm' => Umkm::count(),
             'products' => Produk::count(),
             'users' => User::count(),
+            'penjual' => User::where('role', 'penjual')->count(),
+            'pembeli' => User::where('role', 'pembeli')->count(),
             'orders' => (int) ($orderStats->orders ?? 0),
             'revenue' => (float) ($orderStats->revenue ?? 0)
         ];

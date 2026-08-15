@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('title', 'Kirim Rekomendasi — ' . $umkm->nama_umkm)
-@section('eyebrow', 'Pengelolaan BUMDes')
+@section('eyebrow', 'Pengelolaan Platform')
 @section('page_title', 'Form Rekomendasi Strategi')
 
 @section('content')
@@ -8,7 +8,7 @@
     <div>
         <p class="eyebrow"><span></span>Akselerasi Usaha Mitra</p>
         <h1>Bimbingan Strategi untuk {{ $umkm->nama_umkm }}</h1>
-        <p>Kirim masukan konkret dari BUMDes untuk membantu penjual mengoptimalkan produk, harga, dan omzet.</p>
+        <p>Kirim masukan konkret dari Admin untuk membantu penjual mengoptimalkan produk, harga, dan omzet.</p>
     </div>
     <a class="outline-link" href="{{ route('admin.umkm.analytics') }}">← Kembali ke Analitik</a>
 </section>

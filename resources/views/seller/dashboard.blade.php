@@ -21,7 +21,7 @@
         </div>
         <div style="min-width:0;">
             <strong style="color:#065f46; font-size:0.98rem; display:block;">
-                Ada {{ $rekomendasiBelumDibaca }} rekomendasi strategi baru dari BUMDes!
+                Ada {{ $rekomendasiBelumDibaca }} rekomendasi strategi baru dari platform!
             </strong>
             <span style="color:#047857; font-size:0.85rem;">Dapatkan saran konkret pengembangan produk dan penawaran toko Anda.</span>
         </div>
@@ -45,6 +45,29 @@
         <strong style="color:#b45309;">{{ $stats['unpaid_count'] }} <span style="font-size:13px; font-weight:600;">pesanan</span></strong>
         <span>Menunggu pembayaran / COD</span>
     </article>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+    <h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0 0 14px 0; display: flex; align-items: center; gap: 8px;">
+        <i class="bi bi-wallet2" style="color: #059669;"></i> Ringkasan Keuangan Toko (Setelah Komisi Platform 10%)
+    </h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px;">
+            <small style="color: #166534; font-weight: 700; display: block; margin-bottom: 4px;">💰 Pendapatan Bersih</small>
+            <strong style="font-size: 1.25rem; color: #14532d; display: block;">Rp{{ number_format($stats['pendapatan_bersih'], 0, ',', '.') }}</strong>
+            <span style="font-size: 11px; color: #166534;">Dari pesanan selesai (setelah potong 10%)</span>
+        </div>
+        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px;">
+            <small style="color: #b45309; font-weight: 700; display: block; margin-bottom: 4px;">📋 Menunggu Pencairan Admin</small>
+            <strong style="font-size: 1.25rem; color: #78350f; display: block;">Rp{{ number_format($stats['saldo_pending'], 0, ',', '.') }}</strong>
+            <span style="font-size: 11px; color: #92400e;">Akan ditransfer oleh Admin Platform</span>
+        </div>
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 14px;">
+            <small style="color: #1e40af; font-weight: 700; display: block; margin-bottom: 4px;">✅ Sudah Dicairkan</small>
+            <strong style="font-size: 1.25rem; color: #1e3a8a; display: block;">Rp{{ number_format($stats['saldo_dicairkan'], 0, ',', '.') }}</strong>
+            <span style="font-size: 11px; color: #1d4ed8;">Telah ditransfer ke rekening usaha</span>
+        </div>
+    </div>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: start; margin-bottom: 24px;">

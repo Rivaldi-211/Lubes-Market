@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 @section('title','Dashboard Admin')
 @section('eyebrow','Administrator')
-@section('page_title','Ringkasan BUMDes')
+@section('page_title','Ringkasan Platform')
 
 @section('content')
 <section class="dash-intro">
     <div>
-        <p class="eyebrow"><span></span>Operasional BUMDes</p>
+        <p class="eyebrow"><span></span>Operasional Platform</p>
         <h1>Satu tampilan untuk melihat gerak usaha desa.</h1>
         <p>Fokus pada UMKM aktif, produk, pengguna, pesanan, dan nilai transaksi selesai.</p>
     </div>
@@ -16,7 +16,9 @@
 <div class="metric-grid">
     <article><small>Mitra UMKM</small><strong>{{ $stats['umkm'] }}</strong><span>Terdaftar</span></article>
     <article><small>Produk</small><strong>{{ $stats['products'] }}</strong><span>Katalog</span></article>
-    <article><small>Pengguna</small><strong>{{ $stats['users'] }}</strong><span>Semua role</span></article>
+    <article><small>Total Pengguna</small><strong>{{ $stats['users'] }}</strong><span>Semua peran</span></article>
+    <article><small>Pembeli Aktif</small><strong>{{ $stats['pembeli'] }}</strong><span>Akun pembeli</span></article>
+    <article><small>Penjual Terdaftar</small><strong>{{ $stats['penjual'] }}</strong><span>Akun penjual</span></article>
     <article><small>Pesanan</small><strong>{{ $stats['orders'] }}</strong><span>Rp{{ number_format($stats['revenue'],0,',','.') }} selesai</span></article>
 </div>
 
@@ -30,7 +32,7 @@
     <section class="data-panel">
         <div class="panel-heading">
             <div>
-                <small>STATISTIK BUMDES</small>
+                <small>STATISTIK PLATFORM</small>
                 <h2>🏆 Top 10 Menu Terlaris Desa</h2>
             </div>
             <div class="stats-chart-header-actions">
@@ -40,7 +42,7 @@
                     <button type="button" class="stats-toggle-btn" data-metric="omzet">Omzet Produksi</button>
                 </div>
                 @endif
-                <a class="outline-link" href="{{ route('admin.reports.index') }}">Laporan BUMDes</a>
+                <a class="outline-link" href="{{ route('admin.reports.index') }}">Laporan Platform</a>
             </div>
         </div>
 

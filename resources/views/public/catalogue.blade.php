@@ -5,7 +5,7 @@
 @section('content')
 <section class="inner-hero">
     <div class="shell">
-        <div class="eyebrow"><span></span>Katalog BUMDes</div>
+        <div class="eyebrow"><span></span>Katalog LUDES-MARKET</div>
         <div class="inner-hero-row">
             <h1>Produk warga,<br><em>siap ditemukan.</em></h1>
             <p>Telusuri kuliner, oleh-oleh, dan kerajinan dari mitra UMKM Moncongloe Lappara.</p>

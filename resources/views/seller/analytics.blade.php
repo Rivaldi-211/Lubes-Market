@@ -8,7 +8,7 @@
     <div>
         <p class="eyebrow"><span></span>{{ $umkm->nama_umkm }}</p>
         <h1>Evaluasi kinerja & arah pengembangan toko.</h1>
-        <p>Pantau grafik omzet 6 bulan, evaluasi ulasan pembeli, dan terapkan rekomendasi BUMDes.</p>
+        <p>Pantau grafik omzet 6 bulan, evaluasi ulasan pembeli, dan terapkan rekomendasi platform.</p>
     </div>
     <a class="button" href="{{ route('umkm.show', $umkm) }}" target="_blank"><i class="bi bi-shop"></i> Lihat Toko Publik</a>
 </section>
@@ -160,15 +160,15 @@
 <section class="data-panel" style="padding: 28px; margin-bottom: 32px;">
     <div class="panel-heading" style="margin-bottom: 20px;">
         <div>
-            <small style="color: #059669; font-weight: 700;">AKSELERASI BUMDES</small>
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0;">💡 Rekomendasi Strategi dari Admin BUMDes</h2>
+            <small style="color: #059669; font-weight: 700;">AKSELERASI PLATFORM</small>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0;">💡 Rekomendasi Strategi dari Admin</h2>
         </div>
     </div>
 
     @if($rekomendasi->isEmpty())
         <div style="background: #f9fafb; border: 1px dashed #e5e7eb; border-radius: 12px; padding: 24px; text-align: center; color: #6b7280;">
             <i class="bi bi-lightbulb" style="font-size: 24px; color: #9ca3af; display: block; margin-bottom: 8px;"></i>
-            Belum ada rekomendasi strategi tertulis dari pengelola BUMDes Berkah untuk toko Anda.
+            Belum ada rekomendasi strategi tertulis dari pengelola platform untuk toko Anda.
         </div>
     @else
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
