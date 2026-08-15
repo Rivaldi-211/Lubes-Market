@@ -35,7 +35,7 @@ class BumdesDemoSeeder extends Seeder
             ['username' => 'umkm_pisangepe', 'nama_lengkap' => 'Pak Baso', 'email' => 'baso.pisangepe@gmail.com', 'no_hp' => '081234500003', 'role' => 'penjual'],
             ['username' => 'umkm_kripik', 'nama_lengkap' => 'Ibu Nur', 'email' => 'nur.kripik@gmail.com', 'no_hp' => '081234500004', 'role' => 'penjual'],
             ['username' => 'umkm_anyaman', 'nama_lengkap' => 'Pak Dg. Tola', 'email' => 'tola.anyaman@gmail.com', 'no_hp' => '081234500005', 'role' => 'penjual'],
-            ['username' => 'halim', 'nama_lengkap' => 'Moammar Donat Shop', 'email' => 'halimsrimuliani@gmail.com', 'no_hp' => '085242664216', 'role' => 'penjual'],
+            ['username' => 'umkm_moammar', 'nama_lengkap' => 'Moammar Donat Shop', 'email' => 'halimsrimuliani@gmail.com', 'no_hp' => '085242664216', 'role' => 'penjual'],
             ['username' => 'umkm_madu', 'nama_lengkap' => 'Pak Rudi', 'email' => 'rudi.madu@gmail.com', 'no_hp' => '081234500011', 'role' => 'penjual'],
             ['username' => 'umkm_batik', 'nama_lengkap' => 'Ibu Aminah', 'email' => 'aminah.batik@gmail.com', 'no_hp' => '081234500012', 'role' => 'penjual'],
             ['username' => 'umkm_kopi', 'nama_lengkap' => 'Pak Andi', 'email' => 'andi.kopi@gmail.com', 'no_hp' => '081234500013', 'role' => 'penjual'],

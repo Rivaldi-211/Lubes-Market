@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\CatalogController;
@@ -47,6 +48,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class,'store'])->name('login.store');
     Route::get('/register', [RegisterController::class,'create'])->name('register');
     Route::post('/register', [RegisterController::class,'store'])->name('register.store');
+    Route::get('/lupa-password', [ForgotPasswordController::class, 'create'])->name('password.request');
+    Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
 Route::post('/logout',[LoginController::class,'destroy'])->middleware('auth')->name('logout');
 Route::post('/webhooks/xendit/payment', [\App\Http\Controllers\Webhook\XenditWebhookController::class, 'payment'])->name('webhooks.xendit.payment');

@@ -24,9 +24,14 @@
         </div>
     </label>
 
-    <label class="check-row">
-        <input type="checkbox" name="remember" value="1"> Ingat sesi saya
-    </label>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 12px;">
+        <label class="check-row" style="margin: 0;">
+            <input type="checkbox" name="remember" value="1"> Ingat sesi saya
+        </label>
+        <a href="{{ route('password.request') }}" style="font-size: 12.5px; font-weight: 700; color: #b45309; text-decoration: none;">
+            Lupa password?
+        </a>
+    </div>
 
     <button class="button wide" type="submit">Masuk <i class="bi bi-arrow-right"></i></button>
 </form>

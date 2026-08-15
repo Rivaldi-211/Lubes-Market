@@ -1,15 +1,14 @@
-.dashboard-body {
-    margin: 0;
-    background: #f3f1e9;
-    color: var(--ink);
-    font-family: var(--font);
+.dashboard-body,
+.dashboard-sidebar,
+.sidebar-nav {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
 .dashboard-body::-webkit-scrollbar,
 .dashboard-shell::-webkit-scrollbar,
-.dashboard-sidebar::-webkit-scrollbar {
+.dashboard-sidebar::-webkit-scrollbar,
+.sidebar-nav::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
@@ -92,18 +91,8 @@
     gap: 14px;
     overflow-y: auto;
     flex: 1;
-    padding-right: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
-
-.sidebar-nav::-webkit-scrollbar {
-    width: 4px;
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .sidebar-section {
