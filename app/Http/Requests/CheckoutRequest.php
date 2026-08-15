@@ -8,7 +8,7 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'metode_pembayaran'=>['required',Rule::in(['COD','Transfer','QRIS','Moncongloe'])],
+            'metode_pembayaran'=>['required',Rule::in(['COD','Transfer','QRIS'])],
             'rekening_bank_id' => [
                 Rule::requiredIf(fn () => $this->input('metode_pembayaran') === 'Transfer'),
                 'nullable',

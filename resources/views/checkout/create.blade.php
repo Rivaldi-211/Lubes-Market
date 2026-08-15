@@ -56,8 +56,7 @@
                         @foreach([
                             ['COD', 'Bayar saat pesanan diterima', 'bi-cash-coin'],
                             ['Transfer', 'Transfer bank, unggah bukti setelah pesan', 'bi-bank'],
-                            ['QRIS', 'Bayar melalui QRIS, lalu unggah bukti', 'bi-qr-code'],
-                            ['Moncongloe', 'Ambil / bayar di kawasan Moncongloe Lappara', 'bi-shop']
+                            ['QRIS', 'Bayar melalui QRIS, lalu unggah bukti', 'bi-qr-code']
                         ] as $payment)
                             <label class="payment-option">
                                 <input type="radio" name="metode_pembayaran" value="{{ $payment[0] }}" @checked(old('metode_pembayaran', 'COD') === $payment[0]) onchange="document.getElementById('bankAccountSection').style.display = (this.value === 'Transfer') ? 'block' : 'none'">

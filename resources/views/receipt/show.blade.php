@@ -160,8 +160,8 @@
                 padding: 0;
             }
 
-            .print {
-                display: none;
+            .print, .action-bar, .btn-back, .btn-print {
+                display: none !important;
             }
         }
     </style>
@@ -216,6 +216,13 @@
         </p>
     </div>
 
-    <button class="print" onclick="window.print()">Cetak nota</button>
+    <div class="action-bar no-print" style="display: flex !important; justify-content: center !important; align-items: center !important; gap: 14px !important; margin: 24px auto 40px !important; text-align: center !important;">
+        <button type="button" class="btn-back" onclick="if (document.referrer && document.referrer !== window.location.href) { window.location.href = document.referrer; } else { window.history.back(); }" style="padding: 12px 24px !important; background: #e2ded4 !important; color: #173d2b !important; border: 1px solid #c8c2b4 !important; cursor: pointer !important; font-size: 14px !important; font-weight: 700 !important; border-radius: 8px !important; display: inline-flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;">
+            &larr; Kembali
+        </button>
+        <button type="button" class="btn-print" onclick="window.print()" style="padding: 12px 24px !important; background: #173d2b !important; color: #ffffff !important; border: 0 !important; cursor: pointer !important; font-size: 14px !important; font-weight: 700 !important; border-radius: 8px !important; display: inline-flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;">
+            Cetak nota
+        </button>
+    </div>
 </body>
 </html>

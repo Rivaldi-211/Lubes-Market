@@ -126,7 +126,10 @@
                             <span>Subtotal</span>
                             <strong id="modalSubtotal"></strong>
                         </div>
-                        <button type="submit" class="button button-dark wide" id="modalSubmit"><i class="bi bi-bag-plus"></i> Tambah ke Keranjang</button>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+                            <button type="submit" class="button button-dark" id="modalSubmit" style="flex: 1; min-width: 140px; justify-content: center;"><i class="bi bi-bag-plus"></i> + Keranjang</button>
+                            <button type="submit" name="direct_checkout" value="1" class="button" id="modalDirectCheckout" style="flex: 1; min-width: 140px; justify-content: center; background: var(--gold); color: var(--green-950);"><i class="bi bi-lightning-fill"></i> Pesan Langsung</button>
+                        </div>
                     </form>
 
                     <div class="modal-unavailable" id="modalUnavailable" style="display:none">

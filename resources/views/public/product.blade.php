@@ -52,13 +52,18 @@
                 <p class="product-description">{{ $produk->deskripsi }}</p>
 
                 @if($produk->isAvailable())
-                    <form class="buy-box" action="{{ route('cart.add', $produk) }}" method="post">
+                    <form class="buy-box" action="{{ route('cart.add', $produk) }}" method="post" style="display: flex; flex-direction: column; gap: 16px;">
                         @csrf
-                        <label>
-                            Jumlah
-                            <input type="number" name="jumlah" min="1" max="{{ $produk->stok_jumlah }}" value="1">
-                        </label>
-                        <button class="button button-dark" type="submit"><i class="bi bi-bag-plus"></i> Tambah ke Keranjang</button>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <label style="margin: 0; min-width: 110px;">
+                                Jumlah
+                                <input type="number" name="jumlah" min="1" max="{{ $produk->stok_jumlah }}" value="1">
+                            </label>
+                        </div>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; width: 100%;">
+                            <button class="button button-dark" type="submit" style="flex: 1; min-width: 170px; justify-content: center;"><i class="bi bi-bag-plus"></i> + Keranjang</button>
+                            <button class="button" type="submit" name="direct_checkout" value="1" style="flex: 1; min-width: 170px; justify-content: center; background: var(--gold); color: var(--green-950);"><i class="bi bi-lightning-fill"></i> Pesan Langsung</button>
+                        </div>
                     </form>
                 @else
                     <div class="unavailable-note">Produk sedang tidak tersedia. Cek kembali katalog untuk pilihan lain.</div>

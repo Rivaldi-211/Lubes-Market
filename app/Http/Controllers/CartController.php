@@ -13,6 +13,10 @@ class CartController extends Controller
         $data = $request->validate(['jumlah' => ['required', 'integer', 'min:1']]);
         $cart->add($produk, (int)$data['jumlah']);
 
+        if ($request->has('direct_checkout')) {
+            return redirect()->route('checkout.create');
+        }
+
         return redirect()->back(fallback: route('cart.index'))->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
     public function update(Request $request, CartService $cart): RedirectResponse
