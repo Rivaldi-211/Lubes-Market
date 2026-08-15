@@ -1129,6 +1129,16 @@ td .ludes-select-trigger,
     .stats-chart-grid {
         grid-template-columns: 1fr;
     }
+
+    .stats-chart-left-col {
+        position: static !important;
+        width: 100%;
+    }
+
+    .stats-legend-list {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
 }
 
 .stats-chart-left-col {
@@ -1137,7 +1147,7 @@ td .ludes-select-trigger,
     align-items: center;
     gap: 14px;
     position: sticky;
-    top: 12px;
+    top: 96px;
 }
 
 .stats-chart-canvas-box {
