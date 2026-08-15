@@ -57,58 +57,6 @@
     </div>
 </section>
 
-@if(isset($topProduct) && $topProduct)
-<section class="section top-seller-section" style="background: #faf8f5; border-top: 1px solid #ece7de; border-bottom: 1px solid #ece7de; padding: 64px 0;">
-    <div class="shell">
-        <div style="background: #ffffff; border: 1px solid #e6e1d6; border-radius: 20px; padding: 36px; box-shadow: 0 8px 30px rgba(24, 46, 33, 0.04);">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; align-items: center;">
-                <div style="position: relative;">
-                    @if($topProduct->foto)
-                        <img src="{{ asset('storage/' . $topProduct->foto) }}" alt="{{ $topProduct->nama_produk }}" style="width: 100%; max-height: 280px; object-fit: cover; border-radius: 14px; border: 1px solid #e8e3d8;">
-                    @else
-                        <div style="width: 100%; height: 260px; background: #f5f1e7; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #205037; border: 1px solid #e8e3d8;">
-                            <i class="bi bi-bag"></i>
-                        </div>
-                    @endif
-                    <div style="position: absolute; top: 12px; left: 12px; background: #ffffff; color: #205037; padding: 5px 14px; border-radius: 30px; font-weight: 600; font-size: 0.8rem; border: 1px solid #d9c9ac; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: inline-flex; align-items: center; gap: 6px;">
-                        <i class="bi bi-trophy-fill" style="color: #c79b42;"></i> PRODUK TERLARIS NO. 1 DESA
-                    </div>
-                </div>
-                <div>
-                    <div class="eyebrow" style="margin-bottom: 8px;"><span></span> Pilihan Utama Warga</div>
-                    <h2 style="font-family: 'Manrope', sans-serif; font-size: 1.85rem; font-weight: 700; margin-bottom: 12px; color: #173d2b; line-height: 1.2;">{{ $topProduct->nama_produk }}</h2>
-                    <p style="color: #6e736c; font-size: 0.95rem; margin-bottom: 24px; line-height: 1.6;">
-                        {{ Str::limit($topProduct->deskripsi, 150) }}
-                    </p>
-                    <div style="display: flex; gap: 28px; margin-bottom: 28px; padding: 16px 0; border-top: 1px solid #ece7de; border-bottom: 1px solid #ece7de; flex-wrap: wrap;">
-                        <div>
-                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Mitra UMKM</span>
-                            <strong style="color: #173d2b; font-weight: 600; font-size: 0.95rem;">{{ $topProduct->umkm->nama_umkm ?? '-' }}</strong>
-                        </div>
-                        <div>
-                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Total Terjual</span>
-                            <strong style="color: #205037; font-weight: 700; font-size: 1.05rem;">
-                                {{ number_format($topProduct->total_terjual ?? 0, 0, ',', '.') }} porsi
-                            </strong>
-                        </div>
-                        <div>
-                            <span style="font-size: 0.78rem; color: #6e736c; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Harga</span>
-                            <strong style="color: #173d2b; font-weight: 700; font-size: 1.05rem;">
-                                Rp{{ number_format($topProduct->harga, 0, ',', '.') }}
-                            </strong>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="{{ route('products.show', $topProduct->id) }}" class="button">
-                            Lihat Detail & Beli <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@endif
 
 @if(isset($topPerKategori) && $topPerKategori->isNotEmpty())
 <section class="section" style="padding: 64px 0; background: #fff;">
