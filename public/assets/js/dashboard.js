@@ -11,6 +11,38 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-review-open]').forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.reviewOpen)?.showModal()));
     document.querySelectorAll('[data-review-close]').forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.reviewClose)?.close()));
 
+    /* --- Collapsible Sidebar Sections --- */
+    document.querySelectorAll('[data-toggle-section]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = btn.closest('.sidebar-section');
+            if (!section) return;
+            const isCollapsed = section.classList.toggle('is-collapsed');
+            const sectionId = section.dataset.sectionId;
+            if (sectionId) {
+                try {
+                    localStorage.setItem('ludes_sidebar_' + sectionId, isCollapsed ? 'collapsed' : 'expanded');
+                } catch (err) {}
+            }
+        });
+    });
+
+    document.querySelectorAll('.sidebar-section[data-section-id]').forEach(section => {
+        const sectionId = section.dataset.sectionId;
+        const hasActiveChild = section.querySelector('a.active') !== null;
+
+        if (hasActiveChild) {
+            section.classList.remove('is-collapsed');
+        } else if (sectionId) {
+            try {
+                const savedState = localStorage.getItem('ludes_sidebar_' + sectionId);
+                if (savedState === 'collapsed') {
+                    section.classList.add('is-collapsed');
+                }
+            } catch (err) {}
+        }
+    });
+
     /* --- Custom Dropdown Menu for Dashboard --- */
     function initLudesCustomDropdowns() {
         const selects = document.querySelectorAll('select');

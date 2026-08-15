@@ -6,11 +6,100 @@
 <div class="sidebar-context"><small>Ruang kerja</small><strong>{{ auth()->user()->isAdmin()?'Administrator':(auth()->user()->isSeller()?'Mitra UMKM':'Pembeli') }}</strong></div>
 <nav class="sidebar-nav">
 @if(auth()->user()->isAdmin())
-<a class="{{ request()->routeIs('admin.dashboard')?'active':'' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-grid"></i>Ringkasan</a><a class="{{ request()->routeIs('admin.verifikasi-penjual.*')?'active':'' }}" href="{{ route('admin.verifikasi-penjual.index') }}"><i class="bi bi-person-check-fill"></i>Verifikasi Penjual</a><a class="{{ request()->routeIs('admin.disbursement.*')?'active':'' }}" href="{{ route('admin.disbursement.index') }}"><i class="bi bi-wallet2"></i>Pencairan UMKM</a><a class="{{ request()->routeIs('admin.zona-pengiriman.*')?'active':'' }}" href="{{ route('admin.zona-pengiriman.index') }}"><i class="bi bi-truck"></i>Zona Pengiriman</a><a class="{{ request()->routeIs('admin.umkm.*') && !request()->routeIs('admin.umkm.analytics*')?'active':'' }}" href="{{ route('admin.umkm.index') }}"><i class="bi bi-shop"></i>UMKM</a><a class="{{ request()->routeIs('admin.products.*')?'active':'' }}" href="{{ route('admin.products.index') }}"><i class="bi bi-box-seam"></i>Produk</a><a class="{{ request()->routeIs('admin.keroyokan.*')?'active':'' }}" href="{{ route('admin.keroyokan.index') }}"><i class="bi bi-people-fill"></i>Keroyokan</a><a class="{{ request()->routeIs('admin.rekening-bank.*')?'active':'' }}" href="{{ route('admin.rekening-bank.index') }}"><i class="bi bi-bank"></i>Rekening Bank</a><a class="{{ request()->routeIs('admin.users.*')?'active':'' }}" href="{{ route('admin.users.index') }}"><i class="bi bi-people"></i>Pengguna</a><a class="{{ request()->routeIs('admin.orders.*')?'active':'' }}" href="{{ route('admin.orders.index') }}"><i class="bi bi-receipt"></i>Pesanan</a><a class="{{ request()->routeIs('admin.reports.*')?'active':'' }}" href="{{ route('admin.reports.index') }}"><i class="bi bi-bar-chart"></i>Laporan</a><a class="{{ request()->routeIs('admin.umkm.analytics*')?'active':'' }}" href="{{ route('admin.umkm.analytics') }}"><i class="bi bi-bar-chart-line"></i>Analitik UMKM</a><a class="{{ request()->routeIs('admin.logs.*')?'active':'' }}" href="{{ route('admin.logs.index') }}"><i class="bi bi-clock-history"></i>Aktivitas</a>
+    <div class="sidebar-section" data-section-id="admin-utama">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Utama</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('admin.dashboard')?'active':'' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-grid"></i>Ringkasan</a>
+            <a class="{{ request()->routeIs('admin.orders.*')?'active':'' }}" href="{{ route('admin.orders.index') }}"><i class="bi bi-receipt"></i>Pesanan</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="admin-katalog">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Katalog &amp; Mitra</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('admin.umkm.*') && !request()->routeIs('admin.umkm.analytics*')?'active':'' }}" href="{{ route('admin.umkm.index') }}"><i class="bi bi-shop"></i>UMKM</a>
+            <a class="{{ request()->routeIs('admin.products.*')?'active':'' }}" href="{{ route('admin.products.index') }}"><i class="bi bi-box-seam"></i>Produk</a>
+            <a class="{{ request()->routeIs('admin.keroyokan.*')?'active':'' }}" href="{{ route('admin.keroyokan.index') }}"><i class="bi bi-people-fill"></i>Keroyokan</a>
+            <a class="{{ request()->routeIs('admin.verifikasi-penjual.*')?'active':'' }}" href="{{ route('admin.verifikasi-penjual.index') }}"><i class="bi bi-person-check-fill"></i>Verifikasi Penjual</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="admin-keuangan">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Keuangan &amp; Logistik</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('admin.disbursement.*')?'active':'' }}" href="{{ route('admin.disbursement.index') }}"><i class="bi bi-wallet2"></i>Pencairan UMKM</a>
+            <a class="{{ request()->routeIs('admin.rekening-bank.*')?'active':'' }}" href="{{ route('admin.rekening-bank.index') }}"><i class="bi bi-bank"></i>Rekening Bank</a>
+            <a class="{{ request()->routeIs('admin.zona-pengiriman.*')?'active':'' }}" href="{{ route('admin.zona-pengiriman.index') }}"><i class="bi bi-truck"></i>Zona Pengiriman</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="admin-analitik">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Analitik &amp; Sistem</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('admin.reports.*')?'active':'' }}" href="{{ route('admin.reports.index') }}"><i class="bi bi-bar-chart"></i>Laporan</a>
+            <a class="{{ request()->routeIs('admin.umkm.analytics*')?'active':'' }}" href="{{ route('admin.umkm.analytics') }}"><i class="bi bi-bar-chart-line"></i>Analitik UMKM</a>
+            <a class="{{ request()->routeIs('admin.users.*')?'active':'' }}" href="{{ route('admin.users.index') }}"><i class="bi bi-people"></i>Pengguna</a>
+            <a class="{{ request()->routeIs('admin.logs.*')?'active':'' }}" href="{{ route('admin.logs.index') }}"><i class="bi bi-clock-history"></i>Aktivitas</a>
+        </div>
+    </div>
 @elseif(auth()->user()->isSeller())
-<a class="{{ request()->routeIs('seller.dashboard')?'active':'' }}" href="{{ route('seller.dashboard') }}"><i class="bi bi-grid"></i>Ringkasan</a><a class="{{ request()->routeIs('seller.profile.*')?'active':'' }}" href="{{ route('seller.profile.edit') }}"><i class="bi bi-shop"></i>Profil & Akun</a><a class="{{ request()->routeIs('seller.products.*')?'active':'' }}" href="{{ route('seller.products.index') }}"><i class="bi bi-box-seam"></i>Produk</a><a class="{{ request()->routeIs('seller.orders.*')?'active':'' }}" href="{{ route('seller.orders.index') }}"><i class="bi bi-receipt"></i>Pesanan</a><a class="{{ request()->routeIs('seller.reports.*')?'active':'' }}" href="{{ route('seller.reports.index') }}"><i class="bi bi-bar-chart"></i>Laporan</a><a class="{{ request()->routeIs('seller.analytics*')?'active':'' }}" href="{{ route('seller.analytics') }}"><i class="bi bi-graph-up-arrow"></i>Analitik Usaha</a>
+    <div class="sidebar-section" data-section-id="seller-utama">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Utama</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('seller.dashboard')?'active':'' }}" href="{{ route('seller.dashboard') }}"><i class="bi bi-grid"></i>Ringkasan</a>
+            <a class="{{ request()->routeIs('seller.profile.*')?'active':'' }}" href="{{ route('seller.profile.edit') }}"><i class="bi bi-shop"></i>Profil &amp; Akun</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="seller-katalog">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Katalog &amp; Order</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('seller.products.*')?'active':'' }}" href="{{ route('seller.products.index') }}"><i class="bi bi-box-seam"></i>Produk</a>
+            <a class="{{ request()->routeIs('seller.orders.*')?'active':'' }}" href="{{ route('seller.orders.index') }}"><i class="bi bi-receipt"></i>Pesanan</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="seller-performa">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Performa</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('seller.reports.*')?'active':'' }}" href="{{ route('seller.reports.index') }}"><i class="bi bi-bar-chart"></i>Laporan</a>
+            <a class="{{ request()->routeIs('seller.analytics*')?'active':'' }}" href="{{ route('seller.analytics') }}"><i class="bi bi-graph-up-arrow"></i>Analitik Usaha</a>
+        </div>
+    </div>
 @else
-<a class="{{ request()->routeIs('buyer.dashboard')?'active':'' }}" href="{{ route('buyer.dashboard') }}"><i class="bi bi-bag-check"></i>Pesanan Saya</a><a class="{{ request()->routeIs('buyer.profile.*')?'active':'' }}" href="{{ route('buyer.profile.edit') }}"><i class="bi bi-person-gear"></i>Pengaturan Akun</a><a href="{{ route('catalogue') }}"><i class="bi bi-compass"></i>Belanja Produk</a><a href="{{ route('cart.index') }}"><i class="bi bi-bag"></i>Keranjang</a>
+    <div class="sidebar-section" data-section-id="buyer-aktivitas">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Aktivitas Saya</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a class="{{ request()->routeIs('buyer.dashboard')?'active':'' }}" href="{{ route('buyer.dashboard') }}"><i class="bi bi-bag-check"></i>Pesanan Saya</a>
+            <a class="{{ request()->routeIs('buyer.profile.*')?'active':'' }}" href="{{ route('buyer.profile.edit') }}"><i class="bi bi-person-gear"></i>Pengaturan Akun</a>
+        </div>
+    </div>
+
+    <div class="sidebar-section" data-section-id="buyer-belanja">
+        <button type="button" class="sidebar-section-header" data-toggle-section>
+            <span><i class="bi bi-chevron-down section-arrow"></i> Belanja</span>
+        </button>
+        <div class="sidebar-section-body">
+            <a href="{{ route('catalogue') }}"><i class="bi bi-compass"></i>Belanja Produk</a>
+            <a href="{{ route('cart.index') }}"><i class="bi bi-bag"></i>Keranjang</a>
+        </div>
+    </div>
 @endif
 </nav><div class="sidebar-bottom"><a href="{{ route('home') }}"><i class="bi bi-arrow-left"></i>Lihat situs</a><form method="post" action="{{ route('logout') }}">@csrf<button><i class="bi bi-box-arrow-right"></i>Keluar</button></form></div></aside>
 <div class="sidebar-backdrop" data-sidebar-backdrop></div><main class="dashboard-main"><header class="dashboard-topbar"><button class="sidebar-trigger" data-sidebar-open aria-label="Buka menu"><i class="bi bi-list"></i></button><div><small>@yield('eyebrow','LUDES-MARKET')</small><strong>@yield('page_title','Dashboard')</strong></div><a class="topbar-user" href="{{ auth()->user()->isSeller() ? route('seller.profile.edit') : (auth()->user()->isBuyer() ? route('buyer.profile.edit') : route('admin.dashboard')) }}" style="text-decoration:none;color:inherit;" title="Buka pengaturan profil"><span>{{ strtoupper(substr(auth()->user()->nama_lengkap,0,1)) }}</span><div><b>{{ auth()->user()->nama_lengkap }}</b><small>{{ ucfirst(auth()->user()->role) }}</small></div></a></header><div class="dashboard-content"><x-flash/>@yield('content')</div></main></div><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script src="{{ asset('assets/js/app.js') }}"></script><script src="{{ asset('assets/js/dashboard.js') }}"></script>@if(auth()->check() && auth()->user()->isSeller())<script src="{{ asset('assets/js/seller-notifications.js') }}"></script>@endif @stack('scripts')</body></html>
