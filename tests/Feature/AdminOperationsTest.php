@@ -46,7 +46,10 @@ class AdminOperationsTest extends TestCase
     }
     public function test_admin_can_update_order_status_and_access_reports_logs(): void
     {
-        $this->seed(BumdesDemoSeeder::class); $admin=$this->admin(); $order=Pesanan::where('status','Menunggu')->firstOrFail();
+        $this->seed(BumdesDemoSeeder::class); $admin=$this->admin();
+        $buyer=User::where('role','pembeli')->firstOrFail();
+        $product=Produk::firstOrFail();
+        $order=Pesanan::create(['pembeli_id'=>$buyer->id,'produk_id'=>$product->id,'jumlah'=>1,'total_harga'=>$product->harga,'metode_pembayaran'=>'COD','status'=>'Menunggu','tanggal_pesan'=>now()]);
         $this->actingAs($admin)->patch(route('admin.orders.update',$order),['status'=>'Diproses'])->assertRedirect();
         $this->assertSame('Diproses',$order->fresh()->status);
         $this->actingAs($admin)->get(route('admin.reports.index'))->assertOk();

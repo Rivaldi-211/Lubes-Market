@@ -8,7 +8,7 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         $orders=Pesanan::query()->where('pembeli_id',$request->user()->id)
-            ->with(['produk.umkm','ulasan'])->latest('tanggal_pesan')->paginate(10);
+            ->with(['produk.umkm.user','ulasan'])->latest('tanggal_pesan')->paginate(10);
         $statsRaw=Pesanan::query()
             ->where('pembeli_id',$request->user()->id)
             ->selectRaw("
@@ -24,6 +24,7 @@ class DashboardController extends Controller
             'diproses'=>(int)($statsRaw->diproses??0),
             'selesai'=>(int)($statsRaw->selesai??0),
         ];
-        return view('buyer.dashboard',compact('orders','stats'));
+        $adminContact = \App\Models\User::where('role', 'admin')->whereNotNull('no_hp')->value('no_hp') ?: '081234500001';
+        return view('buyer.dashboard',compact('orders','stats','adminContact'));
     }
 }

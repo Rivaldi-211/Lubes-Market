@@ -16,11 +16,27 @@ class BuyerOrderLifecycleTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function createOrder(User $buyer, string $status = 'Menunggu', string $method = 'Transfer'): Pesanan
+    {
+        $product = Produk::firstOrFail();
+        return Pesanan::create([
+            'pembeli_id' => $buyer->id,
+            'produk_id' => $product->id,
+            'jumlah' => 1,
+            'total_harga' => $product->harga,
+            'metode_pembayaran' => $method,
+            'status' => $status,
+            'alamat_pengiriman' => 'Moncongloe',
+            'no_hp_pembeli' => '081234500006',
+            'tanggal_pesan' => now(),
+        ]);
+    }
+
     public function test_buyer_can_cancel_own_waiting_order_and_stock_is_restored_once(): void
     {
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
-        $order = Pesanan::where('pembeli_id', $buyer->id)->where('status', 'Menunggu')->firstOrFail();
+        $order = $this->createOrder($buyer, 'Menunggu');
         $product = $order->produk;
         $before = $product->stok_jumlah;
 
@@ -37,8 +53,8 @@ class BuyerOrderLifecycleTest extends TestCase
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
         $other = User::create(['username'=>'other','password'=>'password123','nama_lengkap'=>'Other','role'=>'pembeli','status'=>'aktif']);
-        $foreign = Pesanan::where('pembeli_id', $buyer->id)->where('status', 'Menunggu')->firstOrFail();
-        $completed = Pesanan::where('pembeli_id', $buyer->id)->where('status', 'Selesai')->firstOrFail();
+        $foreign = $this->createOrder($buyer, 'Menunggu');
+        $completed = $this->createOrder($buyer, 'Selesai');
 
         $this->actingAs($other)->patch(route('buyer.orders.cancel', $foreign))->assertForbidden();
         $this->actingAs($buyer)->patch(route('buyer.orders.cancel', $completed), [], ['Accept' => 'application/json'])->assertStatus(422);
@@ -49,7 +65,7 @@ class BuyerOrderLifecycleTest extends TestCase
         Storage::fake('public');
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
-        $order = Pesanan::where('pembeli_id', $buyer->id)->where('metode_pembayaran', 'Transfer')->firstOrFail();
+        $order = $this->createOrder($buyer, 'Menunggu', 'Transfer');
 
         $this->actingAs($buyer)->post(route('buyer.orders.proof', $order), [
             'bukti_pembayaran' => UploadedFile::fake()->create('bukti.jpg', 500, 'image/jpeg'),
@@ -65,8 +81,8 @@ class BuyerOrderLifecycleTest extends TestCase
         Storage::fake('public');
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
-        $cod = Pesanan::where('pembeli_id', $buyer->id)->where('metode_pembayaran', 'COD')->firstOrFail();
-        $transfer = Pesanan::where('pembeli_id', $buyer->id)->where('metode_pembayaran', 'Transfer')->firstOrFail();
+        $cod = $this->createOrder($buyer, 'Menunggu', 'COD');
+        $transfer = $this->createOrder($buyer, 'Menunggu', 'Transfer');
 
         $this->actingAs($buyer)->post(route('buyer.orders.proof', $cod), [
             'bukti_pembayaran' => UploadedFile::fake()->create('bukti.jpg', 100, 'image/jpeg'),
@@ -82,7 +98,7 @@ class BuyerOrderLifecycleTest extends TestCase
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
         $admin = User::where('role', 'admin')->firstOrFail();
-        $order = Pesanan::where('pembeli_id', $buyer->id)->firstOrFail();
+        $order = $this->createOrder($buyer, 'Menunggu');
         $seller = $order->produk->umkm->user;
         $other = User::create(['username'=>'other2','password'=>'password123','nama_lengkap'=>'Other 2','role'=>'pembeli','status'=>'aktif']);
 
@@ -96,11 +112,7 @@ class BuyerOrderLifecycleTest extends TestCase
     {
         $this->seed(BumdesDemoSeeder::class);
         $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
-        $product = Produk::findOrFail(1);
-        $order = Pesanan::create([
-            'pembeli_id'=>$buyer->id,'produk_id'=>$product->id,'jumlah'=>1,'total_harga'=>$product->harga,
-            'metode_pembayaran'=>'COD','status'=>'Selesai','alamat_pengiriman'=>'Moncongloe','no_hp_pembeli'=>'0812',
-        ]);
+        $order = $this->createOrder($buyer, 'Selesai', 'COD');
 
         $this->actingAs($buyer)->post(route('buyer.orders.review', $order), [
             'rating'=>4,'komentar'=>'Produk bagus dan rapi.',
@@ -109,5 +121,47 @@ class BuyerOrderLifecycleTest extends TestCase
         $this->assertDatabaseHas('ulasan', ['pesanan_id'=>$order->id,'pembeli_id'=>$buyer->id,'rating'=>4]);
         $this->actingAs($buyer)->post(route('buyer.orders.review', $order), ['rating'=>5], ['Accept' => 'application/json'])->assertStatus(422);
         $this->assertSame(1, Ulasan::where('pesanan_id', $order->id)->count());
+    }
+
+    public function test_buyer_can_confirm_received_order_when_status_is_diproses(): void
+    {
+        $this->seed(BumdesDemoSeeder::class);
+        $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
+        $order = $this->createOrder($buyer, 'Diproses', 'COD');
+
+        $this->actingAs($buyer)
+            ->patch(route('buyer.orders.confirm-received', $order))
+            ->assertRedirect(route('buyer.dashboard'))
+            ->assertSessionHas('success');
+
+        $this->assertSame('Selesai', $order->fresh()->status);
+        $this->assertSame('Sudah Dibayar', $order->fresh()->status_pembayaran);
+    }
+
+    public function test_buyer_cannot_confirm_received_foreign_order(): void
+    {
+        $this->seed(BumdesDemoSeeder::class);
+        $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
+        $other = User::create(['username'=>'other_buyer','password'=>'password123','nama_lengkap'=>'Other Buyer','role'=>'pembeli','status'=>'aktif']);
+        $order = $this->createOrder($buyer, 'Diproses');
+
+        $this->actingAs($other)
+            ->patch(route('buyer.orders.confirm-received', $order))
+            ->assertForbidden();
+
+        $this->assertSame('Diproses', $order->fresh()->status);
+    }
+
+    public function test_buyer_cannot_confirm_received_order_if_status_is_not_diproses(): void
+    {
+        $this->seed(BumdesDemoSeeder::class);
+        $buyer = User::where('username', 'budi_pembeli')->firstOrFail();
+        $orderWaiting = $this->createOrder($buyer, 'Menunggu');
+
+        $this->actingAs($buyer)
+            ->patch(route('buyer.orders.confirm-received', $orderWaiting), [], ['Accept' => 'application/json'])
+            ->assertStatus(422);
+
+        $this->assertSame('Menunggu', $orderWaiting->fresh()->status);
     }
 }

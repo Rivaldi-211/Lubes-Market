@@ -81,6 +81,7 @@ Route::middleware(['auth','active'])->group(function () {
         Route::patch('/pembeli/profil', [BuyerProfileController::class, 'update'])->name('buyer.profile.update');
         Route::patch('/pembeli/profil/password', [BuyerProfileController::class, 'updatePassword'])->name('buyer.profile.password');
         Route::patch('/pembeli/pesanan/{pesanan}/batal',[BuyerOrderController::class,'cancel'])->name('buyer.orders.cancel');
+        Route::patch('/pembeli/pesanan/{pesanan}/terima',[BuyerOrderController::class,'confirmReceived'])->name('buyer.orders.confirm-received');
         Route::post('/pembeli/pesanan/{pesanan}/bukti',[BuyerOrderController::class,'uploadProof'])->name('buyer.orders.proof');
         Route::post('/pembeli/pesanan/{pesanan}/ulasan',[BuyerOrderController::class,'review'])->name('buyer.orders.review');
     });

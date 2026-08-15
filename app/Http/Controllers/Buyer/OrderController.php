@@ -30,6 +30,26 @@ class OrderController extends Controller
         $this->logger->log("Membatalkan pesanan #{$pesanan->id}",$request->user(),$request->ip());
         return redirect()->route('buyer.dashboard')->with('success','Pesanan dibatalkan dan stok dikembalikan.');
     }
+    public function confirmReceived(Request $request, Pesanan $pesanan)
+    {
+        $this->own($request, $pesanan);
+        if ($pesanan->status === 'Selesai') {
+            return redirect()->route('buyer.dashboard')->with('info', 'Pesanan ini sudah berstatus selesai.');
+        }
+        if ($pesanan->status !== 'Diproses') {
+            throw ValidationException::withMessages(['pesanan' => 'Konfirmasi penerimaan barang hanya dapat dilakukan untuk pesanan yang sedang diproses/dikirim.']);
+        }
+        DB::transaction(function () use ($pesanan) {
+            $order = Pesanan::whereKey($pesanan->id)->lockForUpdate()->firstOrFail();
+            $updateData = ['status' => 'Selesai'];
+            if ($order->metode_pembayaran === 'COD' && $order->status_pembayaran !== 'Sudah Dibayar') {
+                $updateData['status_pembayaran'] = 'Sudah Dibayar';
+            }
+            $order->update($updateData);
+        });
+        $this->logger->log("Mengonfirmasi penerimaan pesanan #{$pesanan->id}", $request->user(), $request->ip());
+        return redirect()->route('buyer.dashboard')->with('success', 'Pesanan #' . str_pad($pesanan->id, 5, '0', STR_PAD_LEFT) . ' berhasil dikonfirmasi selesai diterima. Silakan berikan ulasan produk Anda!');
+    }
     public function uploadProof(PaymentProofRequest $request, Pesanan $pesanan)
     {
         $this->own($request,$pesanan);

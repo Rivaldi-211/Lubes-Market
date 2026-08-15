@@ -8,7 +8,7 @@
 <section class="dash-intro">
     <div>
         <p class="eyebrow"><span></span>Keuangan Platform</p>
-        <h1>Pencairan Saldo &amp; Komisi Platform (10%).</h1>
+        <h1>Pencairan Saldo &amp; Komisi Platform (3%).</h1>
         <p>Dana pembayaran pembeli masuk terpusat ke Admin. Cairkan pendapatan bersih ke penjual setelah pesanan selesai dan penjual mengajukan pencairan.</p>
     </div>
 </section>

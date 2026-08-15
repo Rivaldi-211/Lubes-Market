@@ -49,13 +49,13 @@
 
 <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
     <h3 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0 0 14px 0; display: flex; align-items: center; gap: 8px;">
-        <i class="bi bi-wallet2" style="color: #059669;"></i> Ringkasan Keuangan Toko (Setelah Komisi Platform 10%)
+        <i class="bi bi-wallet2" style="color: #059669;"></i> Ringkasan Keuangan Toko (Setelah Komisi Platform 3%)
     </h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px;">
             <small style="color: #166534; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="bi bi-cash-stack"></i> Pendapatan Bersih</small>
             <strong style="font-size: 1.25rem; color: #14532d; display: block;">Rp{{ number_format($stats['pendapatan_bersih'], 0, ',', '.') }}</strong>
-            <span style="font-size: 11px; color: #166534;">Dari pesanan selesai (setelah potong 10%)</span>
+            <span style="font-size: 11px; color: #166534;">Dari pesanan selesai (setelah potong 3%)</span>
         </div>
         <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px;">
             <small style="color: #b45309; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><i class="bi bi-clock-history"></i> Menunggu Pencairan Admin</small>

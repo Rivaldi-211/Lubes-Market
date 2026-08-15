@@ -28,7 +28,7 @@ class BumdesDemoSeeder extends Seeder
             ['username' => 'siti_pembeli', 'nama_lengkap' => 'Siti Rahma', 'email' => 'siti@gmail.com', 'no_hp' => '081234500007', 'role' => 'pembeli'],
             ['username' => 'rudi_pembeli', 'nama_lengkap' => 'Rudi Kurniawan', 'email' => 'rudi@gmail.com', 'no_hp' => '081234500008', 'role' => 'pembeli'],
             ['username' => 'dewi_pembeli', 'nama_lengkap' => 'Dewi Lestari', 'email' => 'dewi@gmail.com', 'no_hp' => '081234500009', 'role' => 'pembeli'],
-            ['username' => 'andi_pembeli', 'nama_lengkap' => 'Andi Wijaya', 'email' => 'andi@gmail.com', 'no_hp' => '081234500010', 'role' => 'pembeli'],
+            ['username' => 'hikmah', 'nama_lengkap' => 'Nur Hikmah', 'email' => 'nurhikmahchyn27@gmail.com', 'no_hp' => '08012345678', 'role' => 'pembeli'],
 
             // 15 Penjual UMKM
             ['username' => 'umkm_jalangkote', 'nama_lengkap' => 'Ibu Sari', 'email' => 'sari.jalangkote@gmail.com', 'no_hp' => '081234500002', 'role' => 'penjual'],

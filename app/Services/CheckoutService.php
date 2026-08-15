@@ -91,7 +91,7 @@ class CheckoutService
                 }
 
                 $subtotalProduk = (float)$product->harga * $quantity;
-                $komisiAdmin = round($subtotalProduk * 0.10, 2);
+                $komisiAdmin = round($subtotalProduk * 0.03, 2);
                 $pendapatanPenjual = $subtotalProduk - $komisiAdmin;
                 $totalHargaItem = $subtotalProduk + $ongkosPerItem + $packingPerItem;
 
