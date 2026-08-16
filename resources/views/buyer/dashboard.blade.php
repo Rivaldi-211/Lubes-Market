@@ -45,13 +45,8 @@
                     }
 
                     // Admin Phone & WhatsApp link
-                    $rawAdminPhone = $adminContact ?? '081234500001';
-                    $adminPhoneDigits = preg_replace('/[^0-9]/', '', $rawAdminPhone);
-                    if (str_starts_with($adminPhoneDigits, '0')) {
-                        $adminPhoneFormatted = '62' . substr($adminPhoneDigits, 1);
-                    } else {
-                        $adminPhoneFormatted = $adminPhoneDigits;
-                    }
+                    $rawAdminPhone = is_object($adminContact) ? ($adminContact->phone ?: '081234500001') : ($adminContact ?: '081234500001');
+                    $adminPhoneFormatted = is_object($adminContact) ? ($adminContact->wa_phone ?: '6281234500001') : '6281234500001';
 
                     $sellerWaMsg = "Halo kak {$sellerOwner}, saya {$buyerName} (Pembeli) ingin menanyakan status Pesanan {$orderCode} ({$productName}). Barang pesanan saya belum sampai ke alamat pengiriman. Mohon bantuannya untuk pengecekan status pengiriman. Terima kasih!";
                     $sellerWaUrl = $sellerPhoneFormatted ? "https://wa.me/{$sellerPhoneFormatted}?text=" . rawurlencode($sellerWaMsg) : null;

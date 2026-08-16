@@ -24,7 +24,6 @@ class DashboardController extends Controller
             'diproses'=>(int)($statsRaw->diproses??0),
             'selesai'=>(int)($statsRaw->selesai??0),
         ];
-        $adminContact = \App\Models\User::where('role', 'admin')->whereNotNull('no_hp')->value('no_hp') ?: '081234500001';
-        return view('buyer.dashboard',compact('orders','stats','adminContact'));
+        return view('buyer.dashboard',compact('orders','stats'));
     }
 }
