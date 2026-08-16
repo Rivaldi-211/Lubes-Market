@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\BatchKeroyokan;
+use App\Models\Disbursement;
 use App\Models\Kategori;
 use App\Models\KelompokKeroyokan;
 use App\Models\Pesanan;
@@ -19,9 +20,9 @@ class BumdesDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Users (Admin, 5 Pembeli, 15 Penjual)
+        // 1. Users (Admin, 6 Pembeli, 15 Penjual)
         $users = [
-            ['username' => 'admin', 'nama_lengkap' => 'Admin LUDES-MARKET', 'email' => 'admin@ludesmarket.id', 'no_hp' => '081234500001', 'role' => 'admin'],
+            ['username' => 'admin', 'nama_lengkap' => 'Admin LUDES-MARKET', 'email' => 'admin@ludesmarket.id', 'no_hp' => '0812-8257-5933', 'role' => 'admin'],
 
             // Pembeli
             ['username' => 'budi_pembeli', 'nama_lengkap' => 'Budi Santoso', 'email' => 'budi@gmail.com', 'no_hp' => '081234500006', 'role' => 'pembeli'],
@@ -29,6 +30,7 @@ class BumdesDemoSeeder extends Seeder
             ['username' => 'rudi_pembeli', 'nama_lengkap' => 'Rudi Kurniawan', 'email' => 'rudi@gmail.com', 'no_hp' => '081234500008', 'role' => 'pembeli'],
             ['username' => 'dewi_pembeli', 'nama_lengkap' => 'Dewi Lestari', 'email' => 'dewi@gmail.com', 'no_hp' => '081234500009', 'role' => 'pembeli'],
             ['username' => 'hikmah', 'nama_lengkap' => 'Nur Hikmah', 'email' => 'nurhikmahchyn27@gmail.com', 'no_hp' => '08012345678', 'role' => 'pembeli'],
+            ['username' => 'mozzapiey', 'nama_lengkap' => 'mozzapiey', 'email' => 'mozzapiey@gmail.com', 'no_hp' => '0895803005021', 'role' => 'pembeli'],
 
             // 15 Penjual UMKM
             ['username' => 'umkm_wawa', 'nama_lengkap' => 'Kedai Wawa', 'email' => 'wawa@gmail.com', 'no_hp' => '081234500002', 'role' => 'penjual'],
@@ -87,8 +89,6 @@ class BumdesDemoSeeder extends Seeder
             Umkm::create($row + ['user_id' => $sellerUsers[$i]->id, 'status' => 'aktif']);
         }
 
-        $this->call(RekeningBankSeeder::class);
-
         // 4. Products List (1: Kreatif, 2: Kuliner, 3: Oleh-oleh)
         $productsData = [
             // UMKM 1: Kedai Wawa
@@ -137,7 +137,7 @@ class BumdesDemoSeeder extends Seeder
             [10, 2, 'Nasi Ayam Suwir', 18000, 'Ready', 30, 'Nasi hangat pulen dengan lauk ayam suwir bumbu pedas gurih.', 'products/EZJifxVMHBzInYlOy3RtEFhYEU2Qbpe9CKqkpqBq.jpg'],
             [10, 2, 'Nasi Ayam Kremes', 20000, 'Ready', 30, 'Nasi hangat dengan ayam goreng empuk bertabur kremes renyah.', 'products/TwRg4Gl3FkJK0Qg3SgNtSBSYcYUtJhcoUIuYlzY3.jpg'],
             [10, 2, 'Nasi Ayam Sambal Hijau', 20000, 'Ready', 30, 'Nasi ayam goreng dipadukan dengan pedas segarnya sambal hijau.', 'products/UJbOK6wpQ9h6p4FsJPOuS9XTBbgwEVqlfVRF0FRz.jpg'],
-            [10, 2, 'Nasi Kucing', 8000, 'Ready', 50, 'Nasi porsi kecil (seukuran kepalan tangan) yang dibungkus daun pisang atau kertas, dilengkapi lauk sederhana seperti sambal, ikan teri, atau tempe. Dinamakan "nasi kucing" karena porsinya yang mini menyerupai takaran makanan kucing', 'products/hH3OOdItbIEU4wR0USBQDBfoWoM4zqPHYlsfY6ph.jpg'],
+            [10, 2, 'Nasi Kucing', 8000, 'Ready', 50, 'Nasi porsi kecil dibungkus daun pisang dilengkapi lauk sambal tempe dan teri.', 'products/hH3OOdItbIEU4wR0USBQDBfoWoM4zqPHYlsfY6ph.jpg'],
             // UMKM 11: Momma Donat Shop
             [11, 2, 'Donat Nampah', 65000, 'Pre-Order', 15, 'Paket donat nampah aneka topping cantik untuk sajian acara.', 'products/KuHuwaeqly2vmlXuYFFDhuHAjo8C68FYGNBtBdQv.jpg', 2],
             [11, 2, 'Donat Mini Ucapan', 45000, 'Pre-Order', 20, 'Donat mini hias ucapan kustom untuk ulang tahun dan perayaan.', 'products/dcVMPzhoVo0zA4c3txiFtcrC7ZWH2pdUkiOstnVE.jpg', 2],
@@ -185,7 +185,7 @@ class BumdesDemoSeeder extends Seeder
             ]);
         }
 
-        // 5. Strategy Recommendations Demo Data (RekomendasiStrategi)
+        // 5. Strategy Recommendations (RekomendasiStrategi)
         $recommendations = [
             [
                 'umkm_id' => 1,
@@ -253,5 +253,258 @@ class BumdesDemoSeeder extends Seeder
 
         Produk::whereIn('nama_produk', ['Keripik Ubi Pedas', 'Keripik Ikan', 'Sambel Kemasan', 'Makaroni Pedas Asin', 'Basreng Daun Jeruk', 'Kacang Bawang'])
             ->update(['kelompok_keroyokan_id' => $kelompokOlehOleh->id]);
+
+        // 7. Demo Batch Keroyokan & Orders
+        $budi = User::where('username', 'budi_pembeli')->first();
+        $hikmah = User::where('username', 'hikmah')->first();
+        $mozza = User::where('username', 'mozzapiey')->first();
+
+        if ($budi && $kelompokSnack) {
+            $batch = BatchKeroyokan::create([
+                'pembeli_id' => $budi->id,
+                'kelompok_keroyokan_id' => $kelompokSnack->id,
+                'target_jumlah' => 15,
+                'total_harga' => 260000,
+            ]);
+
+            // Pesanan Keroyokan items
+            $p6 = Produk::find(6); // Jalangkote Sayur
+            $p7 = Produk::find(7); // Jalangkote Telur
+            $p25 = Produk::find(25); // Risol Mayo
+
+            if ($p6 && $p7 && $p25) {
+                Pesanan::create([
+                    'pembeli_id' => $budi->id,
+                    'batch_keroyokan_id' => $batch->id,
+                    'produk_id' => $p6->id,
+                    'jumlah' => 15,
+                    'total_harga' => 76667,
+                    'ongkos_kirim' => 1667,
+                    'biaya_packing' => 0,
+                    'komisi_admin' => 2250,
+                    'pendapatan_penjual' => 72750,
+                    'metode_pembayaran' => 'QRIS',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Moncongloe Lappara RT 02',
+                    'zona_pengiriman' => 'Luar Desa, Dalam Kecamatan',
+                    'no_hp_pembeli' => '081234500006',
+                    'status' => 'Selesai',
+                    'opsi_packing' => 'Standar',
+                    'tanggal_pesan' => now()->subDays(2),
+                ]);
+
+                Pesanan::create([
+                    'pembeli_id' => $budi->id,
+                    'batch_keroyokan_id' => $batch->id,
+                    'produk_id' => $p7->id,
+                    'jumlah' => 15,
+                    'total_harga' => 91667,
+                    'ongkos_kirim' => 1667,
+                    'biaya_packing' => 0,
+                    'komisi_admin' => 2700,
+                    'pendapatan_penjual' => 87300,
+                    'metode_pembayaran' => 'QRIS',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Moncongloe Lappara RT 02',
+                    'zona_pengiriman' => 'Luar Desa, Dalam Kecamatan',
+                    'no_hp_pembeli' => '081234500006',
+                    'status' => 'Selesai',
+                    'opsi_packing' => 'Standar',
+                    'tanggal_pesan' => now()->subDays(2),
+                ]);
+
+                Pesanan::create([
+                    'pembeli_id' => $budi->id,
+                    'batch_keroyokan_id' => $batch->id,
+                    'produk_id' => $p25->id,
+                    'jumlah' => 15,
+                    'total_harga' => 91666,
+                    'ongkos_kirim' => 1666,
+                    'biaya_packing' => 0,
+                    'komisi_admin' => 2700,
+                    'pendapatan_penjual' => 87300,
+                    'metode_pembayaran' => 'QRIS',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Moncongloe Lappara RT 02',
+                    'zona_pengiriman' => 'Luar Desa, Dalam Kecamatan',
+                    'no_hp_pembeli' => '081234500006',
+                    'status' => 'Selesai',
+                    'opsi_packing' => 'Standar',
+                    'tanggal_pesan' => now()->subDays(2),
+                ]);
+            }
+        }
+
+        // 8. Demo Regular Orders & Reviews
+        if ($hikmah) {
+            $p4 = Produk::find(4); // Empek-empek
+            if ($p4) {
+                $order4 = Pesanan::create([
+                    'pembeli_id' => $hikmah->id,
+                    'produk_id' => $p4->id,
+                    'jumlah' => 3,
+                    'total_harga' => 47000,
+                    'ongkos_kirim' => 2000,
+                    'biaya_packing' => 0,
+                    'komisi_admin' => 1350,
+                    'pendapatan_penjual' => 43650,
+                    'metode_pembayaran' => 'COD',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Dusun Lappara',
+                    'zona_pengiriman' => 'Dalam Desa',
+                    'no_hp_pembeli' => '08012345678',
+                    'status' => 'Selesai',
+                    'catatan' => 'Bungkus satu-satu',
+                    'opsi_packing' => 'Standar',
+                    'tanggal_pesan' => now()->subDay(),
+                ]);
+
+                Ulasan::create([
+                    'pesanan_id' => $order4->id,
+                    'produk_id' => $p4->id,
+                    'pembeli_id' => $hikmah->id,
+                    'rating' => 5,
+                    'komentar' => 'Pengiriman cepat dan rasa sangat mantap!',
+                ]);
+            }
+
+            $p14 = Produk::find(14); // Cookies
+            if ($p14) {
+                $order14 = Pesanan::create([
+                    'pembeli_id' => $hikmah->id,
+                    'produk_id' => $p14->id,
+                    'jumlah' => 10,
+                    'total_harga' => 287000,
+                    'ongkos_kirim' => 25000,
+                    'biaya_packing' => 12000,
+                    'komisi_admin' => 7500,
+                    'pendapatan_penjual' => 242500,
+                    'metode_pembayaran' => 'QRIS',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Jl. Poros Moncongloe',
+                    'zona_pengiriman' => 'Luar Kabupaten',
+                    'no_hp_pembeli' => '08012345678',
+                    'status' => 'Selesai',
+                    'catatan' => 'Kemasan kado spesial',
+                    'opsi_packing' => 'Hadiah',
+                    'tanggal_pesan' => now()->subDay(),
+                ]);
+
+                Ulasan::create([
+                    'pesanan_id' => $order14->id,
+                    'produk_id' => $p14->id,
+                    'pembeli_id' => $hikmah->id,
+                    'rating' => 5,
+                    'komentar' => 'Renyah dan manisnya pas!',
+                ]);
+            }
+
+            $p52 = Produk::find(52); // Makaroni Pedas Asin
+            if ($p52) {
+                $order52 = Pesanan::create([
+                    'pembeli_id' => $hikmah->id,
+                    'produk_id' => $p52->id,
+                    'jumlah' => 20,
+                    'total_harga' => 332000,
+                    'ongkos_kirim' => 25000,
+                    'biaya_packing' => 7000,
+                    'komisi_admin' => 9000,
+                    'pendapatan_penjual' => 291000,
+                    'metode_pembayaran' => 'QRIS',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Hartaco Indah',
+                    'zona_pengiriman' => 'Luar Kabupaten',
+                    'no_hp_pembeli' => '08012345678',
+                    'status' => 'Selesai',
+                    'catatan' => 'Bungkus rapi',
+                    'opsi_packing' => 'Premium',
+                    'tanggal_pesan' => now()->subDay(),
+                ]);
+
+                Ulasan::create([
+                    'pesanan_id' => $order52->id,
+                    'produk_id' => $p52->id,
+                    'pembeli_id' => $hikmah->id,
+                    'rating' => 5,
+                    'komentar' => 'Keren, rasa pedas asinnya nagih!',
+                ]);
+            }
+
+            $p59 = Produk::find(59); // Ayam Madu
+            if ($p59) {
+                $order59 = Pesanan::create([
+                    'pembeli_id' => $hikmah->id,
+                    'produk_id' => $p59->id,
+                    'jumlah' => 25,
+                    'total_harga' => 657000,
+                    'ongkos_kirim' => 25000,
+                    'biaya_packing' => 7000,
+                    'komisi_admin' => 18750,
+                    'pendapatan_penjual' => 606250,
+                    'metode_pembayaran' => 'COD',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Jl. Urip',
+                    'zona_pengiriman' => 'Luar Kabupaten',
+                    'no_hp_pembeli' => '08012345678',
+                    'status' => 'Selesai',
+                    'catatan' => 'Bungkus box',
+                    'opsi_packing' => 'Premium',
+                    'tanggal_pesan' => now()->subHours(6),
+                ]);
+
+                Ulasan::create([
+                    'pesanan_id' => $order59->id,
+                    'produk_id' => $p59->id,
+                    'pembeli_id' => $hikmah->id,
+                    'rating' => 4,
+                    'komentar' => 'Ayam bumbu madunya enak sekali!',
+                ]);
+
+                // Demo Disbursement for Kedai Arisz
+                $adminUser = User::where('role', 'admin')->first();
+                $disburse = Disbursement::create([
+                    'umkm_id' => 14,
+                    'jumlah' => 606250,
+                    'status' => 'dibayar',
+                    'catatan' => 'Pencairan dana langsung oleh Admin untuk Kedai Arisz',
+                    'dibayar_at' => now(),
+                    'admin_id' => $adminUser?->id,
+                ]);
+                $disburse->pesanan()->attach($order59->id);
+            }
+        }
+
+        if ($mozza) {
+            $p15 = Produk::find(15); // Macaroni Aneka Rasa
+            if ($p15) {
+                $order15 = Pesanan::create([
+                    'pembeli_id' => $mozza->id,
+                    'produk_id' => $p15->id,
+                    'jumlah' => 1,
+                    'total_harga' => 12000,
+                    'ongkos_kirim' => 2000,
+                    'biaya_packing' => 0,
+                    'komisi_admin' => 300,
+                    'pendapatan_penjual' => 9700,
+                    'metode_pembayaran' => 'COD',
+                    'status_pembayaran' => 'Sudah Dibayar',
+                    'alamat_pengiriman' => 'Gedung Kemahasiswaan',
+                    'zona_pengiriman' => 'Dalam Desa',
+                    'no_hp_pembeli' => '0895803005021',
+                    'status' => 'Selesai',
+                    'catatan' => 'Banyakin saosnya',
+                    'opsi_packing' => 'Standar',
+                    'tanggal_pesan' => now()->subHours(2),
+                ]);
+
+                Ulasan::create([
+                    'pesanan_id' => $order15->id,
+                    'produk_id' => $p15->id,
+                    'pembeli_id' => $mozza->id,
+                    'rating' => 5,
+                    'komentar' => 'Yummy dan renyah!',
+                ]);
+            }
+        }
     }
 }
