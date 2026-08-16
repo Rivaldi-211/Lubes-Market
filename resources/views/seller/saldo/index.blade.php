@@ -169,7 +169,7 @@
 
             <div style="margin-top: 14px; background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; font-size: 11px; color: #166534;">
                 <i class="bi bi-info-circle-fill" style="flex-shrink: 0; color: #15803d; font-size: 13px;"></i>
-                <span>Transfer dilakukan manual oleh Admin BUMDes ke rekening terdaftar di atas setelah pengajuan disetujui.</span>
+                <span>Transfer dilakukan manual oleh Admin LUDES-MARKET ke rekening terdaftar di atas setelah pengajuan disetujui.</span>
             </div>
         </div>
     </section>

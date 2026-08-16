@@ -20,14 +20,14 @@ class AdminContactDynamicUpdateTest extends TestCase
         $resInitial = $this->get('/');
         $resInitial->assertOk();
         $resInitial->assertSee('081234500001');
-        $resInitial->assertSee('admin@bumdesberkah.id');
+        $resInitial->assertSee('admin@ludesmarket.id');
 
         // 2. Admin updates profile with new phone and email
         $newPhone = '082199887766';
-        $newEmail = 'admin_baru@bumdesberkah.id';
+        $newEmail = 'admin_baru@ludesmarket.id';
 
         $this->actingAs($admin)->patch(route('admin.profile.update'), [
-            'nama_lengkap' => 'Pengelola Baru BUMDes',
+            'nama_lengkap' => 'Pengelola Baru Platform',
             'username'     => $admin->username,
             'email'        => $newEmail,
             'no_hp'        => $newPhone,

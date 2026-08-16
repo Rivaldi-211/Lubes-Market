@@ -15,12 +15,12 @@ class RekeningBankSeeder extends Seeder
         $umkm3 = $umkms->get(2);
 
         $accounts = [
-            // Platform Bank Accounts (untuk pembayaran transfer pembeli ke rekening bersama BUMDes)
+            // Platform Bank Accounts (untuk pembayaran transfer pembeli ke rekening bersama platform)
             [
                 'umkm_id' => null,
                 'nama_bank' => 'Bank BRI Platform',
                 'nomor_rekening' => '0234-01-000000-50-1',
-                'atas_nama' => 'BUMDes Berkah Moncongloe',
+                'atas_nama' => 'LUDES MARKET Moncongloe',
                 'aktif' => true,
                 'urutan' => 1,
             ],
@@ -28,7 +28,7 @@ class RekeningBankSeeder extends Seeder
                 'umkm_id' => null,
                 'nama_bank' => 'Bank Sulselbar Platform',
                 'nomor_rekening' => '0892-0000-11',
-                'atas_nama' => 'BUMDes Berkah Moncongloe',
+                'atas_nama' => 'LUDES MARKET Moncongloe',
                 'aktif' => true,
                 'urutan' => 2,
             ],

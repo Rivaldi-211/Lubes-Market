@@ -21,7 +21,7 @@ class BumdesDemoSeeder extends Seeder
     {
         // 1. Users (Admin, 5 Pembeli, 15 Penjual)
         $users = [
-            ['username' => 'admin', 'nama_lengkap' => 'Ketua BUMDes Berkah', 'email' => 'admin@bumdesberkah.id', 'no_hp' => '081234500001', 'role' => 'admin'],
+            ['username' => 'admin', 'nama_lengkap' => 'Admin LUDES-MARKET', 'email' => 'admin@ludesmarket.id', 'no_hp' => '081234500001', 'role' => 'admin'],
 
             // Pembeli
             ['username' => 'budi_pembeli', 'nama_lengkap' => 'Budi Santoso', 'email' => 'budi@gmail.com', 'no_hp' => '081234500006', 'role' => 'pembeli'],
@@ -222,7 +222,7 @@ class BumdesDemoSeeder extends Seeder
             [
                 'umkm_id' => 4,
                 'judul' => 'Kerjasama Titik Jual Rest Area Moncongloe',
-                'isi' => 'BUMDes dapat membantu menitipkan produk Sarang Madu Muda di etalase Pusat Oleh-Oleh Kecamatan.',
+                'isi' => 'Pengelola platform dapat membantu menitipkan produk Sarang Madu Muda di etalase Pusat Oleh-Oleh Kecamatan.',
                 'tipe' => 'distribusi',
                 'periode' => date('Y-m'),
                 'dibaca' => false,

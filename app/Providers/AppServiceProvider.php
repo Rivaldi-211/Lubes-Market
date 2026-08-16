@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
                 if (Schema::hasTable('users')) {
                     $admin = User::where('role', 'admin')->first();
                     $rawPhone = $admin?->no_hp ?: '081234500001';
-                    $rawEmail = $admin?->email ?: 'admin@bumdesberkah.id';
+                    $rawEmail = $admin?->email ?: 'admin@ludesmarket.id';
                     $name = $admin?->nama_lengkap ?: 'Admin LUDES-MARKET';
 
                     $digits = preg_replace('/[^0-9]/', '', $rawPhone);
@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('adminContact', (object) [
                     'user' => null,
                     'nama' => 'Admin LUDES-MARKET',
-                    'email' => 'admin@bumdesberkah.id',
+                    'email' => 'admin@ludesmarket.id',
                     'phone' => '0812-3450-0001',
                     'phone_digits' => '081234500001',
                     'wa_phone' => '6281234500001',

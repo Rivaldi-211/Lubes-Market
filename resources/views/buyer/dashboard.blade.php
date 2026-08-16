@@ -223,19 +223,19 @@
                                     @endif
                                 </div>
 
-                                {{-- Option 2: Admin BUMDes / Platform --}}
+                                {{-- Option 2: Admin Platform --}}
                                 <div style="background: #ffffff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <div style="width: 36px; height: 36px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
                                             <i class="bi bi-headset"></i>
                                         </div>
                                         <div>
-                                            <strong style="display: block; font-size: 13px; color: #0f172a;">Admin BUMDes (LUDES-MARKET)</strong>
+                                            <strong style="display: block; font-size: 13px; color: #0f172a;">Admin LUDES-MARKET (Platform)</strong>
                                             <small style="color: #64748b; font-size: 11px;">Pusat Bantuan & Pengaduan · {{ $rawAdminPhone }}</small>
                                         </div>
                                     </div>
                                     <a href="{{ $adminWaUrl }}" target="_blank" rel="noopener noreferrer" class="button" style="background: #0f766e; color: #ffffff; border: none; font-size: 12.5px; font-weight: 700; border-radius: 8px; padding: 9px 14px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
-                                        <i class="bi bi-whatsapp" style="font-size: 15px;"></i> Chat Admin BUMDes via WhatsApp
+                                        <i class="bi bi-whatsapp" style="font-size: 15px;"></i> Chat Admin via WhatsApp
                                     </a>
                                 </div>
                             </div>

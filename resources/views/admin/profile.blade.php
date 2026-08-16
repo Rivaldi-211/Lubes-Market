@@ -86,7 +86,7 @@
                 </label>
 
                 <label class="full">Alamat Kantor / Domisili
-                    <textarea name="alamat_utama" rows="3" placeholder="Alamat kantor BUMDes atau domisili administrator">{{ old('alamat_utama', $user->alamat_utama) }}</textarea>
+                    <textarea name="alamat_utama" rows="3" placeholder="Alamat kantor atau domisili administrator">{{ old('alamat_utama', $user->alamat_utama) }}</textarea>
                 </label>
             </div>
 

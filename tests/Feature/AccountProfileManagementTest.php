@@ -14,12 +14,12 @@ class AccountProfileManagementTest extends TestCase
 
     private function seller(): User
     {
-        return User::where('username', 'umkm_jalangkote')->firstOrFail();
+        return User::where('role', 'penjual')->firstOrFail();
     }
 
     private function buyer(): User
     {
-        return User::where('username', 'pembeli_andi')->firstOrFail();
+        return User::where('username', 'budi_pembeli')->firstOrFail();
     }
 
     public function test_guest_cannot_access_profile_pages(): void
@@ -35,7 +35,7 @@ class AccountProfileManagementTest extends TestCase
 
         $response = $this->actingAs($seller)->get(route('seller.profile.edit'));
         $response->assertOk()
-            ->assertSee('Profil UMKM & Akun Penjual')
+            ->assertSee('Profil &amp; Akun Penjual', false)
             ->assertSee($seller->nama_lengkap)
             ->assertSee($seller->umkm->nama_umkm);
     }
@@ -141,7 +141,7 @@ class AccountProfileManagementTest extends TestCase
 
         $response = $this->actingAs($buyer)->get(route('buyer.profile.edit'));
         $response->assertOk()
-            ->assertSee('Kelola Informasi Akun Anda')
+            ->assertSee('Kelola Profil Akun Pembeli')
             ->assertSee($buyer->nama_lengkap)
             ->assertSee($buyer->username);
     }

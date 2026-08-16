@@ -18,7 +18,7 @@
                                 <span style="color: #eab308;">LUDES</span>-MARKET
                             </h1>
                             <p style="margin: 4px 0 0 0; color: #9fb9aa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
-                                BUMDes Berkah · Moncongloe Lappara
+                                Moncongloe Lappara
                             </p>
                         </td>
                     </tr>
@@ -70,7 +70,7 @@
                     <tr>
                         <td style="background-color: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
                             <p style="margin: 0; font-size: 12px; color: #94a3b8;">
-                                &copy; {{ date('Y') }} LUDES-MARKET — Platform Pemberdayaan UMKM &amp; BUMDes Moncongloe Lappara.
+                                &copy; {{ date('Y') }} LUDES-MARKET — Platform Pemasaran Produk UMKM Moncongloe Lappara.
                             </p>
                         </td>
                     </tr>

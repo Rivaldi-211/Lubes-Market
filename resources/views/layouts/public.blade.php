@@ -136,7 +136,7 @@
                 <p>Desa Moncongloe Lappara<br>Kabupaten Maros, Sulawesi Selatan</p>
                 <p><i class="bi bi-geo-alt"></i> Kawasan Kuliner Moncongloe Lappara</p>
                 <p><i class="bi bi-telephone-fill" style="color:var(--gold)"></i> <a href="{{ $adminContact->wa_link ?? 'https://wa.me/6281234500001' }}" target="_blank" rel="noopener" style="color:inherit">{{ $adminContact->phone ?? '0812-3450-0001' }} (Admin)</a></p>
-                <p><i class="bi bi-envelope-fill" style="color:var(--gold)"></i> <a href="mailto:{{ $adminContact->email ?? 'admin@bumdesberkah.id' }}" style="color:inherit">{{ $adminContact->email ?? 'admin@bumdesberkah.id' }}</a></p>
+                <p><i class="bi bi-envelope-fill" style="color:var(--gold)"></i> <a href="mailto:{{ $adminContact->email ?? 'admin@ludesmarket.id' }}" style="color:inherit">{{ $adminContact->email ?? 'admin@ludesmarket.id' }}</a></p>
             </div>
         </div>
 
