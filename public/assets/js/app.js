@@ -348,4 +348,177 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.ludes-custom-select.is-open').forEach(w => w.classList.remove('is-open'));
         }
     });
+
+    /* ==========================================================================
+       LUDES-MARKET INTERACTIVE MOTION & ANIMATION ENGINE
+       ========================================================================== */
+
+    /* --- 1. Tactile Click Ripple Effect --- */
+    function createRipple(e) {
+        const btn = e.currentTarget;
+        if (btn.classList.contains('disabled') || btn.disabled) return;
+
+        const rect = btn.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ludes-ripple-effect';
+
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1600);
+    }
+
+    document.querySelectorAll('.button, .button-light, .button-outline, .btn, .round-link, .add-cart-btn, .profile-tab-btn').forEach(btn => {
+        btn.addEventListener('click', createRipple);
+    });
+
+    /* --- 2. Dynamic Scroll Reveal with Staggering --- */
+    const revealSelector = '.product-card, .metric-grid article, .intro-grid, .keroyokan-cta-section, .location-card, .category-card, .seller-card, .card, .form-card, .section-heading, .feature-card, .hero-facts > div';
+    const revealElements = document.querySelectorAll(revealSelector);
+
+    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+        revealElements.forEach((el, index) => {
+            el.classList.add('ludes-reveal');
+            const staggerIndex = (index % 6) + 1;
+            el.classList.add(`stagger-${staggerIndex}`);
+        });
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    } else {
+        revealElements.forEach(el => el.classList.add('is-revealed'));
+    }
+
+    /* --- 3. Dynamic Number Count-Up Animation (Linear & Constant Velocity) --- */
+    function animateValue(obj, start, end, duration, prefix = '', suffix = '') {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            // Pure linear constant speed progression
+            const current = Math.floor(progress * (end - start) + start);
+            obj.textContent = prefix + current.toLocaleString('id-ID') + suffix;
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                obj.textContent = prefix + end.toLocaleString('id-ID') + suffix;
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    const countElements = document.querySelectorAll('.hero-facts strong, .metric-grid strong');
+    if (countElements.length > 0 && 'IntersectionObserver' in window) {
+        const countObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const text = el.textContent.trim();
+                    
+                    // Parse Rupiah or regular numbers
+                    let prefix = '';
+                    let suffix = '';
+                    let cleanText = text;
+
+                    if (text.startsWith('Rp')) {
+                        prefix = 'Rp';
+                        cleanText = text.replace('Rp', '').trim();
+                    }
+                    if (text.endsWith('%')) {
+                        suffix = '%';
+                        cleanText = cleanText.replace('%', '').trim();
+                    }
+
+                    const num = parseInt(cleanText.replace(/\./g, '').replace(/,/g, ''), 10);
+                    if (!isNaN(num) && num > 0) {
+                        animateValue(el, 0, num, 1600, prefix, suffix);
+                    }
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        countElements.forEach(el => countObserver.observe(el));
+    }
+
+    /* --- 4. Interactive 3D Card Hover Tilt (Smooth & Constant) --- */
+    const tiltCards = document.querySelectorAll('.product-card, .seller-card');
+    tiltCards.forEach(card => {
+        card.setAttribute('data-tilt-card', 'true');
+        card.style.transition = 'transform 0.4s linear, box-shadow 0.4s linear';
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -2.5;
+            const rotateY = ((x - centerX) / centerX) * 2.5;
+
+            card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    /* --- 5. Cart Badge Bounce Feedback --- */
+    document.querySelectorAll('.add-cart-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cartLink = document.querySelector('.cart-link');
+            if (cartLink) {
+                cartLink.classList.remove('badge-pop');
+                void cartLink.offsetWidth; // Trigger reflow
+                cartLink.classList.add('badge-pop');
+                setTimeout(() => cartLink.classList.remove('badge-pop'), 600);
+            }
+        });
+    });
+
+    /* --- 6. Interactive Floating Back-To-Top Button --- */
+    let backToTop = document.getElementById('ludesBackToTop');
+    if (!backToTop) {
+        backToTop = document.createElement('button');
+        backToTop.id = 'ludesBackToTop';
+        backToTop.setAttribute('aria-label', 'Kembali ke atas halaman');
+        backToTop.innerHTML = '<i class="bi bi-chevron-up"></i>';
+        document.body.appendChild(backToTop);
+    }
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 350) {
+            backToTop.classList.add('is-visible');
+        } else {
+            backToTop.classList.remove('is-visible');
+        }
+    }, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 });
+

@@ -46,11 +46,19 @@
             <button class="button button-dark" type="submit">Terapkan</button>
         </form>
 
-        <div class="results-head">
-            <p><strong>{{ $products->total() }}</strong> produk ditemukan</p>
-            @if(request()->hasAny(['q', 'kategori', 'sort']))
-                <a href="{{ route('catalogue') }}">Reset filter</a>
-            @endif
+        <div class="category-pills-bar" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; margin-top: 8px;">
+            <a href="{{ route('catalogue', array_merge(request()->except('kategori', 'page'), [])) }}" 
+               class="category-pill {{ !request('kategori') ? 'active' : '' }}" 
+               style="padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.15s ease-out; display: inline-flex; align-items: center; gap: 6px; {{ !request('kategori') ? 'background: #123825; color: #fff; box-shadow: 0 4px 12px rgba(18,56,37,0.25);' : 'background: #f1f5f9; color: #475569;' }}">
+               <i class="bi bi-grid-fill"></i> Semua
+            </a>
+            @foreach($categories as $category)
+                <a href="{{ route('catalogue', array_merge(request()->except('page'), ['kategori' => $category->id])) }}" 
+                   class="category-pill {{ (string)request('kategori') === (string)$category->id ? 'active' : '' }}" 
+                   style="padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.15s ease-out; display: inline-flex; align-items: center; gap: 6px; {{ (string)request('kategori') === (string)$category->id ? 'background: #123825; color: #fff; box-shadow: 0 4px 12px rgba(18,56,37,0.25);' : 'background: #f1f5f9; color: #475569;' }}">
+                   {{ $category->nama_kategori }}
+                </a>
+            @endforeach
         </div>
 
         <div class="product-grid">

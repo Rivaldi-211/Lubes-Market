@@ -225,6 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 1600,
+                    easing: 'linear'
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -270,6 +274,10 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                    duration: 1600,
+                    easing: 'linear'
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {

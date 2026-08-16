@@ -181,4 +181,102 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.ludes-custom-select.is-open').forEach(w => w.classList.remove('is-open'));
         }
     });
+
+    /* ==========================================================================
+       DASHBOARD INTERACTIVE MOTION & ANIMATION ENGINE
+       ========================================================================== */
+
+    /* --- 1. Tactile Click Ripple Effect --- */
+    function createRipple(e) {
+        const btn = e.currentTarget;
+        if (btn.classList.contains('disabled') || btn.disabled) return;
+
+        const rect = btn.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ludes-ripple-effect';
+
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1600);
+    }
+
+    document.querySelectorAll('.button, .button-outline, .btn, .profile-tab-btn, button[type="submit"]').forEach(btn => {
+        btn.addEventListener('click', createRipple);
+    });
+
+    /* --- 2. Metric Grid Count-Up Animation (Linear & Constant Velocity) --- */
+    function animateValue(obj, start, end, duration, prefix = '', suffix = '') {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            // Pure linear constant speed progression
+            const current = Math.floor(progress * (end - start) + start);
+            obj.textContent = prefix + current.toLocaleString('id-ID') + suffix;
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                obj.textContent = prefix + end.toLocaleString('id-ID') + suffix;
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    const metricStrong = document.querySelectorAll('.metric-grid article strong');
+    if (metricStrong.length > 0 && 'IntersectionObserver' in window) {
+        const metricObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const text = el.textContent.trim();
+                    let prefix = '';
+                    let suffix = '';
+                    let cleanText = text;
+
+                    if (text.startsWith('Rp')) {
+                        prefix = 'Rp';
+                        cleanText = text.replace('Rp', '').trim();
+                    }
+                    if (text.endsWith('%')) {
+                        suffix = '%';
+                        cleanText = cleanText.replace('%', '').trim();
+                    }
+
+                    const num = parseInt(cleanText.replace(/\./g, '').replace(/,/g, ''), 10);
+                    if (!isNaN(num) && num > 0) {
+                        animateValue(el, 0, num, 1600, prefix, suffix);
+                    }
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        metricStrong.forEach(el => metricObserver.observe(el));
+    }
+
+    /* --- 3. Interactive Profile Tabs with Smooth Transition --- */
+    const tabButtons = document.querySelectorAll('.profile-tab-btn[data-tab-target]');
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.tabTarget;
+            const targetContent = document.getElementById(targetId);
+            if (!targetContent) return;
+
+            tabButtons.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.profile-tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+
+            btn.classList.add('active');
+            targetContent.classList.add('active');
+        });
+    });
 });
+

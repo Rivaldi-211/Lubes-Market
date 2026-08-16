@@ -1948,7 +1948,126 @@ input[type="file"]::-webkit-file-upload-button:hover {
     }
 }
 
+/* ==========================================================================
+   DASHBOARD INTERACTIVE MOTION & ANIMATION SYSTEM (LINEAR & CONSTANT SPEED)
+   ========================================================================== */
 
+/* --- Metric Cards Interactive Dynamics --- */
+.metric-grid article {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s linear, box-shadow 0.4s linear, border-color 0.35s linear;
+    will-change: transform, box-shadow;
+    backface-visibility: hidden;
+}
 
+.metric-grid article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -4px rgba(18, 56, 37, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03);
+    border-color: rgba(199, 155, 66, 0.35);
+}
+
+.metric-grid article strong {
+    display: inline-block;
+    transition: color 0.35s linear;
+}
+
+/* --- Card & Form Card Elevated Interaction --- */
+.card,
+.form-card,
+.data-panel {
+    transition: transform 0.4s linear, box-shadow 0.4s linear;
+    will-change: transform, box-shadow;
+}
+
+.card:hover,
+.form-card:hover {
+    box-shadow: 0 12px 28px -4px rgba(18, 56, 37, 0.06);
+}
+
+/* --- Table Rows Interactive Highlighting --- */
+.table tbody tr,
+table tbody tr {
+    transition: background-color 0.3s linear, transform 0.35s linear, box-shadow 0.3s linear;
+}
+
+.table tbody tr:hover,
+table tbody tr:hover {
+    background-color: #f8fafc !important;
+    transform: translateX(3px);
+}
+
+/* --- Sidebar Interactive Links --- */
+.sidebar-nav a {
+    transition: transform 0.35s linear, background-color 0.3s linear, color 0.3s linear;
+    will-change: transform;
+}
+
+.sidebar-nav a:hover {
+    transform: translateX(4px);
+}
+
+.sidebar-nav a i {
+    transition: transform 0.35s linear;
+}
+
+.sidebar-nav a:hover i {
+    transform: scale(1.12);
+}
+
+/* --- Tab Buttons Dynamic Switch --- */
+.profile-tab-btn {
+    transition: transform 0.35s linear, background-color 0.3s linear, color 0.3s linear, box-shadow 0.3s linear;
+    will-change: transform;
+}
+
+.profile-tab-btn:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profile-tab-btn.active {
+    transform: none;
+}
+
+.profile-tab-content {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 1.6s linear, transform 1.6s linear;
+    display: none;
+    will-change: opacity, transform;
+}
+
+.profile-tab-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Quick Action Buttons --- */
+.button,
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s linear, box-shadow 0.35s linear, background 0.3s linear !important;
+    will-change: transform, box-shadow;
+}
+
+.button:hover,
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(18, 56, 37, 0.16);
+}
+
+.button:active,
+.btn:active {
+    transform: translateY(0.5px) scale(0.985) !important;
+    transition-duration: 0.15s !important;
+}
+
+/* --- Dialog & Modal Fast Animation --- */
+dialog[open] {
+    animation: ludesScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 

@@ -290,7 +290,8 @@ document.addEventListener('DOMContentLoaded', function () {
             animation: {
                 animateScale: true,
                 animateRotate: true,
-                duration: 800
+                duration: 1600,
+                easing: 'linear'
             }
         }
     });
@@ -300,6 +301,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const centerLabel = document.getElementById('sellerCenterLabel');
     const centerValue = document.getElementById('sellerCenterValue');
     const legendItems = document.querySelectorAll('#sellerLegendList .stats-legend-item');
+
+    function animateCenterValue(targetVal, prefix = '', suffix = '') {
+        let startTimestamp = null;
+        const duration = 1600;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const current = Math.floor(progress * targetVal);
+            centerValue.innerHTML = `${prefix}${formatNumber(current)}${suffix}`;
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                centerValue.innerHTML = `${prefix}${formatNumber(targetVal)}${suffix}`;
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    // Animate center value on initial render
+    animateCenterValue(totalTerjual, '', ' <span style="font-size:11px; font-weight:600;">porsi</span>');
 
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -313,14 +334,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (currentMetric === 'terjual') {
                 centerLabel.textContent = 'Total Terjual';
-                centerValue.innerHTML = `${formatNumber(totalTerjual)} <span style="font-size:11px; font-weight:600;">porsi</span>`;
+                animateCenterValue(totalTerjual, '', ' <span style="font-size:11px; font-weight:600;">porsi</span>');
                 legendItems.forEach(item => {
                     const badge = item.querySelector('.stats-legend-qty');
                     if (badge) badge.textContent = badge.dataset.terjual;
                 });
             } else {
                 centerLabel.textContent = 'Total Omzet';
-                centerValue.innerHTML = `${formatRp(totalOmzet)}`;
+                animateCenterValue(totalOmzet, 'Rp', '');
                 legendItems.forEach(item => {
                     const badge = item.querySelector('.stats-legend-qty');
                     if (badge) badge.textContent = badge.dataset.omzet;

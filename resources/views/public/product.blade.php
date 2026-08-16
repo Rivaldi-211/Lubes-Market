@@ -54,17 +54,39 @@
                 @if($produk->isAvailable())
                     <form class="buy-box" action="{{ route('cart.add', $produk) }}" method="post" style="display: flex; flex-direction: column; gap: 16px;">
                         @csrf
-                        <div style="display: flex; align-items: center; gap: 16px;">
-                            <label style="margin: 0; min-width: 110px;">
-                                Jumlah
-                                <input type="number" name="jumlah" min="1" max="{{ $produk->stok_jumlah }}" value="1">
-                            </label>
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 14px 18px;">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <label style="margin: 0; font-size: 13.5px; font-weight: 700; color: #1e293b;">Atur Jumlah:</label>
+                                <div style="display: inline-flex; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                                    <button type="button" class="interactive-qty-minus" onclick="let inp = document.getElementById('productQtyInput'); if(parseInt(inp.value)>1){inp.value = parseInt(inp.value)-1; inp.dispatchEvent(new Event('change'));}" style="width: 38px; height: 38px; border: none; background: #f1f5f9; font-size: 16px; font-weight: 700; cursor: pointer; color: #334155; transition: background 0.15s;">−</button>
+                                    <input type="number" name="jumlah" id="productQtyInput" min="1" max="{{ $produk->stok_jumlah }}" value="1" readonly style="width: 52px; height: 38px; border: none; text-align: center; font-weight: 800; font-size: 15px; color: #0f172a; outline: none; background: transparent;">
+                                    <button type="button" class="interactive-qty-plus" onclick="let inp = document.getElementById('productQtyInput'); if(parseInt(inp.value)<{{ $produk->stok_jumlah }}){inp.value = parseInt(inp.value)+1; inp.dispatchEvent(new Event('change'));}" style="width: 38px; height: 38px; border: none; background: #f1f5f9; font-size: 16px; font-weight: 700; cursor: pointer; color: #334155; transition: background 0.15s;">+</button>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 11px; color: #64748b; font-weight: 600; display: block;">Total Subtotal:</span>
+                                <strong id="productSubtotalText" style="font-size: 1.25rem; color: #123825; font-weight: 800;">Rp{{ number_format((float)$produk->harga, 0, ',', '.') }}</strong>
+                            </div>
                         </div>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; width: 100%;">
-                            <button class="button button-dark" type="submit" style="flex: 1; min-width: 170px; justify-content: center;"><i class="bi bi-bag-plus"></i> + Keranjang</button>
-                            <button class="button" type="submit" name="direct_checkout" value="1" style="flex: 1; min-width: 170px; justify-content: center; background: var(--gold); color: var(--green-950);"><i class="bi bi-lightning-fill"></i> Pesan Langsung</button>
+                            <button class="button button-dark" type="submit" style="flex: 1; min-width: 170px; justify-content: center; padding: 13px 20px; font-weight: 800;"><i class="bi bi-bag-plus"></i> + Keranjang</button>
+                            <button class="button" type="submit" name="direct_checkout" value="1" style="flex: 1; min-width: 170px; justify-content: center; background: var(--gold); color: var(--green-950); padding: 13px 20px; font-weight: 800;"><i class="bi bi-lightning-fill"></i> Pesan Langsung</button>
                         </div>
                     </form>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const unitPrice = {{ (float)$produk->harga }};
+                            const qtyInput = document.getElementById('productQtyInput');
+                            const subtotalEl = document.getElementById('productSubtotalText');
+                            if(qtyInput && subtotalEl) {
+                                qtyInput.addEventListener('change', function() {
+                                    const q = parseInt(qtyInput.value) || 1;
+                                    subtotalEl.textContent = 'Rp' + (unitPrice * q).toLocaleString('id-ID');
+                                });
+                            }
+                        });
+                    </script>
                 @else
                     <div class="unavailable-note">Produk sedang tidak tersedia. Cek kembali katalog untuk pilihan lain.</div>
                 @endif

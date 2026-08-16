@@ -132,6 +132,10 @@ document.addEventListener('DOMContentLoaded', function () {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 1600,
+                easing: 'linear'
+            },
             plugins: {
                 legend: { display: false },
                 tooltip: {

@@ -47,13 +47,13 @@ Route::delete('/keranjang',[CartController::class,'clear'])->name('cart.clear');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class,'create'])->name('login');
-    Route::post('/login', [LoginController::class,'store'])->name('login.store');
+    Route::post('/login', [LoginController::class,'store'])->name('login.store')->middleware('throttle:10,1');
     Route::get('/register', [RegisterController::class,'create'])->name('register');
-    Route::post('/register', [RegisterController::class,'store'])->name('register.store');
+    Route::post('/register', [RegisterController::class,'store'])->name('register.store')->middleware('throttle:10,1');
     Route::get('/lupa-password', [ForgotPasswordController::class, 'create'])->name('password.request');
-    Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+    Route::post('/lupa-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email')->middleware('throttle:5,1');
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update')->middleware('throttle:5,1');
 });
 Route::post('/logout',[LoginController::class,'destroy'])->middleware('auth')->name('logout');
 Route::post('/webhooks/xendit/payment', [\App\Http\Controllers\Webhook\XenditWebhookController::class, 'payment'])->name('webhooks.xendit.payment');
