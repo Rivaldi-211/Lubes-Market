@@ -16,7 +16,7 @@ class CheckoutRequest extends FormRequest
                 Rule::exists('rekening_bank', 'id')->where('aktif', true),
             ],
             'alamat_pengiriman'=>['required','string','max:255'],
-            'zona_pengiriman'=>['required','string', Rule::exists('zona_pengiriman', 'nama_zona')->where('aktif', true)],
+            'zona_pengiriman'=>['nullable','string', Rule::exists('zona_pengiriman', 'nama_zona')->where('aktif', true)],
             'opsi_packing'=>['nullable','string'],
             'no_hp_pembeli'=>['required','string','max:20'],
             'catatan'=>['nullable','string','max:255'],

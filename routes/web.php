@@ -41,6 +41,7 @@ Route::post('/keroyokan/{kelompokKeroyokan}/simulasi', [PublicKeroyokanControlle
 Route::get('/keranjang',[CartController::class,'index'])->name('cart.index');
 Route::post('/keranjang/tambah/{produk}',[CartController::class,'add'])->name('cart.add');
 Route::patch('/keranjang',[CartController::class,'update'])->name('cart.update');
+Route::delete('/keranjang/keroyokan/hapus',[CartController::class,'removeKeroyokan'])->name('cart.remove-keroyokan');
 Route::delete('/keranjang/{produk}',[CartController::class,'remove'])->name('cart.remove');
 Route::delete('/keranjang',[CartController::class,'clear'])->name('cart.clear');
 
@@ -84,6 +85,9 @@ Route::middleware(['auth','active'])->group(function () {
         Route::patch('/pembeli/pesanan/{pesanan}/terima',[BuyerOrderController::class,'confirmReceived'])->name('buyer.orders.confirm-received');
         Route::post('/pembeli/pesanan/{pesanan}/bukti',[BuyerOrderController::class,'uploadProof'])->name('buyer.orders.proof');
         Route::post('/pembeli/pesanan/{pesanan}/ulasan',[BuyerOrderController::class,'review'])->name('buyer.orders.review');
+        Route::patch('/pembeli/batch-keroyokan/{batch}/batal', [BuyerOrderController::class, 'cancelBatch'])->name('buyer.orders.cancel-batch');
+        Route::patch('/pembeli/batch-keroyokan/{batch}/terima', [BuyerOrderController::class, 'confirmReceivedBatch'])->name('buyer.orders.confirm-received-batch');
+        Route::post('/pembeli/batch-keroyokan/{batch}/bukti', [BuyerOrderController::class, 'uploadProofBatch'])->name('buyer.orders.proof-batch');
     });
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function(){

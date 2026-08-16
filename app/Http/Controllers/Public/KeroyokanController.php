@@ -36,12 +36,21 @@ class KeroyokanController extends Controller
         $totalStock = (int) $eligibleProducts->sum('stok_jumlah');
         $minPrice = $allProducts->min('harga') ?: 0;
 
+        $defaultJumlahBox = 15;
+        $defaultBoxItems = [];
+        foreach ($allProducts as $p) {
+            $defaultBoxItems[$p->id] = 1;
+        }
+
         return view('public.keroyokan.show', [
             'kelompok' => $kelompokKeroyokan,
             'allProducts' => $allProducts,
             'eligibleProducts' => $eligibleProducts,
             'totalStock' => $totalStock,
             'minPrice' => $minPrice,
+            'jumlahBox' => $defaultJumlahBox,
+            'boxItems' => $defaultBoxItems,
+            'substitutions' => [],
         ]);
     }
 
@@ -53,14 +62,37 @@ class KeroyokanController extends Controller
         abort_unless($kelompokKeroyokan->aktif, 404);
 
         $request->validate([
-            'target_jumlah' => ['required', 'integer', 'min:2', 'max:100000'],
+            'jumlah_box' => ['nullable', 'integer', 'min:15', 'max:100000'],
+            'target_jumlah' => ['nullable', 'integer', 'min:15', 'max:100000'],
+            'box_items' => ['nullable', 'array'],
+            'box_items.*' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'substitutions' => ['nullable', 'array'],
+            'substitutions.*' => ['nullable', 'integer'],
         ], [
-            'target_jumlah.required' => 'Jumlah kebutuhan wajib diisi.',
-            'target_jumlah.min' => 'Jumlah pesanan minimal 2 unit.',
+            'jumlah_box.min' => 'Jumlah pesanan minimal 15 box.',
+            'target_jumlah.min' => 'Jumlah pesanan minimal 15 box.',
         ]);
 
-        $targetJumlah = (int) $request->input('target_jumlah');
-        $result = $keroyokanService->calculateAllocation($kelompokKeroyokan, $targetJumlah);
+        $hasCustom = $request->filled('jumlah_box') || ($request->filled('box_items') && !empty($request->input('box_items')));
+
+        if ($hasCustom) {
+            $jumlahBox = (int) ($request->input('jumlah_box') ?: 15);
+            $boxItems = (array) $request->input('box_items', []);
+            $substitutions = (array) $request->input('substitutions', []);
+
+            $result = $keroyokanService->calculateCustomBoxAllocation(
+                $kelompokKeroyokan,
+                $jumlahBox,
+                $boxItems,
+                $substitutions
+            );
+        } else {
+            $targetJumlah = (int) $request->input('target_jumlah', 15);
+            $result = $keroyokanService->calculateAllocation($kelompokKeroyokan, $targetJumlah);
+            $jumlahBox = $targetJumlah;
+            $boxItems = [];
+            $substitutions = [];
+        }
 
         $allProducts = $keroyokanService->getAllProducts($kelompokKeroyokan);
         $eligibleProducts = $keroyokanService->getEligibleProducts($kelompokKeroyokan);
@@ -72,7 +104,9 @@ class KeroyokanController extends Controller
             'totalStock' => (int) $eligibleProducts->sum('stok_jumlah'),
             'minPrice' => $allProducts->min('harga') ?: 0,
             'simulation' => $result,
-            'inputQuantity' => $targetJumlah,
+            'jumlahBox' => $jumlahBox,
+            'boxItems' => $boxItems ?: ($result['box_items'] ?? []),
+            'substitutions' => $substitutions,
         ]);
     }
 
@@ -85,24 +119,52 @@ class KeroyokanController extends Controller
         abort_unless($kelompokKeroyokan->aktif, 404);
 
         $request->validate([
-            'target_jumlah' => ['required', 'integer', 'min:2', 'max:100000'],
+            'jumlah_box' => ['nullable', 'integer', 'min:15', 'max:100000'],
+            'target_jumlah' => ['nullable', 'integer', 'min:15', 'max:100000'],
+            'box_items' => ['nullable', 'array'],
+            'box_items.*' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'substitutions' => ['nullable', 'array'],
+            'substitutions.*' => ['nullable', 'integer'],
+        ], [
+            'jumlah_box.min' => 'Jumlah pesanan minimal 15 box.',
+            'target_jumlah.min' => 'Jumlah pesanan minimal 15 box.',
         ]);
 
-        $targetJumlah = (int) $request->input('target_jumlah');
-        $result = $keroyokanService->calculateAllocation($kelompokKeroyokan, $targetJumlah);
+        $hasCustom = $request->filled('jumlah_box') || ($request->filled('box_items') && !empty($request->input('box_items')));
+
+        if ($hasCustom) {
+            $jumlahBox = (int) ($request->input('jumlah_box') ?: 15);
+            $boxItems = (array) $request->input('box_items', []);
+            $substitutions = (array) $request->input('substitutions', []);
+
+            $result = $keroyokanService->calculateCustomBoxAllocation(
+                $kelompokKeroyokan,
+                $jumlahBox,
+                $boxItems,
+                $substitutions
+            );
+        } else {
+            $targetJumlah = (int) $request->input('target_jumlah', 15);
+            $result = $keroyokanService->calculateAllocation($kelompokKeroyokan, $targetJumlah);
+            $jumlahBox = $targetJumlah;
+        }
 
         if ($result['status'] !== 'success') {
             return redirect()->route('keroyokan.show', $kelompokKeroyokan)
                 ->with('error', $result['message'] ?? 'Alokasi Keroyokan tidak memenuhi syarat.');
         }
 
-        if ($cartService->raw() !== []) {
-            return redirect()->route('keroyokan.show', $kelompokKeroyokan)
-                ->with('error', 'Keranjang Anda masih berisi produk. Selesaikan atau kosongkan keranjang sebelum membuat pesanan Keroyokan.');
-        }
+        $cartService->replaceForKeroyokan(
+            $result['allocations'],
+            $kelompokKeroyokan->id,
+            $result['target_quantity'],
+            [
+                'jumlah_box' => $jumlahBox,
+                'box_price' => $result['box_price'] ?? 0,
+                'total_pcs_in_box' => $result['total_pcs_in_box'] ?? 0,
+            ]
+        );
 
-        $cartService->replaceForKeroyokan($result['allocations'], $kelompokKeroyokan->id, $targetJumlah);
-
-        return redirect()->route('checkout.create')->with('success', 'Rencana Keroyokan berhasil disiapkan. Silakan lengkapi pesanan Anda.');
+        return redirect()->route('checkout.create')->with('success', 'Rencana Paket Keroyokan (' . $jumlahBox . ' Box) berhasil disiapkan. Silakan lengkapi pesanan Anda.');
     }
 }

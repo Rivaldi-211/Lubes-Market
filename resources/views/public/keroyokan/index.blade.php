@@ -38,10 +38,15 @@
                     @endphp
                     <article class="product-card" style="display:flex; flex-direction:column; justify-content:space-between; height:100%; border:1px solid var(--line); border-radius:var(--radius); padding:24px; background:#fff; position:relative;">
                         <div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                                <span class="badge" style="background:var(--cream); color:var(--green-900); padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;">
-                                    {{ $group->kategori->nama_kategori }}
-                                </span>
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap: wrap;">
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <span class="badge" style="background:var(--cream); color:var(--green-900); padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;">
+                                        {{ $group->kategori->nama_kategori }}
+                                    </span>
+                                    <span style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; padding:3px 8px; border-radius:10px; font-size:11px; font-weight:700;">
+                                        Min. 15 Box
+                                    </span>
+                                </div>
                                 @if($isOutOfStock)
                                     <span class="badge" style="background:#f8d7da; color:#721c24; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:700;">
                                         <i class="bi bi-exclamation-triangle-fill"></i> Stok Habis

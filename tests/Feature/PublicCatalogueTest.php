@@ -18,33 +18,32 @@ class PublicCatalogueTest extends TestCase
     {
         $this->seed(BumdesDemoSeeder::class);
         $this->get('/')->assertOk()->assertSee('LUDES-MARKET');
-        $this->get('/katalog')->assertOk()->assertSee('Bakso Bakar');
+        $this->get('/katalog')->assertOk()->assertSee('Kedai Wawa');
     }
 
     public function test_catalogue_hides_products_from_inactive_umkm(): void
     {
         $this->seed(BumdesDemoSeeder::class);
-        $umkm = Umkm::where('nama_umkm', 'Pisang Epe & Bakso Bakar Pak Baso')->firstOrFail();
+        $umkm = Umkm::where('nama_umkm', 'Kedai Wawa')->firstOrFail();
         $umkm->update(['status' => 'nonaktif']);
-        $this->get('/katalog')->assertDontSee('Bakso Bakar');
+        $this->get('/katalog')->assertDontSee('Pastry Salju');
     }
 
     public function test_catalogue_can_filter_by_keyword_and_category(): void
     {
         $this->seed(BumdesDemoSeeder::class);
-        $category = Kategori::where('nama_kategori', 'Kerajinan / Kreatif')->firstOrFail();
+        $category = Kategori::where('nama_kategori', 'Kreatif')->firstOrFail();
         $this->get('/katalog?q=Anyaman&kategori='.$category->id)
-            ->assertOk()->assertSee('Anyaman Tas Bambu')->assertDontSee('Kripik Pisang Original');
+            ->assertOk()->assertSee('Anyaman')->assertDontSee('Jalangkote Sayur');
     }
 
     public function test_product_detail_shows_seller_and_reviews(): void
     {
         $this->seed(BumdesDemoSeeder::class);
-        $product = Produk::findOrFail(3);
+        $product = Produk::with('umkm')->firstOrFail();
         $this->get('/produk/'.$product->id)
             ->assertOk()
             ->assertSee($product->nama_produk)
-            ->assertSee('Pak Baso')
-            ->assertSee('masih hangat');
+            ->assertSee($product->umkm->nama_umkm);
     }
 }

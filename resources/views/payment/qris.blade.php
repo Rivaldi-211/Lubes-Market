@@ -57,7 +57,7 @@
                                 </div>
                             @endif
 
-                            @if(app()->environment(['local', 'testing']) && $payment->payment_method === 'QRIS' && !empty($payment->xendit_payment_request_id) && ($payment->expires_at === null || $payment->expires_at->isFuture()))
+                            <!-- @if(app()->environment(['local', 'testing']) && $payment->payment_method === 'QRIS' && !empty($payment->xendit_payment_request_id) && ($payment->expires_at === null || $payment->expires_at->isFuture()))
                                 <div style="margin-top: 20px; padding: 16px; background: #f0fdf4; border: 1px dashed #10b981; border-radius: 12px; text-align: center;">
                                     <small style="color: #047857; display: block; margin-bottom: 8px; font-weight: 600;">
                                         <i class="bi bi-phone-vibrate-fill"></i> MODE PRESENTASI DEMO (SCAN KAMERA HP)
@@ -83,7 +83,7 @@
                                         @endif
                                     </div>
                                 </div>
-                            @endif
+                            @endif -->
                         </div>
 
                         <div style="margin-top: 24px; padding: 20px; background: #f1f5f9; border-radius: 12px;">

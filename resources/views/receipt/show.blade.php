@@ -199,6 +199,13 @@
             </div>
         </div>
 
+        @if($order->batch_keroyokan_id)
+            <div style="margin: 18px 0 6px; padding: 10px 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 12px; color: #166534; display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: 700; color: #15803d; text-transform: uppercase; font-size: 11px; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Paket Keroyokan</span>
+                <span>Dikemas terpadu dalam 1 box kemasan berlabel resmi LUDES-MARKET.</span>
+            </div>
+        @endif
+
         <div class="item">
             <div>
                 <b>{{ $order->produk->nama_produk }}</b><br>
@@ -206,12 +213,31 @@
             </div>
             <div>{{ $order->status }}</div>
             <div style="text-align:right">
-                <b>Rp{{ number_format((float)$order->total_harga,0,',','.') }}</b>
+                <b>Rp{{ number_format((float)$order->produk->harga * $order->jumlah,0,',','.') }}</b>
             </div>
         </div>
 
+        <div style="margin: 12px 0; border-bottom: 1px solid #eee; padding-bottom: 12px; font-size: 13px; color: #475569; display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; justify-content: space-between;">
+                <span>Subtotal Produk:</span>
+                <span>Rp{{ number_format((float)$order->produk->harga * $order->jumlah, 0, ',', '.') }}</span>
+            </div>
+            @if($order->ongkos_kirim > 0)
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Ongkos Kirim @if($order->batch_keroyokan_id)<small>(Porsi Keroyokan)</small>@endif:</span>
+                    <span>Rp{{ number_format((float)$order->ongkos_kirim, 0, ',', '.') }}</span>
+                </div>
+            @endif
+            @if($order->biaya_packing > 0)
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Biaya Kemasan Box ({{ $order->opsi_packing ?? 'Standar' }}):</span>
+                    <span>Rp{{ number_format((float)$order->biaya_packing, 0, ',', '.') }}</span>
+                </div>
+            @endif
+        </div>
+
         <div class="total">
-            <span>Total</span>
+            <span>Total Tagihan</span>
             <b>Rp{{ number_format((float)$order->total_harga,0,',','.') }}</b>
         </div>
 

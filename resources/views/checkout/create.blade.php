@@ -5,7 +5,9 @@
 @section('content')
 <section class="inner-hero compact-hero">
     <div class="shell">
-        <div class="eyebrow"><span></span>Checkout</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+            <div class="eyebrow" style="margin-bottom: 0;"><span></span>Checkout Pesanan</div>
+        </div>
         <div class="inner-hero-row">
             <h1>Detail jelas,<br><em>pesanan tenang.</em></h1>
             <p>Lengkapi kontak, lokasi pengiriman, opsi packing, dan cara pembayaran.</p>
@@ -45,11 +47,13 @@
                                 </div>
                             </div>
                         @elseif($isKeroyokan)
-                            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; color: #166534;">
-                                <i class="bi bi-people-fill" style="font-size: 1.2rem; color: #16a34a; flex-shrink: 0;"></i>
-                                <div>
-                                    <strong>Paket Pesanan Keroyokan:</strong>
-                                    <small style="display: block; color: #15803d;">Pengiriman gabungan satu tujuan (1x tarif ongkir rombongan).</small>
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px 16px; font-size: 0.88rem; color: #14532d; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.06);">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 0.92rem; display: block; color: #14532d;">Paket Pesanan Keroyokan LUDES-MARKET</strong>
+                                    <span style="display: block; color: #166534; font-size: 0.82rem; margin-top: 2px;">Seluruh produk dari {{ $umkmCount }} mitra UMKM akan dikemas rapi dalam <strong>1 kemasan box terpadu berlabel LUDES-MARKET</strong> (Hemat: 1x tarif ongkir zona &amp; 1x biaya packing kemasan).</span>
                                 </div>
                             </div>
                         @endif
@@ -180,40 +184,65 @@
 
             <!-- ASIDE: RINGKASAN BIAYA & PESANAN -->
             <aside class="order-summary">
-                <span>Ringkasan pesanan</span>
-                <h2>{{ $items->sum('quantity') }} item</h2>
+                <span style="color: rgba(255, 255, 255, 0.7); text-transform: uppercase; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; display: block; margin-bottom: 4px;">Ringkasan Pesanan</span>
+                <h2 style="color: #ffffff; font-size: 1.6rem; font-weight: 800; margin: 0 0 14px 0;">Paket Keroyokan</h2>
+
+                @if($isKeroyokan)
+                    <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;">
+                        <strong style="color: #ffffff; font-size: 0.92rem; display: block;">
+                            <i class="bi bi-people-fill" style="color: #4ade80;"></i> {{ $kelompok?->nama_kelompok ?? 'Paket Keroyokan' }}
+                        </strong>
+                        <small style="color: rgba(255, 255, 255, 0.75); font-size: 0.78rem;">Mitra UMKM Moncongloe</small>
+                    </div>
+                @endif
+
                 <div class="checkout-items">
-                    @foreach($items as $item)
-                        <div>
-                            <span>{{ $item['quantity'] }}× {{ $item['product']->nama_produk }} <small style="color:#64748b; font-size:0.75rem;">({{ $item['product']->umkm->nama_umkm }})</small></span>
-                            <strong>Rp{{ number_format($item['line_total'], 0, ',', '.') }}</strong>
-                        </div>
-                    @endforeach
+                    @if(!empty($isKeroyokan) && isset($keroyokanItems) && $keroyokanItems->isNotEmpty())
+                        @foreach($keroyokanItems as $item)
+                            <div>
+                                <span style="color: #ffffff; font-size: 12px;">{{ $item['product']->nama_produk }}</span>
+                                <strong style="color: #ffffff; font-size: 12px;">Rp{{ number_format($item['line_total'], 0, ',', '.') }}</strong>
+                            </div>
+                        @endforeach
+                    @endif
+
+                    @if(isset($regularItems) && $regularItems->isNotEmpty())
+                        @foreach($regularItems as $item)
+                            <div>
+                                <span style="color: rgba(255, 255, 255, 0.85); font-size: 12px;">{{ $item['product']->nama_produk }} <small style="color: rgba(255, 255, 255, 0.6);">({{ $item['product']->umkm->nama_umkm }})</small></span>
+                                <strong style="color: #ffffff; font-size: 12px;">Rp{{ number_format($item['line_total'], 0, ',', '.') }}</strong>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
-                <div style="border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 14px 0; margin: 16px 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
-                    <div style="display: flex; justify-content: space-between; color: #475569;">
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.16); border-bottom: 1px solid rgba(255, 255, 255, 0.16); padding: 14px 0; margin: 16px 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.85);">
                         <span>Subtotal Produk</span>
-                        <strong id="displaySubtotal">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
+                        <strong id="displaySubtotal" style="color: #ffffff;">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; color: #475569;" id="rowOngkir">
-                        <span>Ongkos Kirim @if(!$isKeroyokan && $umkmCount > 1) <small style="color:#64748b; font-weight:600;">({{ $umkmCount }} Toko)</small> @elseif($isKeroyokan) <small style="color:#16a34a; font-weight:600;">(Keroyokan)</small> @endif</span>
-                        <strong id="displayOngkir" style="color: #059669;">Rp0</strong>
+                    <div style="display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.85);" id="rowOngkir">
+                        <span>Ongkos Kirim @if(!$isKeroyokan && $umkmCount > 1) <small style="color: rgba(255, 255, 255, 0.7); font-weight: 600;">({{ $umkmCount }} Toko)</small> @elseif($isKeroyokan) <small style="color: #4ade80; font-weight: 600;">(Keroyokan)</small> @endif</span>
+                        <strong id="displayOngkir" style="color: #4ade80;">Rp0</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; color: #475569;" id="rowPacking">
+                    <div style="display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.85);" id="rowPacking">
                         <span>Biaya Packing</span>
-                        <strong id="displayPacking" style="color: #059669;">Rp0</strong>
+                        <strong id="displayPacking" style="color: #4ade80;">Rp0</strong>
                     </div>
                 </div>
 
                 <div class="summary-grand" style="margin-top: 0;">
-                    <span>Total Tagihan</span>
-                    <strong id="displayGrandTotal" style="font-size: 1.35rem; color: #123825;">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
+                    <span style="color: rgba(255, 255, 255, 0.85);">Total Tagihan</span>
+                    <strong id="displayGrandTotal" style="font-size: 1.35rem; color: #ffffff;">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
                 </div>
 
-                <p style="font-size: 0.78rem; color: #64748b; margin-top: 12px;">Stok diperiksa lagi saat tombol di bawah ditekan. Jika stok berubah, transaksi dibatalkan tanpa pesanan sebagian.</p>
+                <p style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.65); margin-top: 12px;">Stok diperiksa lagi saat tombol di bawah ditekan. Jika stok berubah, transaksi dibatalkan tanpa pesanan sebagian.</p>
                 <button class="button wide" type="submit" style="margin-top: 12px;">Buat pesanan <i class="bi bi-arrow-right"></i></button>
-                <a class="back-cart" href="{{ route('cart.index') }}"><i class="bi bi-arrow-left"></i> Kembali ke keranjang</a>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+                    <a class="back-cart" href="{{ route('cart.index') }}" style="color: rgba(255, 255, 255, 0.85); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.85rem;"><i class="bi bi-cart3"></i> Kembali ke keranjang</a>
+                    <a class="back-cart" href="{{ route('catalogue') }}" style="color: #86efac; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.82rem;"><i class="bi bi-grid-fill"></i> Lanjut Belanja di Katalog</a>
+                </div>
             </aside>
         </form>
     </div>

@@ -70,4 +70,76 @@ class OrderController extends Controller
         $this->logger->log("Memberi ulasan pada pesanan #{$pesanan->id}",$request->user(),$request->ip());
         return redirect()->route('buyer.dashboard')->with('success','Terima kasih, ulasan Anda sudah disimpan.');
     }
+
+    public function confirmReceivedBatch(Request $request, \App\Models\BatchKeroyokan $batch)
+    {
+        if ($batch->pembeli_id !== $request->user()->id) {
+            abort(403);
+        }
+        $orders = Pesanan::where('batch_keroyokan_id', $batch->id)->get();
+        if ($orders->isEmpty()) abort(404);
+
+        DB::transaction(function () use ($batch) {
+            $orders = Pesanan::where('batch_keroyokan_id', $batch->id)->lockForUpdate()->get();
+            foreach ($orders as $order) {
+                if ($order->status === 'Diproses') {
+                    $updateData = ['status' => 'Selesai'];
+                    if ($order->metode_pembayaran === 'COD' && $order->status_pembayaran !== 'Sudah Dibayar') {
+                        $updateData['status_pembayaran'] = 'Sudah Dibayar';
+                    }
+                    $order->update($updateData);
+                }
+            }
+        });
+
+        $this->logger->log("Mengonfirmasi penerimaan Paket Keroyokan #KR-{$batch->id}", $request->user(), $request->ip());
+        return redirect()->route('buyer.dashboard')->with('success', 'Paket Keroyokan #KR-' . str_pad($batch->id, 5, '0', STR_PAD_LEFT) . ' berhasil dikonfirmasi selesai diterima. Silakan berikan ulasan untuk produk Anda!');
+    }
+
+    public function cancelBatch(Request $request, \App\Models\BatchKeroyokan $batch)
+    {
+        if ($batch->pembeli_id !== $request->user()->id) {
+            abort(403);
+        }
+        DB::transaction(function () use ($batch, $request) {
+            $orders = Pesanan::where('batch_keroyokan_id', $batch->id)->lockForUpdate()->get();
+            foreach ($orders as $order) {
+                if ($order->pembeli_id !== $request->user()->id) abort(403);
+                if ($order->status === 'Menunggu') {
+                    $product = Produk::whereKey($order->produk_id)->lockForUpdate()->first();
+                    if ($product) {
+                        $product->increment('stok_jumlah', $order->jumlah);
+                        if ($product->stok_status === 'Habis') {
+                            $product->update(['stok_status' => 'Ready']);
+                        }
+                    }
+                    $order->update(['status' => 'Dibatalkan']);
+                }
+            }
+        });
+        $this->logger->log("Membatalkan Paket Keroyokan #KR-{$batch->id}", $request->user(), $request->ip());
+        return redirect()->route('buyer.dashboard')->with('success', 'Paket Keroyokan dibatalkan dan seluruh stok dikembalikan.');
+    }
+
+    public function uploadProofBatch(PaymentProofRequest $request, \App\Models\BatchKeroyokan $batch)
+    {
+        if ($batch->pembeli_id !== $request->user()->id) {
+            abort(403);
+        }
+        $orders = Pesanan::where('batch_keroyokan_id', $batch->id)->get();
+        if ($orders->isEmpty()) abort(404);
+        $first = $orders->first();
+        if (!in_array($first->metode_pembayaran, ['Transfer', 'QRIS'], true)) {
+            throw ValidationException::withMessages(['bukti_pembayaran' => 'Bukti pembayaran hanya untuk Transfer atau QRIS.']);
+        }
+        if ($first->bukti_pembayaran) {
+            Storage::disk('public')->delete($first->bukti_pembayaran);
+        }
+        $path = $request->file('bukti_pembayaran')->store('payment-proofs', 'public');
+        foreach ($orders as $order) {
+            $order->update(['bukti_pembayaran' => $path]);
+        }
+        $this->logger->log("Mengunggah bukti pembayaran Paket Keroyokan #KR-{$batch->id}", $request->user(), $request->ip());
+        return redirect()->route('buyer.dashboard')->with('success', 'Bukti pembayaran Paket Keroyokan berhasil diunggah.');
+    }
 }

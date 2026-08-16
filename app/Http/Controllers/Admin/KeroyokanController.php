@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BatchKeroyokan;
 use App\Models\Kategori;
 use App\Models\KelompokKeroyokan;
 use App\Services\ActivityLogger;
@@ -20,7 +21,13 @@ class KeroyokanController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view('admin.keroyokan.index', compact('groups'));
+        $recentBatches = BatchKeroyokan::query()
+            ->with(['kelompokKeroyokan', 'pembeli', 'pesanan.produk.umkm'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.keroyokan.index', compact('groups', 'recentBatches'));
     }
 
     public function create(): View

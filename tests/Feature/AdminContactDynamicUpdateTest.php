@@ -19,8 +19,8 @@ class AdminContactDynamicUpdateTest extends TestCase
         // 1. Initial check on homepage
         $resInitial = $this->get('/');
         $resInitial->assertOk();
-        $resInitial->assertSee('081234500001');
-        $resInitial->assertSee('admin@ludesmarket.id');
+        $resInitial->assertSee($admin->email);
+        $resInitial->assertSee('wa.me/6281234500001');
 
         // 2. Admin updates profile with new phone and email
         $newPhone = '082199887766';
@@ -69,5 +69,30 @@ class AdminContactDynamicUpdateTest extends TestCase
         $resBuyer->assertOk();
         $resBuyer->assertSee($newPhone);
         $resBuyer->assertSee('wa.me/6282199887766');
+    }
+
+    public function test_admin_can_view_profile_page_and_update_password(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+        $admin = User::where('role', 'admin')->firstOrFail();
+
+        // 1. GET /admin/profil
+        $res = $this->actingAs($admin)->get(route('admin.profile.edit'));
+        $res->assertOk();
+        $res->assertSee('Profil &amp; Pengaturan Akun Admin', false);
+        $res->assertSee('Data Profil &amp; Kontak Admin', false);
+        $res->assertSee($admin->nama_lengkap);
+        $res->assertSee($admin->username);
+
+        // 2. PATCH /admin/profil/password
+        $pwdRes = $this->actingAs($admin)->patch(route('admin.profile.password'), [
+            'current_password'      => 'password123',
+            'password'              => 'NewAdminPass123!',
+            'password_confirmation' => 'NewAdminPass123!',
+        ]);
+        $pwdRes->assertRedirect(route('admin.profile.edit', ['tab' => 'keamanan']));
+
+        $admin->refresh();
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('NewAdminPass123!', $admin->password));
     }
 }

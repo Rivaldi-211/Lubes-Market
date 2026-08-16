@@ -25,8 +25,8 @@ class RevisiV2FeaturesTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Produsen Lokal Desa');
-        $response->assertSee('Jalangkote Bu Sari');
-        $response->assertSee('Moammar Donat Shop');
+        $response->assertSee('Kedai Mama Aisy');
+        $response->assertSee('Momma Donat Shop');
     }
 
     public function test_public_can_view_single_toko_profile_page(): void
@@ -63,7 +63,7 @@ class RevisiV2FeaturesTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Analitik Akselerasi UMKM');
         $response->assertSee('Ranking Omzet Bulan Ini');
-        $response->assertSee('Jalangkote Bu Sari');
+        $response->assertSee('Kedai Mama Aisy');
     }
 
     public function test_admin_can_send_rekomendasi_strategi_to_umkm(): void
