@@ -18,21 +18,14 @@
         <x-flash />
 
         <form class="catalogue-toolbar" method="get">
+            @if(request('kategori'))
+                <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+            @endif
+
             <label class="search-box">
                 <i class="bi bi-search"></i>
                 <input name="q" value="{{ request('q') }}" placeholder="Cari produk atau nama UMKM...">
             </label>
-
-            <div class="select-wrapper">
-                <select name="kategori">
-                    <option value="">Semua kategori</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" @selected((string)request('kategori') === (string)$category->id)>
-                            {{ $category->nama_kategori }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
 
             <div class="select-wrapper">
                 <select name="sort">
