@@ -35,6 +35,25 @@
                             <input type="text" name="no_hp_pembeli" value="{{ old('no_hp_pembeli', $user->no_hp) }}" required placeholder="Contoh: 081234567890">
                         </label>
 
+                        @if(!$isKeroyokan && $umkmCount > 1)
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; color: #1e40af;">
+                                <i class="bi bi-shop" style="font-size: 1.2rem; color: #2563eb; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong>Pesanan dari {{ $umkmCount }} Toko UMKM Berbeda:</strong>
+                                    <div style="color: #334155; margin-top: 2px;">{{ $umkmList->pluck('nama_umkm')->implode(', ') }}</div>
+                                    <small style="color: #64748b;">Ongkos kirim dihitung per toko pengirim.</small>
+                                </div>
+                            </div>
+                        @elseif($isKeroyokan)
+                            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; color: #166534;">
+                                <i class="bi bi-people-fill" style="font-size: 1.2rem; color: #16a34a; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong>Paket Pesanan Keroyokan:</strong>
+                                    <small style="display: block; color: #15803d;">Pengiriman gabungan satu tujuan (1x tarif ongkir rombongan).</small>
+                                </div>
+                            </div>
+                        @endif
+
                         <label class="span-2">
                             Zona Pengiriman <span class="required">*</span>
                             <select name="zona_pengiriman" id="zonaSelect" required onchange="updateCalculations()" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
@@ -44,7 +63,11 @@
                                             data-biaya="{{ $zona->biaya }}"
                                             data-keterangan="{{ $zona->keterangan }}"
                                             @selected(old('zona_pengiriman', $user->zona_pengiriman) === $zona->nama_zona)>
-                                        {{ $zona->nama_zona }} — Rp{{ number_format($zona->biaya, 0, ',', '.') }}
+                                        @if(!$isKeroyokan && $umkmCount > 1)
+                                            {{ $zona->nama_zona }} — Rp{{ number_format($zona->biaya, 0, ',', '.') }} / toko (Total: Rp{{ number_format($zona->biaya * $umkmCount, 0, ',', '.') }})
+                                        @else
+                                            {{ $zona->nama_zona }} — Rp{{ number_format($zona->biaya, 0, ',', '.') }}
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -162,7 +185,7 @@
                 <div class="checkout-items">
                     @foreach($items as $item)
                         <div>
-                            <span>{{ $item['quantity'] }}× {{ $item['product']->nama_produk }}</span>
+                            <span>{{ $item['quantity'] }}× {{ $item['product']->nama_produk }} <small style="color:#64748b; font-size:0.75rem;">({{ $item['product']->umkm->nama_umkm }})</small></span>
                             <strong>Rp{{ number_format($item['line_total'], 0, ',', '.') }}</strong>
                         </div>
                     @endforeach
@@ -174,7 +197,7 @@
                         <strong id="displaySubtotal">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
                     </div>
                     <div style="display: flex; justify-content: space-between; color: #475569;" id="rowOngkir">
-                        <span>Ongkos Kirim</span>
+                        <span>Ongkos Kirim @if(!$isKeroyokan && $umkmCount > 1) <small style="color:#64748b; font-weight:600;">({{ $umkmCount }} Toko)</small> @elseif($isKeroyokan) <small style="color:#16a34a; font-weight:600;">(Keroyokan)</small> @endif</span>
                         <strong id="displayOngkir" style="color: #059669;">Rp0</strong>
                     </div>
                     <div style="display: flex; justify-content: space-between; color: #475569;" id="rowPacking">
@@ -200,13 +223,14 @@
 @push('scripts')
 <script>
 const baseSubtotal = {{ $subtotal }};
+const umkmMultiplier = {{ $isKeroyokan ? 1 : ($umkmCount ?: 1) }};
 
 function updateCalculations() {
     const zonaSelect = document.getElementById('zonaSelect');
-    let ongkir = 0;
+    let ongkirPerToko = 0;
     if (zonaSelect && zonaSelect.selectedIndex > 0) {
         const opt = zonaSelect.options[zonaSelect.selectedIndex];
-        ongkir = parseFloat(opt.dataset.biaya || 0);
+        ongkirPerToko = parseFloat(opt.dataset.biaya || 0);
 
         const ketBox = document.getElementById('keteranganZona');
         const ketTeks = document.getElementById('teksKeteranganZona');
@@ -217,6 +241,8 @@ function updateCalculations() {
             ketBox.style.display = 'none';
         }
     }
+
+    const totalOngkir = ongkirPerToko * umkmMultiplier;
 
     const activePackingRadio = document.querySelector('.packing-radio:checked');
     let packingBiaya = 0;
@@ -236,9 +262,9 @@ function updateCalculations() {
         }
     });
 
-    const grandTotal = baseSubtotal + ongkir + packingBiaya;
+    const grandTotal = baseSubtotal + totalOngkir + packingBiaya;
 
-    document.getElementById('displayOngkir').textContent = 'Rp' + ongkir.toLocaleString('id-ID');
+    document.getElementById('displayOngkir').textContent = 'Rp' + totalOngkir.toLocaleString('id-ID');
     document.getElementById('displayPacking').textContent = packingBiaya > 0 ? 'Rp' + packingBiaya.toLocaleString('id-ID') : 'Gratis';
     document.getElementById('displayGrandTotal').textContent = 'Rp' + grandTotal.toLocaleString('id-ID');
 }

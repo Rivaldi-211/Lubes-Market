@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 @endif
-@if($errors->any())
+@if(isset($errors) && $errors->any())
 <script>
 document.addEventListener('DOMContentLoaded',function(){
     Swal.fire({title:'Periksa kembali data Anda',icon:'error',html:'<ul style="text-align:left;margin:0;padding-left:18px;color:#e8dcc8">'+{!! json_encode(collect($errors->all())->map(fn($e)=>'<li>'.$e.'</li>')->implode('')) !!}+'</ul>',confirmButtonText:'OK',customClass:{popup:'swal-dark-gold',confirmButton:'swal-gold-btn'},background:'#1a1f1a',color:'#f5f1e7'});

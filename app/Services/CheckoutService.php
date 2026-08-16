@@ -62,17 +62,9 @@ class CheckoutService
                 }
             }
 
-            // Ongkir & Packing Calculation
-            $zona = isset($payload['zona_pengiriman']) ? \App\Models\ZonaPengiriman::where('nama_zona', $payload['zona_pengiriman'])->first() : null;
-            $ongkosKirimTotal = $zona ? (float)$zona->biaya : 0;
-
-            $opsiPackingNama = $payload['opsi_packing'] ?? 'Standar';
-            $packing = \App\Models\OpsiPacking::where('nama', $opsiPackingNama)->first();
-            $biayaPackingTotal = $packing ? (float)$packing->biaya : 0;
-
-            $itemCount = count($raw);
-            $ongkosPerItem = $itemCount > 0 ? round($ongkosKirimTotal / $itemCount, 2) : $ongkosKirimTotal;
-            $packingPerItem = $itemCount > 0 ? round($biayaPackingTotal / $itemCount, 2) : $biayaPackingTotal;
+            // 1. Validasi produk & kelompokkan per UMKM
+            $itemsData = [];
+            $itemsByUmkm = [];
 
             foreach ($raw as $productId => $quantity) {
                 $product = Produk::query()->whereKey((int)$productId)->lockForUpdate()->first();
@@ -90,13 +82,74 @@ class CheckoutService
                     }
                 }
 
-                $subtotalProduk = (float)$product->harga * $quantity;
-                $komisiAdmin = round($subtotalProduk * 0.03, 2);
+                $itemsData[$productId] = [
+                    'product' => $product,
+                    'quantity' => $quantity,
+                    'umkm_id' => $product->umkm_id,
+                ];
+                $itemsByUmkm[$product->umkm_id][] = $productId;
+            }
+
+            // 2. Ongkir & Packing Calculation
+            $zona = isset($payload['zona_pengiriman']) ? \App\Models\ZonaPengiriman::where('nama_zona', $payload['zona_pengiriman'])->first() : null;
+            $zonaBiaya = (int) ($zona ? $zona->biaya : 0);
+
+            $opsiPackingNama = $payload['opsi_packing'] ?? 'Standar';
+            $packing = \App\Models\OpsiPacking::where('nama', $opsiPackingNama)->first();
+            $biayaPackingTotal = (int) ($packing ? $packing->biaya : 0);
+
+            $itemCount = count($itemsData);
+
+            // Alokasi Biaya Packing (dibagi integer remainder ke seluruh item)
+            $packingAllocations = [];
+            if ($itemCount > 0) {
+                $basePacking = intdiv($biayaPackingTotal, $itemCount);
+                $remPacking = $biayaPackingTotal % $itemCount;
+                $pIdx = 0;
+                foreach ($itemsData as $productId => $item) {
+                    $packingAllocations[$productId] = $basePacking + ($pIdx < $remPacking ? 1 : 0);
+                    $pIdx++;
+                }
+            }
+
+            // Alokasi Ongkir:
+            // - Jika Keroyokan: 1x tarif zona dibagi ke seluruh item rombongan
+            // - Jika Regular Order: Tarif zona dihitung PER TOKO (UMKM), didistribusikan ke produk dalam toko tsb
+            $ongkosAllocations = [];
+            if ($validKeroyokanContext) {
+                $baseOngkir = $itemCount > 0 ? intdiv($zonaBiaya, $itemCount) : 0;
+                $remOngkir = $itemCount > 0 ? $zonaBiaya % $itemCount : 0;
+                $oIdx = 0;
+                foreach ($itemsData as $productId => $item) {
+                    $ongkosAllocations[$productId] = $baseOngkir + ($oIdx < $remOngkir ? 1 : 0);
+                    $oIdx++;
+                }
+            } else {
+                foreach ($itemsByUmkm as $umkmId => $productIds) {
+                    $umkmItemCount = count($productIds);
+                    $baseOngkirUmkm = intdiv($zonaBiaya, $umkmItemCount);
+                    $remOngkirUmkm = $zonaBiaya % $umkmItemCount;
+                    foreach ($productIds as $pos => $productId) {
+                        $ongkosAllocations[$productId] = $baseOngkirUmkm + ($pos < $remOngkirUmkm ? 1 : 0);
+                    }
+                }
+            }
+
+            // 3. Simpan Pesanan
+            foreach ($itemsData as $productId => $item) {
+                $product = $item['product'];
+                $quantity = $item['quantity'];
+
+                $subtotalProduk = (int) round((float)$product->harga * $quantity);
+                $komisiAdmin = (int) round($subtotalProduk * 0.03);
                 $pendapatanPenjual = $subtotalProduk - $komisiAdmin;
+                $ongkosPerItem = $ongkosAllocations[$productId] ?? 0;
+                $packingPerItem = $packingAllocations[$productId] ?? 0;
+
                 $totalHargaItem = $subtotalProduk + $ongkosPerItem + $packingPerItem;
 
                 if ($isQris) {
-                    $totalQrisAmount += (int)round($totalHargaItem);
+                    $totalQrisAmount += (int)$totalHargaItem;
                 }
 
                 $orderData = [

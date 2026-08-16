@@ -28,6 +28,9 @@ class CheckoutController extends Controller
             ->get();
         $zonaPengiriman = \App\Models\ZonaPengiriman::aktif()->orderBy('urutan')->get();
         $opsiPacking = \App\Models\OpsiPacking::aktif()->orderBy('urutan')->get();
+        $isKeroyokan = !empty(session('keroyokan_context'));
+        $umkmList = $items->pluck('product.umkm')->filter()->unique('id')->values();
+        $umkmCount = $umkmList->count();
 
         return view('checkout.create', [
             'items' => $items,
@@ -36,6 +39,9 @@ class CheckoutController extends Controller
             'rekeningBankList' => $rekeningBankList,
             'zonaPengiriman' => $zonaPengiriman,
             'opsiPacking' => $opsiPacking,
+            'isKeroyokan' => $isKeroyokan,
+            'umkmList' => $umkmList,
+            'umkmCount' => $umkmCount,
         ]);
     }
 
