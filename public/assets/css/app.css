@@ -999,48 +999,64 @@ footer[id] {
     display: block;
 }
 
-/* --- Footer --- */
+/* --- Footer (Compact & Balanced) --- */
 .site-footer {
     background: #0c271a;
     color: #fff;
-    padding: 74px 0 24px;
+    padding: 36px 0 16px;
 }
 
 .footer-grid {
     display: grid;
     grid-template-columns: 1.5fr .6fr .9fr;
-    gap: 70px;
+    gap: 36px;
+    align-items: start;
 }
 
 .footer-brand {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .footer-grid p {
-    color: rgba(255, 255, 255, .62);
-    max-width: 420px;
+    color: rgba(255, 255, 255, .68);
+    max-width: 400px;
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 6px;
 }
 
 .footer-grid h4 {
     text-transform: uppercase;
-    letter-spacing: .15em;
+    letter-spacing: .12em;
     font-size: 11px;
     color: #d2bf8a;
+    margin-bottom: 10px;
 }
 
-.footer-grid>div:nth-child(2) {
+.footer-grid > div:nth-child(2) {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 14px;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.footer-grid > div:nth-child(2) a {
+    color: rgba(255, 255, 255, .75);
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.footer-grid > div:nth-child(2) a:hover {
+    color: #fff;
 }
 
 .footer-bottom {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid rgba(255, 255, 255, .15);
-    margin-top: 55px;
-    padding-top: 20px;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    margin-top: 24px;
+    padding-top: 14px;
     font-size: 11px;
     color: rgba(255, 255, 255, .45);
 }
