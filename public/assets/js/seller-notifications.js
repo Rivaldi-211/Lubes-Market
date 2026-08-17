@@ -21,12 +21,10 @@
             const seen = getSeenOrders();
             if (!seen.includes(orderId)) {
                 seen.push(orderId);
-                // Keep only the last 100 seen order IDs
                 if (seen.length > 100) seen.shift();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(seen));
             }
         } catch {
-            // Storage quota or error
         }
     }
 
@@ -37,7 +35,6 @@
             const ctx = new AudioContext();
             const now = ctx.currentTime;
 
-            // Two-tone cheerful notification chime (C5 -> G5)
             const osc1 = ctx.createOscillator();
             const gain1 = ctx.createGain();
             osc1.type = 'sine';
@@ -60,7 +57,6 @@
             osc2.start(now + 0.12);
             osc2.stop(now + 0.5);
         } catch {
-            // Ignore audio policy errors
         }
     }
 
@@ -131,33 +127,26 @@
 
             const seen = getSeenOrders();
 
-            // On very first visit, record current existing orders as seen to avoid flood
             if (isInitialLoad && seen.length === 0) {
                 data.notifications.forEach(n => markOrderAsSeen(n.id));
                 return;
             }
 
-            // Find new paid orders
             const newOrders = data.notifications.filter(n => !seen.includes(n.id));
 
             if (newOrders.length > 0) {
-                // Show popup for the latest new order
                 const latestNewOrder = newOrders[0];
                 showPaymentPopup(latestNewOrder);
 
-                // Mark all new as seen
                 newOrders.forEach(n => markOrderAsSeen(n.id));
             }
         } catch {
-            // Polling error ignored
         }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Initial check
         checkNewPayments(true);
 
-        // Polling interval
         setInterval(() => {
             checkNewPayments(false);
         }, POLL_INTERVAL_MS);

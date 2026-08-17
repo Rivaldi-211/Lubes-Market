@@ -20,11 +20,12 @@ class SellerDisbursementTest extends TestCase
     {
         parent::setUp();
         $this->seed(BumdesDemoSeeder::class);
+        $this->seed(\Database\Seeders\RekeningBankSeeder::class);
     }
 
     private function getSeller(): User
     {
-        return User::where('username', 'umkm_jalangkote')->firstOrFail();
+        return User::where('username', 'umkm_wawa')->firstOrFail();
     }
 
     private function getAdmin(): User

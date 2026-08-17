@@ -13,7 +13,6 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // 1. Fetch all orders belonging to this buyer with eager loaded relations
         $allOrders = Pesanan::query()
             ->where('pembeli_id', $user->id)
             ->with([
@@ -24,18 +23,15 @@ class DashboardController extends Controller
             ->latest('tanggal_pesan')
             ->get();
 
-        // 2. Separate into Keroyokan batches and Regular single orders
         $keroyokanGrouped = $allOrders->whereNotNull('batch_keroyokan_id')->groupBy('batch_keroyokan_id');
         $regularOrders = $allOrders->whereNull('batch_keroyokan_id');
 
         $transactionItems = collect();
 
-        // Add Keroyokan batches as 1 consolidated transaction card each
         foreach ($keroyokanGrouped as $batchId => $ordersInBatch) {
             $firstOrder = $ordersInBatch->first();
             $batchModel = $firstOrder->batchKeroyokan;
 
-            // Overall status of the batch
             $statuses = $ordersInBatch->pluck('status');
             if ($statuses->every(fn($s) => $s === 'Dibatalkan')) {
                 $status = 'Dibatalkan';
@@ -67,7 +63,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Add Regular orders as 1 transaction card each
         foreach ($regularOrders as $order) {
             $transactionItems->push([
                 'type' => 'regular',
@@ -78,10 +73,8 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Sort by tanggal_pesan descending
         $transactionItems = $transactionItems->sortByDesc(fn($item) => $item['tanggal_pesan'])->values();
 
-        // 3. Accurate Transaction Metrics
         $stats = [
             'total' => $transactionItems->count(),
             'menunggu' => $transactionItems->where('status', 'Menunggu')->count(),
@@ -89,7 +82,6 @@ class DashboardController extends Controller
             'selesai' => $transactionItems->where('status', 'Selesai')->count(),
         ];
 
-        // 4. Pagination
         $perPage = 10;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = $transactionItems->slice(($currentPage - 1) * $perPage, $perPage)->values();

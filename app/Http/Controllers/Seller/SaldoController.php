@@ -74,7 +74,6 @@ class SaldoController extends Controller
         }
 
         $result = DB::transaction(function () use ($request, $user, $umkm, $logger) {
-            // 1. Validasi kepemilikan rekening bank dan status aktif
             $rekening = RekeningBank::where('id', $request->rekening_bank_id)
                 ->where('umkm_id', $umkm->id)
                 ->where('aktif', true)
@@ -84,7 +83,6 @@ class SaldoController extends Controller
                 return ['success' => false, 'message' => 'Rekening bank tujuan tidak valid atau belum diaktifkan.'];
             }
 
-            // 2. Cek tidak ada pengajuan aktif untuk UMKM ini (dengan row lock)
             $activeExists = Disbursement::where('umkm_id', $umkm->id)
                 ->whereIn('status', ['diajukan', 'diproses'])
                 ->lockForUpdate()
@@ -94,7 +92,6 @@ class SaldoController extends Controller
                 return ['success' => false, 'message' => 'UMKM Anda masih memiliki pengajuan pencairan yang sedang diproses oleh admin. Mohon tunggu hingga selesai.'];
             }
 
-            // 3. Query pesanan eligible dengan row lock
             $pesanan = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
                 ->where('status', 'Selesai')
                 ->whereDoesntHave('disbursements', fn($q) => $q->whereIn('status', ['diajukan', 'diproses', 'dibayar']))
@@ -105,21 +102,18 @@ class SaldoController extends Controller
                 return ['success' => false, 'message' => 'Tidak ada saldo pesanan selesai yang dapat dicairkan saat ini.'];
             }
 
-            // 4. Hitung total jumlah dari server
             $jumlah = (float) $pesanan->sum('pendapatan_penjual');
 
             if ($jumlah <= 0) {
                 return ['success' => false, 'message' => 'Nominal saldo yang dapat dicairkan harus lebih besar dari Rp0.'];
             }
 
-            // 5. Simpan snapshot rekening bank
             $snapshot = [
                 'nama_bank'      => $rekening->nama_bank,
                 'nomor_rekening' => $rekening->nomor_rekening,
                 'atas_nama'      => $rekening->atas_nama,
             ];
 
-            // 6. Buat disbursement status 'diajukan'
             $disbursement = Disbursement::create([
                 'umkm_id'                => $umkm->id,
                 'rekening_bank_id'       => $rekening->id,
@@ -131,10 +125,8 @@ class SaldoController extends Controller
                 'diajukan_at'            => now(),
             ]);
 
-            // 7. Attach pesanan ke pivot disbursement
             $disbursement->pesanan()->attach($pesanan->pluck('id'));
 
-            // 8. Log aktivitas
             $logger->log(
                 "Mengajukan pencairan saldo sebesar Rp" . number_format($jumlah, 0, ',', '.') . " ke rekening {$rekening->nama_bank} ({$rekening->nomor_rekening})",
                 $user,

@@ -20,11 +20,9 @@ class BumdesDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Users (Admin, 6 Pembeli, 15 Penjual)
         $users = [
             ['username' => 'admin', 'nama_lengkap' => 'Admin LUDES-MARKET', 'email' => 'admin@ludesmarket.id', 'no_hp' => '0812-8257-5933', 'role' => 'admin'],
 
-            // Pembeli
             ['username' => 'budi_pembeli', 'nama_lengkap' => 'Budi Santoso', 'email' => 'budi@gmail.com', 'no_hp' => '081234500006', 'role' => 'pembeli'],
             ['username' => 'siti_pembeli', 'nama_lengkap' => 'Siti Rahma', 'email' => 'siti@gmail.com', 'no_hp' => '081234500007', 'role' => 'pembeli'],
             ['username' => 'rudi_pembeli', 'nama_lengkap' => 'Rudi Kurniawan', 'email' => 'rudi@gmail.com', 'no_hp' => '081234500008', 'role' => 'pembeli'],
@@ -32,7 +30,6 @@ class BumdesDemoSeeder extends Seeder
             ['username' => 'hikmah', 'nama_lengkap' => 'Nur Hikmah', 'email' => 'nurhikmahchyn27@gmail.com', 'no_hp' => '08012345678', 'role' => 'pembeli'],
             ['username' => 'mozzapiey', 'nama_lengkap' => 'mozzapiey', 'email' => 'mozzapiey@gmail.com', 'no_hp' => '0895803005021', 'role' => 'pembeli'],
 
-            // 15 Penjual UMKM
             ['username' => 'umkm_wawa', 'nama_lengkap' => 'Kedai Wawa', 'email' => 'wawa@gmail.com', 'no_hp' => '081234500002', 'role' => 'penjual'],
             ['username' => 'umkm_mamaaisy', 'nama_lengkap' => 'Kedai Mama Aisy', 'email' => 'mamaaisy@gmail.com', 'no_hp' => '081234500003', 'role' => 'penjual'],
             ['username' => 'umkm_kedai_al', 'nama_lengkap' => 'Kedai AL', 'email' => 'kedai_al@gmail.com', 'no_hp' => '081234500004', 'role' => 'penjual'],
@@ -54,7 +51,6 @@ class BumdesDemoSeeder extends Seeder
             User::create($row + ['password' => Hash::make('password123'), 'status' => 'aktif']);
         }
 
-        // 2. Kategori
         $kategoriList = [
             'Kreatif',
             'Kuliner',
@@ -64,7 +60,6 @@ class BumdesDemoSeeder extends Seeder
             Kategori::create(['nama_kategori' => $name]);
         }
 
-        // 3. 15 UMKM Data
         $sellerUsers = User::where('role', 'penjual')->orderBy('id')->get();
 
         $umkmRows = [
@@ -89,56 +84,44 @@ class BumdesDemoSeeder extends Seeder
             Umkm::create($row + ['user_id' => $sellerUsers[$i]->id, 'status' => 'aktif']);
         }
 
-        // 4. Products List (1: Kreatif, 2: Kuliner, 3: Oleh-oleh)
         $productsData = [
-            // UMKM 1: Kedai Wawa
             [1, 2, 'Aneka Toping Selai', 15000, 'Ready', 30, 'Aneka varian toping selai manis dan lezat untuk aneka olahan roti dan kue.', 'products/FDgcZmUI6yhPXC6TrAFOfYUjCJxchvd0VbadvkuJ.jpg'],
             [1, 2, 'Pastry Salju', 18000, 'Ready', 25, 'Pastry renyah dengan isian keju gurih dan lumer.', 'products/cUgCZpODVOUITTzPdCBBy3lfokWVpdgUkgMEdQdE.jpg'],
             [1, 2, 'Kue Selai Strawberry', 20000, 'Ready', 20, 'Kue lembut dengan selai strawberry manis segar pilihan.', 'products/qKdVfLmjnG7q8nJADYK0upAdij9VsXllNpHJDAZJ.jpg'],
-            // UMKM 2: Kedai Mama Aisy
             [2, 2, 'Empek-empek', 15000, 'Ready', 35, 'Empek-empek kenyal dan gurih disajikan lengkap dengan kuah cuko mantap.', 'products/yK1uabvlLhNMGq48ow0mkxQWEiQmldgi1RIeY3vN.jpg'],
             [2, 2, 'Jalangkote Gado', 5000, 'Ready', 40, 'Jalangkote renyah dengan isian gado-gado khas dan sambal lezat.', 'products/lBzi8cyrB5lRK1ClnNUq5K5HObELNxqBlDj0y4pH.jpg'],
             [2, 2, 'Jalangkote Sayur', 5000, 'Ready', 50, 'Jalangkote renyah isi sayur wortel dan kentang segar.', 'products/TTGCoywUyk5dSlUoFxHZI83Re4x3w6u8f06ja6PX.jpg'],
             [2, 2, 'Jalangkote Telur', 6000, 'Ready', 45, 'Jalangkote gurih dengan isian potongan telur dan sayur segar.', 'products/MJ5UDfQNjjGLmXehq4iJjW5Wwkusvh7XZ87YkQDo.jpg'],
-            // UMKM 3: Kedai AL
             [3, 2, 'Bakso Keju Meletus', 20000, 'Ready', 30, 'Bakso sapi kenyal dengan isian keju lumer yang meleleh di mulut.', 'products/81bRdL6XgHuIc9GGOCgqGHafBMOufHbEwvdmc11c.jpg'],
             [3, 2, 'Bakso Ikan', 15000, 'Ready', 35, 'Bakso ikan segar olahan gurih dan kenyal.', 'products/MvFotEoJNfVAZyscLDIc2o4O45VlhITRc6izvMvX.jpg'],
             [3, 2, 'Tahu Gendot', 12000, 'Ready', 40, 'Tahu gendot isi daging cincang dan rempah gurih khas.', 'products/M50Hkh7BuVNLXf59OZ3I0DzTpNsWuyyGXJPYtgBM.jpg'],
-            // UMKM 4: Kedai Malekbi
             [4, 3, 'Sarang Madu Muda', 65000, 'Ready', 15, 'Sarang madu muda murni segar dan kaya nutrisi alami.', 'products/gLERlB8StQVRBwsAGitYeCvuxmoXWKLXgWckClXD.jpg'],
             [4, 2, 'Kue Tradisional', 15000, 'Ready', 30, 'Aneka kue tradisional khas yang lezat dan otentik.', 'products/t11ouCcYipapmZrwpSyIkW2TjsLkqXr22mIlwTUX.jpg'],
             [4, 2, 'Aneka Kukusan', 15000, 'Ready', 22, 'kukusan ubi, kacang, telur dan kentang', 'products/eXa5MKsiFnJm0vW9Zy8GQ1CwBulOrpv8473cYtWe.jpg'],
-            // UMKM 5: Nyemil Bebs
             [5, 3, 'Cookies', 25000, 'Ready', 40, 'Cookies renyah manis dengan bahan berkualitas.', 'products/WxqCQCXTnXmDVEvopcdGwPzHkqFuswhHDfG1kqyZ.jpg'],
             [5, 3, 'Macaroni Aneka Rasa', 10000, 'Ready', 50, 'Macaroni renyah gurih dengan pilihan aneka bumbu rasa.', 'products/N7ZIW49OEyqdkvw5tExtQkAUOdYbXA31bGjf3LQU.jpg'],
             [5, 3, 'Cookies Mini', 15000, 'Ready', 40, 'Cookies ukuran mini cocok untuk camilan santai sehari-hari.', 'products/41AKR9f8WyoDG44lYabvhsX2Z0e3dsSjIm76JkHi.jpg'],
             [5, 3, 'Keripik Ubi Pedas', 12000, 'Ready', 45, 'Keripik ubi renyah berbalut bumbu balado pedas manis.', 'products/xK2mvnOU642yqWyyvNfGEgzhI8BExdCTJXdV9pB8.jpg'],
-            // UMKM 6: Toko Afi
             [6, 3, 'Keripik Ikan', 18000, 'Ready', 40, 'Keripik ikan renyah, gurih, dan kaya protein.', 'products/hixNcFsizqWecCvEZoFLtkWxesWdjPM8g5bCv1XB.jpg'],
             [6, 3, 'Sambel Kemasan', 25000, 'Ready', 30, 'Sambel kemasan botol praktis, pedas mantap dan tahan lama.', 'products/7JXMoF3VngO5lzQI78ikBfvXgHRGaTaUaRJFiu2K.jpg'],
             [6, 3, 'Aneka Keripik Oleh Oleh', 20000, 'Ready', 35, 'Aneka pilihan keripik gurih renyah khas daerah.', 'products/cMLlVZh9pgLDsXEMsXsPOR1YKKCZItQERkaO5wZR.jpg'],
             [6, 3, 'Kue Kering', 30000, 'Ready', 25, 'Aneka kue kering toples lezat untuk camilan dan oleh-oleh.', 'products/0oDWckkRaw1GyO3W4rOAWnv24aIZ2xS61Qhf1iY4.jpg'],
-            // UMKM 7: Gorengan Bu Hera
             [7, 2, 'Lumpia', 4000, 'Ready', 50, 'Lumpia goreng renyah isi sayur dan rebung gurih.', 'products/B82eNTHu6O3EsuwEkmuKs0RvW4eOh9XztBwAVn2e.jpg'],
             [7, 2, 'Risol Sayur', 4000, 'Ready', 50, 'Risol goreng gurih dengan isian sayuran segar.', 'products/vRVdpobuBv1AdpPlM9Vhh9p0ibjTKFXBwrc58CdR.jpg'],
             [7, 2, 'Cireng Ayam', 5000, 'Ready', 40, 'Cireng kenyal gurih dengan isian ayam suwir pedas nikmat.', 'products/AkwIBqN3jyQxltBSTNy9YuQ0K8Gy6qrwwznM7HmT.jpg'],
             [7, 2, 'Risol Mayo', 6000, 'Ready', 45, 'Risol renyah dengan isian smoked beef/sosis, telur, dan creamy mayo.', 'products/Q5yIwgoM5z7DV6qGVRPKPdEJZzezAIxJ2jKXWN6b.jpg'],
-            // UMKM 8: Teh Nusantara Kedai Nindi
             [8, 2, 'Teh Nusantara', 8000, 'Ready', 60, 'Racikan teh khas nusantara wangi, segar, dan nikmat.', 'products/D6GtGwPuWSyB9GxmYpZKks22SVmXMTekWYm8q551.jpg'],
             [8, 2, 'Es Kopi Gula Aren', 15000, 'Ready', 40, 'Kopi espresso susu dengan manis alami gula aren asli.', 'products/w9qhSosTbAnA6u6ihDW7f1gsNWIOxu9nmKHiHc59.jpg'],
             [8, 2, 'Cendol', 5000, 'Ready', 35, 'Es cendol segar dengan santan gurih dan kuah gula merah cair.', 'products/KIZoY1uAz8eJAmA5Lzr1loZXOyf3Mvc0Lkvux2it.jpg'],
-            // UMKM 9: Lapak Keos Kaki
             [9, 1, 'Tas Anyaman Plastik', 25000, 'Ready', 20, 'Tas belanja pasar yang kuat, awet, dan ramah lingkungan.', 'products/TiZYIUMxMN6QJgYKicxYBitB7H2a3aZvOkt8pBjY.jpg'],
             [9, 1, 'Tas Jaring', 20000, 'Ready', 25, 'Tas jaring elastis kekinian untuk belanja maupun santai.', 'products/cAX8ZiF5c1eeCEUHnzEuu69l17JZVWknkz7h9dyG.jpg'],
             [9, 1, 'Tas Buatan Wol', 55000, 'Ready', 15, 'Tas rajut wol cantik buatan tangan (handmade).', null],
-            // UMKM 10: Dapur Awan
             [10, 2, 'Nasi Goreng', 15000, 'Ready', 40, 'Nasi goreng racikan bumbu khas desa dengan telur dan kerupuk.', 'products/ZSW6xFOVPrfbRTY9zHxCJi4ynfxNEh61qX7WYGW6.jpg'],
             [10, 2, 'Mie Goreng', 15000, 'Ready', 35, 'Mie goreng gurih lezat lengkap dengan sayuran dan suwiran ayam.', 'products/BXKW4SdOxqus1ibw0R4EGrhFSEvTJ1rfhmOz71ay.jpg'],
             [10, 2, 'Nasi Ayam Suwir', 18000, 'Ready', 30, 'Nasi hangat pulen dengan lauk ayam suwir bumbu pedas gurih.', 'products/EZJifxVMHBzInYlOy3RtEFhYEU2Qbpe9CKqkpqBq.jpg'],
             [10, 2, 'Nasi Ayam Kremes', 20000, 'Ready', 30, 'Nasi hangat dengan ayam goreng empuk bertabur kremes renyah.', 'products/TwRg4Gl3FkJK0Qg3SgNtSBSYcYUtJhcoUIuYlzY3.jpg'],
             [10, 2, 'Nasi Ayam Sambal Hijau', 20000, 'Ready', 30, 'Nasi ayam goreng dipadukan dengan pedas segarnya sambal hijau.', 'products/UJbOK6wpQ9h6p4FsJPOuS9XTBbgwEVqlfVRF0FRz.jpg'],
             [10, 2, 'Nasi Kucing', 8000, 'Ready', 50, 'Nasi porsi kecil dibungkus daun pisang dilengkapi lauk sambal tempe dan teri.', 'products/hH3OOdItbIEU4wR0USBQDBfoWoM4zqPHYlsfY6ph.jpg'],
-            // UMKM 11: Momma Donat Shop
             [11, 2, 'Donat Nampah', 65000, 'Pre-Order', 15, 'Paket donat nampah aneka topping cantik untuk sajian acara.', 'products/KuHuwaeqly2vmlXuYFFDhuHAjo8C68FYGNBtBdQv.jpg', 2],
             [11, 2, 'Donat Mini Ucapan', 45000, 'Pre-Order', 20, 'Donat mini hias ucapan kustom untuk ulang tahun dan perayaan.', 'products/dcVMPzhoVo0zA4c3txiFtcrC7ZWH2pdUkiOstnVE.jpg', 2],
             [11, 2, 'Donat Kukus', 20000, 'Ready', 30, 'Donat kukus lembut dengan lelehan cokelat dan topping lezat.', 'products/CkfC2HwtApZ6InH8pAtmXU7j4buqgNiPcIQvmXax.jpg'],
@@ -152,20 +135,16 @@ class BumdesDemoSeeder extends Seeder
             [11, 2, 'Donat Salju', 22000, 'Ready', 35, 'Donat lembut berbalut taburan gula salju dingin manis.', 'products/3BccL6IcEgxQLrCmfxSvPSzP8gVdaeYeFokLV5r9.jpg'],
             [11, 2, 'Donat Tar', 75000, 'Pre-Order', 10, 'Tart kue donat susun bertingkat spesial untuk perayaan.', 'products/tPmXSKETx5TZpNYn3DaIc8ndeaMhomPS3fUmn0XZ.jpg', 3],
             [11, 2, 'Donat Tumpeng', 90000, 'Pre-Order', 10, 'Susunan tumpeng donat mini dan jumbo meriah untuk syukuran.', 'products/ZDt5rZysLgrQ7A4ov0bL9ZuKOJkbWxyFd79ZlCzU.jpg', 3],
-            // UMKM 12: Jajanan Kering Alea
             [12, 3, 'Makaroni Pedas Asin', 10000, 'Ready', 50, 'Makaroni renyah bumbu gurih asin klasik.', 'products/T59PQ1m9EtTexmQE6CUMHOfisNoPCBePdSXqZePD.jpg'],
             [12, 3, 'Basreng Daun Jeruk', 15000, 'Ready', 45, 'Basreng renyah aroma wangi daun jeruk pedas gurih.', 'products/7LCe6QqWzXG9UFliq54Cf12rHBptJrGsNVzeLWf9.jpg'],
             [12, 3, 'Kacang Bawang', 18000, 'Ready', 40, 'Kacang bawang renyah dan gurih aroma bawang putih asli.', 'products/j2gpIcpq2Q2oLONNOyuzh12GVPwYc1ykxM8WIyk5.jpg'],
             [12, 3, 'Kacang Goreng', 15000, 'Ready', 40, 'Kacang tanah goreng renyah camilan santai keluarga.', 'products/W8Wgg7xTMtsh6EoCPOuYynogQPAg07hgJbPt42yj.jpg'],
-            // UMKM 13: Kedai Mama Kembar
             [13, 2, 'Dadar Santan Kacang', 12000, 'Ready', 30, 'Kue dadar lembut berkuah santan manis gurih dengan kacang pilihan.', 'products/RHBktReebq4fyxyrDK90GZNFtqkR5VADHTd6j35m.jpg'],
             [13, 2, 'Es Kepon Khas', 10000, 'Ready', 35, 'Minuman es kepon segar khas pelepas dahaga.', 'products/PED5ILGahfA5IYSyDnP6cxkGkT6v5tIcXeWP1Yua.jpg'],
             [13, 2, 'Pisang Ijo Monat', 15000, 'Ready', 30, 'Pisang ijo lembut disajikan dengan bubur sumsum dan sirup manis.', 'products/i3CvprL3gIHGgV5zQAkfoLohSKVcYI9p9iEJz8e5.jpg'],
-            // UMKM 14: Kedai Arisz
             [14, 2, 'Roti MesesROti  Mini', 12000, 'Ready', 35, 'Roti manis mini lembut bertabur meses cokelat lezat.', 'products/zFbst49Y8NMynEZyWo15qgwJOU2G0lQiCRrgELPD.jpg'],
             [14, 2, 'Ayam Madu', 25000, 'Ready', 25, 'Ayam olahan bumbu saus madu manis gurih meresap sampai ke tulang.', 'products/sby1kKouKACcgLtB9Gf2xZQUQWviAeV7CWcKReCR.jpg'],
             [14, 2, 'Bakso & Tahu Daging', 18000, 'Ready', 30, 'Porsi bakso daging sapi gurih lengkap dengan tahu bakso empuk.', 'products/KcLnB5M5AvTUfesFBXc6Yjyqg6Al2FukAVAGRHJ3.jpg'],
-            // UMKM 15: Kedai Anyaman
             [15, 1, 'Kerajinan Tangan Bambu', 35000, 'Ready', 20, 'Kerajinan tangan anyaman bambu ramah lingkungan dan estetik.', 'products/rjRFvWZSNdwd1XvNLlG0DShUJJZoce8kkGXRY8K5.jpg'],
             [15, 1, 'Anyaman Tangan', 30000, 'Ready', 20, 'Aneka produk olahan anyaman tangan tradisional yang rapi dan kuat.', 'products/SExsa0J7WYqIPEgizQZ3Du45R5YknQfDCezd8yGJ.jpg'],
             [15, 1, 'Tas Buatan Wol', 50000, 'Ready', 15, 'Tas rajutan tangan dari benang wol halus berpola unik.', 'products/sxde6BLpKHx2Z40TEPVqxdOThAAXnQcbFhr34jaV.jpg'],
@@ -185,7 +164,6 @@ class BumdesDemoSeeder extends Seeder
             ]);
         }
 
-        // 5. Strategy Recommendations (RekomendasiStrategi)
         $recommendations = [
             [
                 'umkm_id' => 1,
@@ -233,7 +211,6 @@ class BumdesDemoSeeder extends Seeder
             RekomendasiStrategi::create($rec);
         }
 
-        // 6. Kelompok Keroyokan
         $kelompokSnack = KelompokKeroyokan::create([
             'kategori_id' => 2, // Kuliner
             'nama_kelompok' => 'Snack Box Acara Desa',
@@ -254,7 +231,6 @@ class BumdesDemoSeeder extends Seeder
         Produk::whereIn('nama_produk', ['Keripik Ubi Pedas', 'Keripik Ikan', 'Sambel Kemasan', 'Makaroni Pedas Asin', 'Basreng Daun Jeruk', 'Kacang Bawang'])
             ->update(['kelompok_keroyokan_id' => $kelompokOlehOleh->id]);
 
-        // 7. Demo Batch Keroyokan & Orders
         $budi = User::where('username', 'budi_pembeli')->first();
         $hikmah = User::where('username', 'hikmah')->first();
         $mozza = User::where('username', 'mozzapiey')->first();
@@ -267,7 +243,6 @@ class BumdesDemoSeeder extends Seeder
                 'total_harga' => 260000,
             ]);
 
-            // Pesanan Keroyokan items
             $p6 = Produk::find(6); // Jalangkote Sayur
             $p7 = Produk::find(7); // Jalangkote Telur
             $p25 = Produk::find(25); // Risol Mayo
@@ -335,7 +310,6 @@ class BumdesDemoSeeder extends Seeder
             }
         }
 
-        // 8. Demo Regular Orders & Reviews
         if ($hikmah) {
             $p4 = Produk::find(4); // Empek-empek
             if ($p4) {
@@ -460,7 +434,6 @@ class BumdesDemoSeeder extends Seeder
                     'komentar' => 'Ayam bumbu madunya enak sekali!',
                 ]);
 
-                // Demo Disbursement for Kedai Arisz
                 $adminUser = User::where('role', 'admin')->first();
                 $disburse = Disbursement::create([
                     'umkm_id' => 14,

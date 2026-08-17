@@ -91,7 +91,6 @@ class CartService
         $current = (int)($cart[$produk->id] ?? 0);
         $target = $current + $quantity;
 
-        // Count any quantity currently allocated in Keroyokan package
         $keroyokanQty = 0;
         if ($this->isKeroyokan()) {
             foreach ($this->keroyokanContext()['allocations'] as $alloc) {

@@ -15,7 +15,6 @@ class RekeningBankSeeder extends Seeder
         $umkm3 = $umkms->get(2);
 
         $accounts = [
-            // Platform Bank Accounts (untuk pembayaran transfer pembeli ke rekening bersama platform)
             [
                 'umkm_id' => null,
                 'nama_bank' => 'Bank BRI Platform',
@@ -33,7 +32,6 @@ class RekeningBankSeeder extends Seeder
                 'urutan' => 2,
             ],
 
-            // UMKM Bank Accounts (untuk pencairan saldo ke masing-masing penjual)
             [
                 'umkm_id' => $umkm1?->id,
                 'nama_bank' => 'Bank BRI',

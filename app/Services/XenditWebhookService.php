@@ -36,7 +36,6 @@ class XenditWebhookService
             return response()->json(['message' => 'Invalid webhook data structure.'], 400);
         }
 
-        // Whitelist contract validations
         $referenceId = $data['reference_id'] ?? null;
         $paymentRequestId = $data['payment_request_id'] ?? $data['id'] ?? null;
         $paymentId = $data['payment_id'] ?? null;
@@ -52,7 +51,6 @@ class XenditWebhookService
             return response()->json(['message' => 'Payload contract mismatch.'], 400);
         }
 
-        // Additional validations for payment.capture & payment.failure
         if ($event === 'payment.capture' || $event === 'payment.failure') {
             if (
                 empty($paymentId) ||
@@ -134,7 +132,6 @@ class XenditWebhookService
                 }
                 $payment->save();
 
-                // Mutate associated Pesanan status to 'Diproses'
                 foreach ($payment->pesanan as $pesanan) {
                     if ($pesanan->status === 'Menunggu') {
                         $pesanan->update(['status' => 'Diproses']);

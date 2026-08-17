@@ -16,13 +16,11 @@ class DisbursementController extends Controller
 {
     public function index(): View
     {
-        // 1. Permintaan masuk dari mitra UMKM (status: diajukan)
         $permintaanMasuk = Disbursement::with(['umkm', 'requester', 'rekeningBank', 'pesanan'])
             ->where('status', 'diajukan')
             ->latest('diajukan_at')
             ->get();
 
-        // 2. Daftar saldo pending pesanan selesai per UMKM (siap dicairkan langsung oleh admin)
         $umkmList = Umkm::with(['user'])->get()->map(function ($umkm) {
             $pesananPending = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
                 ->where('status', 'Selesai')
@@ -35,7 +33,6 @@ class DisbursementController extends Controller
             return $umkm;
         });
 
-        // 3. Riwayat disbursement selesai / ditolak
         $riwayat = Disbursement::with(['umkm', 'admin', 'requester', 'rekeningBank', 'pesanan'])
             ->whereIn('status', ['dibayar', 'ditolak'])
             ->latest()
@@ -85,7 +82,6 @@ class DisbursementController extends Controller
                 return back()->with('error', 'Permintaan pencairan ini sudah diproses sebelumnya.');
             }
 
-            // Lepas semua pesanan agar bisa diajukan kembali oleh penjual
             $locked->pesanan()->detach();
 
             $alasan = $request->alasan_penolakan

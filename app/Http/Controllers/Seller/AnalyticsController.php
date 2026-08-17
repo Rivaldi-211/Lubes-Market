@@ -19,7 +19,6 @@ class AnalyticsController extends Controller
         $dateFormatSql = $driver === 'sqlite' ? "strftime('%Y-%m', tanggal_pesan)" : "DATE_FORMAT(tanggal_pesan, '%Y-%m')";
         $createdAtSql = $driver === 'sqlite' ? "strftime('%Y-%m', created_at)" : "DATE_FORMAT(created_at, '%Y-%m')";
 
-        // 6-month revenue trend
         $startDate6m = now()->subMonths(5)->startOfMonth();
         $rawTrend = Pesanan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
             ->where('status', 'Selesai')
@@ -33,7 +32,6 @@ class AnalyticsController extends Controller
             ->get()
             ->keyBy('bulan');
 
-        // Fill missing months in last 6 months so chart looks complete
         $trendOmzet = collect();
         for ($i = 5; $i >= 0; $i--) {
             $mKey = now()->subMonths($i)->format('Y-m');
@@ -46,14 +44,12 @@ class AnalyticsController extends Controller
             ]);
         }
 
-        // Calculate growth rate (current month vs previous month)
         $omzetBulanIni  = (float) ($trendOmzet->last()?->omzet ?? 0);
         $omzetBulanLalu = (float) ($trendOmzet->slice(-2, 1)->first()?->omzet ?? 0);
         $pertumbuhanPct = $omzetBulanLalu > 0
             ? round((($omzetBulanIni - $omzetBulanLalu) / $omzetBulanLalu) * 100, 1)
             : null;
 
-        // 3-month rating trend
         $startDate3m = now()->subMonths(2)->startOfMonth();
         $rawTrendUlasan = Ulasan::whereHas('produk', fn($q) => $q->where('umkm_id', $umkm->id))
             ->where('created_at', '>=', $startDate3m)
@@ -76,7 +72,6 @@ class AnalyticsController extends Controller
             ]);
         }
 
-        // Top products (highest rating)
         $produkTerbaik = Produk::where('umkm_id', $umkm->id)
             ->whereHas('ulasan')
             ->withAvg('ulasan as avg_rating', 'rating')
@@ -85,7 +80,6 @@ class AnalyticsController extends Controller
             ->take(5)
             ->get();
 
-        // Products needing attention (rating < 3.5)
         $produkPerhatian = Produk::where('umkm_id', $umkm->id)
             ->whereHas('ulasan')
             ->withAvg('ulasan as avg_rating', 'rating')
@@ -96,13 +90,11 @@ class AnalyticsController extends Controller
             ->take(3)
             ->values();
 
-        // Recommendations from platform admin
         $rekomendasi = RekomendasiStrategi::where('umkm_id', $umkm->id)
             ->latest()
             ->take(5)
             ->get();
 
-        // Mark unread recommendations as read
         RekomendasiStrategi::where('umkm_id', $umkm->id)
             ->where('dibaca', false)
             ->update(['dibaca' => true]);

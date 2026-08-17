@@ -65,6 +65,7 @@ class RekeningBankTest extends TestCase
     public function test_checkout_with_transfer_requires_active_rekening_bank(): void
     {
         $this->seed(BumdesDemoSeeder::class);
+        $this->seed(\Database\Seeders\RekeningBankSeeder::class);
         $buyer = User::where('role', 'pembeli')->firstOrFail();
         $product = Produk::where('stok_status', 'Ready')->firstOrFail();
         $bank = RekeningBank::whereNull('umkm_id')->where('aktif', true)->firstOrFail();

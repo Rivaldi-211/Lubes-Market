@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('vendor.pagination.ludes');
 
-        // Share dynamic admin contact to all views
         View::composer('*', function ($view) {
             try {
                 if (Schema::hasTable('users')) {

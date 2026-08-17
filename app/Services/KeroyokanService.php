@@ -88,14 +88,12 @@ class KeroyokanService
             ];
         }
 
-        // Default: if no custom box items specified, default to 1 pcs for each product in group
         if (empty($boxItems)) {
             foreach ($allGroupProducts as $p) {
                 $boxItems[$p->id] = 1;
             }
         }
 
-        // Clean & validate box items
         $cleanedBoxItems = [];
         $totalPcsInBox = 0;
         foreach ($boxItems as $productId => $pcs) {
@@ -134,7 +132,6 @@ class KeroyokanService
                 : 0;
 
             if ($availableStock >= $requiredQty) {
-                // Direct full allocation
                 $lineTotal = (float) $product->harga * $requiredQty;
                 $allocations[$product->id] = [
                     'product' => $product,
@@ -146,7 +143,6 @@ class KeroyokanService
                     'is_substitution' => false,
                 ];
             } else {
-                // Partial direct allocation
                 $directAllocated = $availableStock;
                 $shortageQty = $requiredQty - $directAllocated;
 
@@ -163,14 +159,12 @@ class KeroyokanService
                     ];
                 }
 
-                // Check for user-chosen substitution
                 $substituteId = $substitutions[$productId] ?? null;
                 $substituteProduct = $substituteId ? Produk::with(['umkm', 'kategori'])->find($substituteId) : null;
                 $substituteCovered = 0;
 
                 if ($substituteProduct && $substituteProduct->isAvailable()) {
                     $subAvailable = max(0, (int) $substituteProduct->stok_jumlah);
-                    // Deduct if already partially allocated elsewhere
                     $alreadyAllocated = isset($allocations[$substituteProduct->id]) ? $allocations[$substituteProduct->id]['quantity'] : 0;
                     $subAvailable = max(0, $subAvailable - $alreadyAllocated);
 

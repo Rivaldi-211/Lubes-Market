@@ -413,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const step = (timestamp) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            // Pure linear constant speed progression
             const current = Math.floor(progress * (end - start) + start);
             obj.textContent = prefix + current.toLocaleString('id-ID') + suffix;
             if (progress < 1) {
@@ -433,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const el = entry.target;
                     const text = el.textContent.trim();
                     
-                    // Parse Rupiah or regular numbers
                     let prefix = '';
                     let suffix = '';
                     let cleanText = text;

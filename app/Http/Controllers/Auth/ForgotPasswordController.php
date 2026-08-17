@@ -55,7 +55,6 @@ class ForgotPasswordController extends Controller
                 ->withInput();
         }
 
-        // Generate reset token
         $token = Str::random(64);
         $targetEmail = $user->email;
 
@@ -73,19 +72,16 @@ class ForgotPasswordController extends Controller
             'username' => $user->username,
         ]);
 
-        // Attempt sending real email
         try {
             Mail::to($targetEmail)->send(new ResetPasswordMail($token, $resetUrl, $user));
             $logger->log("Mengirim email reset password ke {$targetEmail} untuk akun {$user->username}", $user, $request->ip());
 
-            // Mask email for privacy (e.g. j***@gmail.com)
             $maskedEmail = $this->maskEmail($targetEmail);
 
             return back()->with('success', "Tautan reset password telah berhasil dikirim ke email Anda ({$maskedEmail}). Silakan periksa Kotak Masuk (Inbox) atau folder Spam.");
         } catch (\Throwable $e) {
             Log::error("Gagal mengirim email reset password: " . $e->getMessage());
 
-            // If in local environment and mailer failed, provide helpful debug message
             if (config('app.env') === 'local') {
                 return back()->with('error', "Gagal mengirim email: " . $e->getMessage() . ". Pastikan konfigurasi SMTP di file .env sudah benar.");
             }
@@ -147,12 +143,10 @@ class ForgotPasswordController extends Controller
                 ->withErrors(['identifier' => 'Pengguna dengan email tersebut tidak ditemukan.']);
         }
 
-        // Update password
         $user->update([
             'password' => Hash::make($request->input('password')),
         ]);
 
-        // Clean up token
         DB::table('password_reset_tokens')->where('email', $email)->delete();
 
         $logger->log("Berhasil mereset password akun {$user->username}", $user, $request->ip());

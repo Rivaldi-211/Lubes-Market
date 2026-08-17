@@ -82,7 +82,6 @@ class CheckoutService
                 }
             }
 
-            // 1. Validasi produk & stok akumulasi
             $totalNeededPerProduct = [];
             foreach ($allCheckoutItems as $item) {
                 $pId = (int)$item['product']->id;
@@ -118,7 +117,6 @@ class CheckoutService
                 }
             }
 
-            // 2. Ongkir & Packing Calculation
             $zona = isset($payload['zona_pengiriman']) ? \App\Models\ZonaPengiriman::where('nama_zona', $payload['zona_pengiriman'])->first() : null;
             $zonaBiaya = (int) ($zona ? $zona->biaya : 0);
 
@@ -128,7 +126,6 @@ class CheckoutService
 
             $itemCount = count($itemsData);
 
-            // Alokasi Biaya Packing
             $packingAllocations = [];
             if ($itemCount > 0) {
                 $basePacking = intdiv($biayaPackingTotal, $itemCount);
@@ -140,9 +137,6 @@ class CheckoutService
                 }
             }
 
-            // Alokasi Ongkir:
-            // - Bagian Keroyokan: 1x tarif zona dibagi rata ke seluruh item Keroyokan
-            // - Bagian Reguler: Tarif zona per toko UMKM reguler
             $ongkosAllocations = [];
             $keroyokanItemKeys = array_keys(array_filter($itemsData, fn($i) => $i['is_keroyokan']));
             $kCount = count($keroyokanItemKeys);
@@ -166,7 +160,6 @@ class CheckoutService
                 }
             }
 
-            // 3. QRIS Pre-validation
             if ($isQris) {
                 $estimatedQris = 0;
                 foreach ($itemsData as $itemKey => $item) {
@@ -187,7 +180,6 @@ class CheckoutService
                 }
             }
 
-            // 4. Simpan Pesanan
             foreach ($itemsData as $itemKey => $item) {
                 $product = $item['product'];
                 $quantity = $item['quantity'];

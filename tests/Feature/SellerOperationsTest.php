@@ -9,7 +9,7 @@ use Tests\TestCase;
 class SellerOperationsTest extends TestCase
 {
     use RefreshDatabase;
-    private function seller(): User { return User::where('username','umkm_jalangkote')->firstOrFail(); }
+    private function seller(): User { return User::where('username','umkm_wawa')->firstOrFail(); }
     public function test_seller_dashboard_only_counts_own_orders(): void
     {
         $this->seed(BumdesDemoSeeder::class); $seller=$this->seller();
